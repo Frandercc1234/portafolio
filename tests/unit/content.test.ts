@@ -64,6 +64,22 @@ describe.each(LOCALES)('proyectos (%s)', (locale) => {
   });
 });
 
+describe.each(LOCALES)('MDX seguro (%s)', (locale) => {
+  it('solo usa los componentes permitidos y no trae HTML suelto ni scripts', () => {
+    const allowed = new Set(['Figure', 'Callout', 'Columns']);
+    for (const { file, raw } of files(locale)) {
+      const body = matter(raw)
+        .content.replace(/```[\s\S]*?```/g, '')
+        .replace(/`[^`]*`/g, '');
+      expect(body, `${locale}/${file}`).not.toMatch(/<script/i);
+      expect(body, `${locale}/${file}`).not.toMatch(/\{[^}]*\}/); // sin expresiones JS
+      for (const m of body.matchAll(/<\/?([A-Za-z][\w-]*)/g)) {
+        expect(allowed.has(m[1]), `${locale}/${file}: <${m[1]}>`).toBe(true);
+      }
+    }
+  });
+});
+
 describe('traducciones', () => {
   it('cada slug existe en en y es', () => {
     const en = files('en')
