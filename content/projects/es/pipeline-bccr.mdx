@@ -1,0 +1,82 @@
+---
+slug: pipeline-bccr
+title: Pipeline de indicadores del BCCR
+summary: Pipeline diario de indicadores del Banco Central de Costa Rica, con una API pública de solo lectura y un dashboard.
+role: Full stack e ingeniero de datos, proyecto individual
+context: personal
+year: 2026
+stack:
+  - Python
+  - NestJS
+  - Next.js
+  - PostgreSQL
+  - React
+  - Tailwind CSS
+  - Recharts
+  - Playwright
+  - Docker
+  - GitHub Actions
+metrics:
+  - value: '6'
+    label: indicadores del BCCR
+  - value: 18 / 18
+    label: valores que coinciden con el BCCR
+  - value: '2015'
+    label: historial desde
+links:
+  demo: https://pipeline-indicadores-cr.vercel.app
+  repo: https://github.com/Frandercc1234/pipeline-indicadores-cr
+cover: /projects/pipeline-bccr/cover.webp
+coverAlt: Dashboard con el tipo de cambio de referencia del dólar en cifras grandes y una línea de un año con las tasas de venta y compra
+featured: true
+order: 3
+---
+
+## Problema
+
+El Banco Central de Costa Rica (BCCR) publica sus indicadores económicos en su servicio SDDE. Este proyecto toma seis de ellos todos los días, los valida y los sirve desde una sola base, como API pública y como dashboard.
+
+La fuente tiene dos rasgos que marcan el diseño. El BCCR puede corregir un valor después de publicarlo. Y algunos indicadores publican fechas por adelantado: los tipos de cambio un día, la tasa básica pasiva diez días.
+
+## Mi rol
+
+Lo construí yo solo, de punta a punta: el ETL, la base de datos, la API, el dashboard, las pruebas y la automatización.
+
+## Qué construí
+
+Un ETL en Python 3.12 corre en GitHub Actions dos veces al día. Baja seis indicadores de la API SDDE del BCCR: el tipo de cambio de referencia (compra y venta), el índice de precios al consumidor y su variación interanual, la tasa básica pasiva y la tasa de política monetaria. Valida cada fila, las guarda en PostgreSQL 17 y después las compara contra la fuente.
+
+Una API NestJS sirve los datos en solo lectura: todos los indicadores con su último valor, un indicador, una serie entre dos fechas y dos rutas de salud. Tiene Swagger y un límite de 60 peticiones por minuto por IP. Un dashboard en Next.js con Tailwind y Recharts muestra los indicadores y se sirve con ISR.
+
+La vigilancia corre en GitHub Actions. `/salud` responde 503 tras 36 horas sin carga, y las pruebas de Playwright corren cada hora contra producción, a 375 y 1280 px. También corren en local y después de cada deploy. La API corre en el plan gratuito de Render y se dormía, porque el ping de GitHub Actions era demasiado irregular. Ahora un ping externo gratuito de cron-job.org llama a `/salud/vivo` cada 5 minutos. Esa ruta no toca la base, así que Neon se suspende igual.
+
+## Decisiones clave
+
+### Sin ORM
+
+Tres tablas de lectura no lo necesitan. La API usa SQL parametrizado con `pg`. No usé un ORM.
+
+### Los huecos nunca se rellenan
+
+Si el BCCR no publicó una fecha, esa fecha no existe en la base. Los huecos largos se anotan como advertencia. No los rellené.
+
+### Las correcciones del BCCR se conservan
+
+Cada corrida diaria vuelve a pedir los últimos 60 días. Si un valor cambió, el valor anterior se guarda en la tabla `revision` junto con el nuevo. Una corrección no borra la historia.
+
+### Permisos mínimos en la base de datos
+
+El rol del ETL puede insertar y actualizar observaciones y cargas, y en la tabla `revision` solo puede agregar filas. No puede borrar filas ni cambiar el esquema. El rol de la API solo puede leer.
+
+## Resultados
+
+El dashboard y la API están publicados, y el historial empieza en 2015.
+
+El 16 de noviembre de 2026 comparé 18 valores, 3 fechas por cada uno de los 6 indicadores, contra sdd.bccr.fi.cr. Los 18 coincidieron.
+
+Los crons de GitHub pueden retrasarse o saltarse, así que la carga corre dos veces al día sobre una ventana de 60 días, y la revisión horaria avisa cuando la última corrida programada tiene más de 18 horas.
+
+## Qué haría después
+
+- Manejar una base nueva del IPC sin un paso manual. Hoy, si el BCCR publica otra base, cambio el código en `etl/indicadores.yaml` y repito la carga histórica de las dos series del IPC.
+- Sacar la API del plan gratuito, para que no necesite un ping externo para mantenerse despierta.

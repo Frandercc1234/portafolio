@@ -13,7 +13,7 @@ export function FeaturedProjects({ projects }: { projects: ProjectMeta[] }) {
     <Section id="projects" title={t('title')}>
       <ProjectCard meta={first} featured />
       {rest.length > 0 && (
-        <ul className="mt-10 grid gap-10 md:mt-6 lg:grid-cols-3 lg:gap-6">
+        <ul className="mt-10 grid gap-10 md:mt-6 md:grid-cols-2 md:gap-6 md:gap-y-12">
           {rest.map((meta) => (
             <li key={meta.slug}>
               <ProjectCard meta={meta} />

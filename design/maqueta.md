@@ -48,3 +48,7 @@ Descartado para este paso por el límite mensual del plan Starter. El archivo "P
 Regla para el paso 5: si el README de `purareserva` no trae cifras, el bloque de métricas no se muestra.
 
 Aprobado por Frander: 2026-11-18
+
+## Después de la aprobación
+
+El inicio pasó a 5 casos destacados (se sumó `pipeline-bccr`): `purareserva` grande arriba y los otros cuatro en una cuadrícula de 2×2 en 1440, apilados en 375. La maqueta mostraba 4 casos con tres en fila.

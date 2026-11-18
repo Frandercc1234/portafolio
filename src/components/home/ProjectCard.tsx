@@ -21,7 +21,11 @@ export function ProjectCard({ meta, featured = false }: Props) {
         <ProjectCover
           meta={meta}
           priority={featured}
-          sizes="(min-width: 1280px) 736px, (min-width: 1024px) 40vw, 100vw"
+          sizes={
+            featured
+              ? '(min-width: 1280px) 736px, (min-width: 768px) 58vw, 100vw'
+              : '(min-width: 1280px) 628px, (min-width: 768px) 50vw, 100vw'
+          }
         />
       </div>
       <div className={featured ? 'mt-4 md:col-span-5 md:mt-0 md:self-center md:pl-6' : 'mt-5'}>

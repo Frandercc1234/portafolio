@@ -29,6 +29,7 @@ Portafolio web de Frander Centeno, desarrollador fullstack en Costa Rica.
 | `purareserva` | Reservas de tours en Guanacaste, Next.js + Supabase + asistente IA | README, `DESIGN.md` y `PRODUCT.md` del repo `Frandercc1234/purareserva`. Demo: https://purareserva.vercel.app |
 | `turismo-cr` | Dashboard de llegadas internacionales del ICT, Python + DuckDB + Streamlit | README del repo `Frandercc1234/turismo-cr`. Demo: https://turismo-cr-7juydxs6ebdqwumreibouf.streamlit.app/ |
 | `asada-gamalotal` | Sistema de inventario para una ASADA (práctica profesional), Next.js + Supabase | README del repo `Frandercc1234/asada-gamalotal-inventario` |
+| `pipeline-bccr` | Pipeline diario de indicadores económicos del BCCR con API pública y dashboard, Python + PostgreSQL + NestJS + Next.js | README y documentos del repo `Frandercc1234/pipeline-indicadores-cr`. Demo: https://pipeline-indicadores-cr.vercel.app |
 | `nicoya-zmt` | Sistema de la Zona Marítimo Terrestre, Municipalidad de Nicoya (proyecto universitario) | Texto de la sección 9.4. En producción: https://zmtmn-usuarios.municoya.go.cr |
 
 `risk-calculator` (https://risk-calculator-web.vercel.app) entra como proyecto secundario: tarjeta en la lista "Otros proyectos", sin caso propio.
@@ -39,7 +40,6 @@ Portafolio web de Frander Centeno, desarrollador fullstack en Costa Rica.
 - Modo oscuro (se evalúa después del lanzamiento).
 - Dominio propio: se publica en `*.vercel.app`. El cambio a un `.dev` es solo configuración (sección 14.4).
 - 3D, WebGL, GSAP, scroll-jacking y cursores personalizados.
-- El caso del pipeline BCCR: se agrega cuando ese proyecto exista, con el mismo formato MDX.
 
 ## 3. Usuarios y roles
 
@@ -225,7 +225,7 @@ Todas las páginas son estáticas (`dynamic = 'error'` en páginas de contenido)
 ### 9.2 Inicio `/[locale]`
 
 1. **Hero:** nombre, rol ("Full stack developer"), una línea de valor (web apps y dashboards de datos para pymes e instituciones públicas), ubicación (Costa Rica, UTC-6), estado ("Open to full stack roles and freelance projects") y dos botones: "Download CV" (principal) y "Contact".
-2. **Casos destacados:** los proyectos con `featured: true` en orden. El primero ocupa más espacio. Cada tarjeta: imagen, título, `summary`, contexto (internship, university, personal) y 3 etiquetas de stack. Toda la tarjeta enlaza al caso.
+2. **Casos destacados:** los proyectos con `featured: true` en orden. El primero ocupa más espacio y los demás van en una cuadrícula de 2×2 en 1440, apilados en 375. Orden: `purareserva`, `nicoya-zmt`, `pipeline-bccr`, `asada-gamalotal`, `turismo-cr`. Cada tarjeta: imagen, título, `summary`, contexto (internship, university, personal) y 3 etiquetas de stack. Toda la tarjeta enlaza al caso.
 3. **Otros proyectos:** lista compacta (risk-calculator) con enlaces a demo y repo.
 4. **Stack:** los 4 grupos de `stack.ts`, como texto, sin logos de colores.
 5. **Experiencia y educación:** línea de tiempo simple con `experience.ts`.
@@ -350,7 +350,7 @@ Antes de cada paso de diseño, cargar la skill que se indica. Después de cada p
 
 ### Paso 5. Contenido
 
-- Clonar en `/tmp` los repos de la sección 2 y leer sus README (y `DESIGN.md`/`PRODUCT.md` en purareserva). Escribir los 4 MDX en inglés y en español con el esquema de 6.1 y las secciones de 6.2.
+- Clonar en `/tmp` los repos de la sección 2 y leer sus README (y `DESIGN.md`/`PRODUCT.md` en purareserva). Escribir los 5 MDX en inglés y en español con el esquema de 6.1 y las secciones de 6.2.
 - Solo datos que estén en los repos o en la sección 9.4. Métricas solo si aparecen escritas ahí; si el README de un proyecto (por ejemplo `purareserva`) no trae cifras, `metrics` queda vacío y el bloque de métricas no se muestra. Tono: oraciones cortas, en primera persona, sin adjetivos de relleno ("robusto", "innovador", "seamless"), sin emojis.
 - Capturas: con Playwright, sacar capturas de los demos en vivo (inicio y una pantalla clave, 1440x900) y guardarlas como `.webp` en `public/projects/<slug>/`. Para `asada-gamalotal` usar las capturas del README del repo si existen; si no, la portada es un bloque tipográfico con el nombre (sin imagen inventada).
 - `src/data/experience.ts` y `stack.ts` con la sección 6.3.
@@ -365,7 +365,7 @@ Antes de cada paso de diseño, cargar la skill que se indica. Después de cada p
 ### Paso 7. Caso de estudio
 
 - `projects/[slug]/page.tsx`, componentes de `components/project/` y `components/mdx/`, `generateStaticParams`, metadatos por caso, "Next project".
-- **Verificación:** `npm run build` genera las 8 páginas de casos. Capturas a 375 y 1440 de `purareserva` en los dos idiomas. Slug inexistente da 404.
+- **Verificación:** `npm run build` genera las 10 páginas de casos. Capturas a 375 y 1440 de `purareserva` en los dos idiomas. Slug inexistente da 404.
 
 ### Paso 8. Formulario de contacto
 
@@ -375,7 +375,7 @@ Antes de cada paso de diseño, cargar la skill que se indica. Después de cada p
 ### Paso 9. SEO y Open Graph
 
 - `generateMetadata` en inicio y casos (título, descripción, `alternates` con `hreflang`, `openGraph`, `twitter`). `sitemap.ts`, `robots.ts`, `opengraph-image.tsx` de inicio y de caso. JSON-LD `Person` en el inicio (nombre, cargo, URL, `sameAs` con GitHub y LinkedIn).
-- **Verificación:** `npm run build`; `/sitemap.xml` lista 10 URLs (2 inicios y 8 casos); `/en/opengraph-image` y `/en/projects/purareserva/opengraph-image` devuelven PNG de 1200x630.
+- **Verificación:** `npm run build`; `/sitemap.xml` lista 12 URLs (2 inicios y 10 casos); `/en/opengraph-image` y `/en/projects/purareserva/opengraph-image` devuelven PNG de 1200x630.
 
 ### Paso 10. Movimiento y detalles (Emil)
 
