@@ -18,8 +18,8 @@ metrics:
     label: assistant test cases (18 ES, 18 EN)
   - value: '25'
     label: hand-written tourism guide cards
-  - value: 30 min
-    label: seat hold on a pending booking
+  - value: 3 / 10
+    label: bookings created, 10 tries on 3 seats
 links:
   demo: https://purareserva.vercel.app
   repo: https://github.com/Frandercc1234/purareserva
@@ -51,8 +51,6 @@ A chat assistant answers questions about tours, seats and tourism in Guanacaste.
   src="/projects/purareserva/tour.webp"
   alt="Tour page for Rincón Canopy with a photo, the price, a day picker with seats left and the booking form"
 />
-
-The stack is Next.js 15 with React 19 and Server Actions, TypeScript, Tailwind CSS 4, Supabase (Postgres, Auth, RLS and Storage), next-intl, Stripe, Resend, the Vercel AI SDK with Groq, pgvector, Zod, Vitest and Playwright.
 
 ## Key decisions
 
@@ -86,7 +84,7 @@ The demo runs on Vercel with Supabase Cloud and Stripe in test mode.
 
 The concurrency script creates exactly 3 bookings out of 10 parallel attempts on a departure with 3 seats.
 
-The assistant has 36 test cases, 18 in Spanish and 18 in English. On 18 November 2026 I ran the 6 booking cases against the real model and passed 6 of 6. I did not rerun the other cases, so there is no recent score for all 36.
+The assistant has 36 test cases, 18 in Spanish and 18 in English.
 
 The tourism guide has 25 hand-written cards, each with an official source. When no card is close enough to the question, the assistant says it does not have the data. The app does not store the text of the conversations.
 
