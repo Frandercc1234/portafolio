@@ -1,0 +1,65 @@
+---
+slug: nicoya-zmt
+title: Sistema de la Zona Marítimo Terrestre, Nicoya
+summary: Sistema de información para el departamento de Zona Marítimo Terrestre de la Municipalidad de Nicoya, con portal ciudadano y panel administrativo.
+role: Desarrollador full stack, equipo de 4 o más
+context: university
+year: 2025
+stack:
+  - React
+  - TypeScript
+  - Next.js
+  - MariaDB
+metrics: []
+links:
+  demo: https://zmtmn-usuarios.municoya.go.cr
+cover: /projects/nicoya-zmt/cover.webp
+coverAlt: Inicio del portal de Zona Marítimo Terrestre con una foto aérea de una bahía y un menú con citas y denuncias
+featured: true
+order: 2
+---
+
+## Problema
+
+El sistema es para el departamento de Zona Marítimo Terrestre de la Municipalidad de Nicoya. Lleva a línea dos cosas: los trámites y las citas de los ciudadanos, y la vista del departamento sobre sus solicitudes.
+
+## Mi rol
+
+Trabajé como desarrollador full stack en un equipo de cuatro o más personas. Fue un proyecto universitario de la Universidad Nacional, en 2024 y 2025.
+
+## Qué construí
+
+Un sistema de información con dos partes. Un portal ciudadano, donde las personas hacen trámites y reservan citas en línea. Un panel administrativo, donde el departamento ve el estado de cada solicitud en tres categorías: pendiente, aprobada y rechazada.
+
+El sistema envía avisos por correo al ciudadano. Tiene pruebas y el diseño funciona en celular.
+
+React y Next.js construyen la interfaz, y Next.js también hace de backend. Los datos viven en MariaDB y el código es TypeScript.
+
+<Figure
+  src="/projects/nicoya-zmt/cover.webp"
+  alt="Inicio del portal de Zona Marítimo Terrestre con una foto aérea de una bahía y un menú con citas y denuncias"
+/>
+
+## Decisiones clave
+
+### Portal ciudadano y panel administrativo separados
+
+El portal ciudadano y el panel administrativo son dos partes separadas, y cada una tiene sus propios permisos.
+
+### MariaDB, porque la tenía el servidor de la Municipalidad
+
+Usé MariaDB porque era lo que ya tenía el servidor de la Municipalidad. La alternativa era una base de datos en la nube, y no la usé.
+
+### Citas en franjas fijas de media hora
+
+Las citas vienen en franjas fijas de media hora. La jefa del departamento las administra desde el panel y puede bloquear horas, para que esas horas no les aparezcan a los ciudadanos.
+
+## Resultados
+
+El sistema está en producción en [zmtmn-usuarios.municoya.go.cr](https://zmtmn-usuarios.municoya.go.cr) y lo usan ciudadanos reales. Reemplazó un proceso que era presencial y en papel.
+
+No tengo cifras para mostrar. El proyecto no tiene repositorio público y esta página no muestra ninguna pantalla con datos personales.
+
+## Qué haría después
+
+Agregaría métricas de uso: solicitudes por mes y tiempo de respuesta.

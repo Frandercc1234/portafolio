@@ -1,0 +1,90 @@
+---
+slug: turismo-cr
+title: Dashboard de llegadas de turistas
+summary: Dashboard de llegadas internacionales a Costa Rica con datos públicos del ICT, hecho con Python, DuckDB y Streamlit.
+role: Ingeniero de datos, proyecto individual
+context: personal
+year: 2026
+stack:
+  - Python
+  - DuckDB
+  - Streamlit
+  - Plotly
+  - pytest
+  - GitHub Actions
+metrics:
+  - value: +50.9%
+    label: llegadas por LIR, 2025 vs 2019
+  - value: '74'
+    label: países en 8 regiones
+  - value: 4.2x
+    label: llegadas de marzo vs setiembre
+links:
+  demo: https://turismo-cr-7juydxs6ebdqwumreibouf.streamlit.app/
+  repo: https://github.com/Frandercc1234/turismo-cr
+cover: /projects/turismo-cr/cover.webp
+coverAlt: Dashboard con el aeropuerto de Liberia seleccionado, tres cifras principales y una línea de llegadas por mes
+demoSleeps: true
+featured: true
+order: 4
+---
+
+## Problema
+
+El Instituto Costarricense de Turismo (ICT) publica sus estadísticas de llegadas en PDF, no en Excel. Las celdas vacías no dejan marca en el texto del PDF, así que los números no se pueden leer como texto plano.
+
+Hice el dashboard para una cámara de turismo de Guanacaste. Responde tres preguntas:
+
+- ¿Cómo evolucionó la llegada de turistas después de 2020? Muestra si el mercado ya se recuperó.
+- ¿Qué países aportan más y cuáles crecen más rápido? Muestra dónde enfocar la promoción y los idiomas de atención.
+- ¿Qué meses concentran la demanda por mercado? Ayuda a planificar personal e inventario.
+
+## Mi rol
+
+Lo construí de punta a punta: la extracción de los PDF, el modelo de datos, las validaciones, el dashboard y el CI.
+
+## Qué construí
+
+Un proceso de carga convierte los anuarios y los informes mensuales del ICT en una base DuckDB. Una app de Streamlit la lee y muestra tres vistas, una por pregunta: la serie mensual contra el mismo mes de 2019, un ranking de países con la variación interanual y un mapa de calor de país por mes.
+
+<Figure
+  src="/projects/turismo-cr/cover.webp"
+  alt="Dashboard con el aeropuerto de Liberia seleccionado, tres cifras principales y una línea de llegadas por mes"
+/>
+
+El modelo de datos es un esquema en estrella: `fact_llegadas`, `dim_fecha`, `dim_pais` y `serie_publicada`. El código de limpieza resuelve los problemas de los PDF: miles separados por un espacio ("298 475"), notas al pie pegadas al nombre del país ("Puerto Rico1"), cuadros de 3 páginas y un mismo país escrito de dos formas ("PANAMA" y "Panamá").
+
+## Decisiones clave
+
+### Leer las celdas por posición
+
+Cada número se ubica por su posición x bajo el encabezado de su columna. Pude leer el texto del PDF línea por línea, pero ahí las celdas vacías no dejan marca y los números se correrían a otra columna.
+
+### Fallar en vez de cargar números malos
+
+Cada cuadro debe sumar igual a su fila TOTAL publicada, y dos informes deben coincidir mes a mes. Si el ICT cambia el diseño del PDF, la carga falla con "fuera de columna". Pude cargar lo que se pueda leer y mostrar una advertencia, pero un número equivocado en un dashboard es peor que no actualizar.
+
+### Guardar los totales publicados en su propia tabla
+
+`serie_publicada` guarda los totales mensuales que publica el ICT. Alimenta la primera pregunta cuando no hay país elegido y valida la suma de países. Pude calcular todos los totales sumando países, pero entonces nada comprobaría la suma.
+
+### Un mes sin dato queda vacío
+
+Un mes sin dato queda vacío, no en cero. Un cero se vería como una caída real de llegadas. El README también dice lo que los datos no pueden decir: el detalle por país existe solo desde 2019, y 2020 y 2021 están afectados por el cierre de fronteras.
+
+## Resultados
+
+Con el aeropuerto de Liberia (LIR) y el rango 2019 a 2025, la app muestra estas cifras:
+
+- En 2025 llegaron 2.943.991 turistas por todas las vías, 6,2% menos que en 2019. La vía aérea subió 11,2% y la terrestre cayó 65,3%.
+- Por LIR llegaron 904.762 (+50,9% contra 2019). Diciembre tuvo 114.686 (+63,5% contra diciembre de 2019).
+- Estados Unidos lidera LIR con 695.273 llegadas (+2,3% contra 2024). Canadá es el que más crece entre los 10 principales (+6,2%). Reino Unido bajó 22,8%.
+- De diciembre a abril se concentra 55,0% de las llegadas. Marzo tiene 4,2 veces las llegadas de setiembre.
+
+Las pruebas comprueban que la suma de países coincide con el TOTAL publicado en los cuadros de cada año de 2019 a 2025. Un workflow de GitHub Actions corre las pruebas en cada push y otro revisa la app publicada cada 6 horas.
+
+## Qué haría después
+
+- Automatizar la actualización mensual. Hoy son cinco pasos manuales: descargar el informe, listar sus cuadros, cargar, probar y subir.
+- Agregar la vía marítima de 2025 cuando el ICT la publique. El informe de 2025 no la trae.
+- Agregar el detalle por país antes de 2019 con anuarios más antiguos.

@@ -1,0 +1,68 @@
+---
+slug: asada-gamalotal
+title: ASADA inventory system
+summary: Inventory system for a rural water association (ASADA), built during my internship with Next.js and Supabase.
+role: Full stack developer, internship
+context: internship
+year: 2025
+stack:
+  - Next.js
+  - React
+  - TypeScript
+  - Tailwind CSS
+  - Supabase
+  - PostgreSQL
+  - Recharts
+metrics: []
+links:
+  demo: https://asada-gamalotal-inventario.vercel.app
+  repo: https://github.com/Frandercc1234/asada-gamalotal-inventario
+featured: true
+order: 3
+---
+
+## Problem
+
+The staff of an ASADA, a rural community water system in Costa Rica, need to know how much material they have and who moved it. Many of them work from a phone and have no technical background.
+
+If anyone can edit the stock by hand, the number stops being reliable.
+
+## My role
+
+I built it during my professional internship at ASADA Gamalotal, from July to December 2025.
+
+## What I built
+
+A web app with a public information page and an internal dashboard for the staff. The dashboard shows the value of the inventory, low-stock alerts and a chart of entries and exits for the last 30 days.
+
+The staff manage products, categories and suppliers, and register entries and exits. A movement can be voided, and the full history stays. Reports of inventory and movements can be filtered by date and exported to PDF and Excel. Admins create users and roles. The layout works on computers and phones.
+
+The stack is Next.js 16 with React 19 and TypeScript, Tailwind CSS 4, Supabase (PostgreSQL, Auth and RLS), Recharts, and jsPDF and ExcelJS for exports.
+
+## Key decisions
+
+### Stock changes only through a transaction
+
+Nobody edits the stock. The PostgreSQL function `registrar_movimiento` locks the product row, checks that there is enough stock for an exit, updates the stock and creates the movement in one operation. Two exits at the same time cannot leave the stock below zero. The movements table does not accept direct inserts.
+
+I could have given the product an editable stock field. Then the number would depend on who typed it last, so I did not do it.
+
+### Permissions in the database
+
+Row Level Security applies the rules even if someone bypasses the interface. Admins and operators can both read the inventory and register movements. Only admins can void movements, change products, categories and suppliers, and manage users.
+
+I could have hidden the buttons in the interface and nothing more. That protects nothing against a direct request, so the rules live in the database.
+
+### No extra backend layer
+
+I used Server Components, Server Actions and PostgreSQL functions. I could have built a separate API. For an inventory with low volume, that would add a second project to maintain without a clear gain.
+
+## Results
+
+The system is published at asada-gamalotal-inventario.vercel.app. The stock changes only when someone registers an entry or an exit, and every movement keeps its user and its date. Products at or below their minimum show up as alerts.
+
+I have no usage numbers to show, so I do not show any.
+
+## What I'd do next
+
+I would add automated tests for `registrar_movimiento`, the most critical piece, including a test with two exits at the same time. The repository has no test command today.

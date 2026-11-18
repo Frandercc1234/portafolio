@@ -1,0 +1,90 @@
+---
+slug: turismo-cr
+title: Tourism arrivals dashboard
+summary: Dashboard of international arrivals to Costa Rica from public ICT data, built with Python, DuckDB and Streamlit.
+role: Data engineer, solo project
+context: personal
+year: 2026
+stack:
+  - Python
+  - DuckDB
+  - Streamlit
+  - Plotly
+  - pytest
+  - GitHub Actions
+metrics:
+  - value: +50.9%
+    label: LIR arrivals, 2025 vs 2019
+  - value: '74'
+    label: countries in 8 regions
+  - value: 4.2x
+    label: March vs September arrivals
+links:
+  demo: https://turismo-cr-7juydxs6ebdqwumreibouf.streamlit.app/
+  repo: https://github.com/Frandercc1234/turismo-cr
+cover: /projects/turismo-cr/cover.webp
+coverAlt: Dashboard with the Liberia airport selected, three headline numbers and a monthly arrivals line chart
+demoSleeps: true
+featured: true
+order: 4
+---
+
+## Problem
+
+The Costa Rican Tourism Board (ICT) publishes its arrival statistics as PDF files, not Excel. Empty cells leave no mark in the text of the PDF, so the numbers cannot be read as plain text.
+
+I built the dashboard for a tourism chamber in Guanacaste. It answers three questions:
+
+- How did tourist arrivals evolve after 2020? This shows whether the market has recovered.
+- Which countries bring the most visitors, and which grow fastest? This shows where to focus promotion and service languages.
+- Which months concentrate demand, by market? This helps plan staff and inventory.
+
+## My role
+
+I built it end to end: the PDF extraction, the data model, the checks, the dashboard and the CI.
+
+## What I built
+
+A loading pipeline turns the ICT yearbooks and monthly reports into a DuckDB database. A Streamlit app reads it and shows three views, one per question: a monthly series against the same month of 2019, a ranking of countries with year-on-year change, and a heat map of country by month.
+
+<Figure
+  src="/projects/turismo-cr/cover.webp"
+  alt="Dashboard with the Liberia airport selected, three headline numbers and a monthly arrivals line chart"
+/>
+
+The data model is a star schema: `fact_llegadas`, `dim_fecha`, `dim_pais` and `serie_publicada`. The cleaning code fixes the problems of the PDFs: thousands separated by a space ("298 475"), footnotes stuck to country names ("Puerto Rico1"), tables that span 3 pages, and the same country spelled two ways ("PANAMA" and "Panamá").
+
+## Key decisions
+
+### Read cells by position
+
+Each number is located by its x position under the header of its column. I could have parsed the PDF text line by line, but empty cells leave no mark there, so the numbers would shift to the wrong column.
+
+### Fail instead of loading wrong numbers
+
+Each table must add up to its published TOTAL row, and two reports must agree month by month. If the ICT changes the layout of the PDF, the load fails with "fuera de columna". I could have loaded whatever parses and shown a warning, but a wrong number on a dashboard is worse than no update.
+
+### Keep the published totals as their own table
+
+`serie_publicada` holds the monthly totals the ICT publishes. It feeds the first question when no country is selected and it validates the sum of countries. I could have computed every total by adding countries, but then nothing would check the sum.
+
+### A missing month stays empty
+
+A month with no data is empty, not zero. A zero would look like a real drop in arrivals. The README also states what the data cannot say: country detail exists only from 2019, and 2020 and 2021 are affected by the border closure.
+
+## Results
+
+With the Liberia airport (LIR) and the range 2019 to 2025, the app shows these figures:
+
+- In 2025, 2,943,991 tourists arrived by all routes, 6.2% fewer than in 2019. Air arrivals grew 11.2% and land arrivals fell 65.3%.
+- Through LIR, 904,762 arrived (+50.9% against 2019). December had 114,686 (+63.5% against December 2019).
+- The United States leads LIR with 695,273 arrivals (+2.3% against 2024). Canada grows most among the top 10 (+6.2%). The United Kingdom fell 22.8%.
+- December to April holds 55.0% of arrivals. March has 4.2 times the arrivals of September.
+
+The tests check that the sum of countries matches the published TOTAL in the tables of every year from 2019 to 2025. A GitHub Actions workflow runs the tests on every push and another one checks the published app every 6 hours.
+
+## What I'd do next
+
+- Automate the monthly update. Today it takes five manual steps: download the report, list its tables, load, test and push.
+- Add the maritime route for 2025 when the ICT publishes it. The 2025 report does not include it.
+- Add country detail before 2019 from older yearbooks.

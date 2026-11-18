@@ -1,0 +1,68 @@
+---
+slug: asada-gamalotal
+title: Sistema de inventario de la ASADA
+summary: Sistema de inventario para una ASADA (acueducto rural), hecho en mi práctica profesional con Next.js y Supabase.
+role: Desarrollador full stack, práctica profesional
+context: internship
+year: 2025
+stack:
+  - Next.js
+  - React
+  - TypeScript
+  - Tailwind CSS
+  - Supabase
+  - PostgreSQL
+  - Recharts
+metrics: []
+links:
+  demo: https://asada-gamalotal-inventario.vercel.app
+  repo: https://github.com/Frandercc1234/asada-gamalotal-inventario
+featured: true
+order: 3
+---
+
+## Problema
+
+El personal de una ASADA, un acueducto rural comunitario de Costa Rica, necesita saber cuánto material tiene y quién lo movió. Muchos trabajan desde el teléfono y no tienen formación técnica.
+
+Si cualquiera puede editar las existencias a mano, el número deja de ser confiable.
+
+## Mi rol
+
+Lo construí durante mi práctica profesional en la ASADA Gamalotal, de julio a diciembre de 2025.
+
+## Qué construí
+
+Una aplicación web con una página pública informativa y un panel interno para el personal. El panel muestra el valor del inventario, las alertas de stock bajo y un gráfico de entradas y salidas de los últimos 30 días.
+
+El personal gestiona productos, categorías y proveedores, y registra entradas y salidas. Un movimiento se puede anular y el historial completo se conserva. Los reportes de inventario y de movimientos se filtran por fechas y se exportan a PDF y Excel. Los administradores crean usuarios y roles. El diseño funciona en computadora y en celular.
+
+El stack es Next.js 16 con React 19 y TypeScript, Tailwind CSS 4, Supabase (PostgreSQL, Auth y RLS), Recharts, y jsPDF y ExcelJS para las exportaciones.
+
+## Decisiones clave
+
+### El stock solo cambia con una transacción
+
+Nadie edita el stock. La función de PostgreSQL `registrar_movimiento` bloquea la fila del producto, valida que haya existencias en una salida, actualiza el stock y crea el movimiento en una sola operación. Dos salidas al mismo tiempo no pueden dejar el stock en negativo. La tabla de movimientos no acepta inserciones directas.
+
+Pude darle al producto un campo de stock editable. Entonces el número dependería de quién lo escribió al final, así que no lo hice.
+
+### Permisos en la base de datos
+
+Row Level Security aplica las reglas aunque alguien evite la interfaz. Los administradores y los operadores pueden consultar el inventario y registrar movimientos. Solo los administradores pueden anular movimientos, modificar productos, categorías y proveedores, y administrar usuarios.
+
+Pude esconder los botones en la interfaz y nada más. Eso no protege contra una petición directa, así que las reglas viven en la base.
+
+### Sin una capa de backend adicional
+
+Usé Server Components, Server Actions y funciones de PostgreSQL. Pude construir una API aparte. Para un inventario de poco volumen, eso agregaría un segundo proyecto que mantener sin una ganancia clara.
+
+## Resultados
+
+El sistema está publicado en asada-gamalotal-inventario.vercel.app. El stock cambia solo cuando alguien registra una entrada o una salida, y cada movimiento guarda su usuario y su fecha. Los productos en el mínimo o por debajo aparecen como alertas.
+
+No tengo cifras de uso para mostrar, así que no muestro ninguna.
+
+## Qué haría después
+
+Agregaría pruebas automáticas para `registrar_movimiento`, la pieza más crítica, incluida una prueba con dos salidas al mismo tiempo. Hoy el repositorio no tiene un comando de pruebas.

@@ -1,0 +1,65 @@
+---
+slug: nicoya-zmt
+title: Maritime Zone system, Nicoya
+summary: Information system for the Maritime Zone department of the Municipality of Nicoya, with a citizen portal and an admin dashboard.
+role: Full stack developer, team of 4+
+context: university
+year: 2025
+stack:
+  - React
+  - TypeScript
+  - Next.js
+  - MariaDB
+metrics: []
+links:
+  demo: https://zmtmn-usuarios.municoya.go.cr
+cover: /projects/nicoya-zmt/cover.webp
+coverAlt: Home page of the Maritime Zone portal with an aerial photo of a bay and a menu with appointments and complaints
+featured: true
+order: 2
+---
+
+## Problem
+
+The system is for the Maritime Zone department of the Municipality of Nicoya. It moves two things online: the procedures and appointments of citizens, and the department's view of its requests.
+
+## My role
+
+I worked as a full stack developer in a team of four or more people. It was a university project at Universidad Nacional, in 2024 and 2025.
+
+## What I built
+
+An information system with two parts. A citizen portal, where people handle procedures and book appointments online. An admin dashboard, where the department sees the state of each request in three categories: pending, approved and rejected.
+
+The system sends the citizen email notices. It has tests, and the design works on phones.
+
+React and Next.js build the interface, and Next.js also acts as the backend. The data lives in MariaDB, and the code is TypeScript.
+
+<Figure
+  src="/projects/nicoya-zmt/cover.webp"
+  alt="Home page of the Maritime Zone portal with an aerial photo of a bay and a menu with appointments and complaints"
+/>
+
+## Key decisions
+
+### Separate citizen portal and admin dashboard
+
+The citizen portal and the admin dashboard are two separate parts, and each has its own permissions.
+
+### MariaDB, because the Municipality's server had it
+
+I used MariaDB because it was what the Municipality's own server already had. The alternative was a cloud database, and I did not use it.
+
+### Appointments in fixed half-hour slots
+
+Appointments come in fixed slots of half an hour. The head of the department manages them from the dashboard and can block hours, so those hours do not show to citizens.
+
+## Results
+
+The system is in production at [zmtmn-usuarios.municoya.go.cr](https://zmtmn-usuarios.municoya.go.cr) and real citizens use it. It replaced a process that was in person and on paper.
+
+I have no numbers to show. The project has no public repository, and this page shows no screen with personal data.
+
+## What I'd do next
+
+I would add usage metrics: requests per month and response time.

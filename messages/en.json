@@ -1,0 +1,75 @@
+{
+  "Meta": {
+    "title": "Frander Centeno, Full stack developer",
+    "description": "Full stack developer in Costa Rica. Web apps and data dashboards for small businesses and public institutions."
+  },
+  "Layout": {
+    "skipToContent": "Skip to content",
+    "name": "Frander Centeno",
+    "nav": { "projects": "Projects", "experience": "Experience", "contact": "Contact" },
+    "downloadCv": "Download CV",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "menu": "Menu",
+    "language": "Language",
+    "mainNav": "Main navigation",
+    "footer": { "built": "Built with Next.js, deployed on Vercel", "rights": "Frander Centeno" },
+    "external": "(opens in a new tab)"
+  },
+  "Home": {
+    "hero": {
+      "role": "Full stack developer",
+      "value": "I build web apps and data dashboards for small businesses and public institutions.",
+      "location": "Costa Rica, UTC-6",
+      "status": "Open to full stack roles and freelance projects",
+      "cv": "Download CV",
+      "contact": "Contact"
+    },
+    "featured": {
+      "title": "Selected work",
+      "context": {
+        "personal": "Personal",
+        "internship": "Internship",
+        "university": "University",
+        "client": "Client"
+      }
+    },
+    "other": { "title": "Other projects", "demo": "Demo", "repo": "Repository" },
+    "stack": { "title": "Stack" },
+    "experience": { "title": "Experience and education" },
+    "about": { "title": "About me" },
+    "contact": {
+      "title": "Contact",
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "send": "Send message",
+      "sending": "Sending…",
+      "success": "Thanks. Your message was sent. I will reply soon.",
+      "errorSend": "The message could not be sent. Write to me at",
+      "errorTurnstile": "The anti-spam check failed. Try again.",
+      "errors": {
+        "name": "Enter your name (2 to 80 characters).",
+        "email": "Enter a valid email.",
+        "message": "Write a message (20 to 2000 characters)."
+      }
+    }
+  },
+  "Project": {
+    "back": "Back to home",
+    "role": "Role",
+    "context": "Context",
+    "year": "Year",
+    "stack": "Stack",
+    "demo": "View demo",
+    "repo": "View repository",
+    "next": "Next project",
+    "wakeUp": "The demo may take ~30 s to wake up."
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "text": "The page you are looking for does not exist.",
+    "home": "Go to home",
+    "projects": "See projects"
+  }
+}

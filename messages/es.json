@@ -1,0 +1,75 @@
+{
+  "Meta": {
+    "title": "Frander Centeno, Desarrollador full stack",
+    "description": "Desarrollador full stack en Costa Rica. Aplicaciones web y dashboards de datos para pymes e instituciones públicas."
+  },
+  "Layout": {
+    "skipToContent": "Saltar al contenido",
+    "name": "Frander Centeno",
+    "nav": { "projects": "Proyectos", "experience": "Experiencia", "contact": "Contacto" },
+    "downloadCv": "Descargar CV",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "menu": "Menú",
+    "language": "Idioma",
+    "mainNav": "Navegación principal",
+    "footer": { "built": "Hecho con Next.js, desplegado en Vercel", "rights": "Frander Centeno" },
+    "external": "(se abre en una pestaña nueva)"
+  },
+  "Home": {
+    "hero": {
+      "role": "Desarrollador full stack",
+      "value": "Construyo aplicaciones web y dashboards de datos para pymes e instituciones públicas.",
+      "location": "Costa Rica, UTC-6",
+      "status": "Disponible para puestos full stack y proyectos freelance",
+      "cv": "Descargar CV",
+      "contact": "Contacto"
+    },
+    "featured": {
+      "title": "Trabajo destacado",
+      "context": {
+        "personal": "Personal",
+        "internship": "Práctica",
+        "university": "Universidad",
+        "client": "Cliente"
+      }
+    },
+    "other": { "title": "Otros proyectos", "demo": "Demo", "repo": "Repositorio" },
+    "stack": { "title": "Stack" },
+    "experience": { "title": "Experiencia y educación" },
+    "about": { "title": "Sobre mí" },
+    "contact": {
+      "title": "Contacto",
+      "name": "Nombre",
+      "email": "Correo",
+      "message": "Mensaje",
+      "send": "Enviar mensaje",
+      "sending": "Enviando…",
+      "success": "Gracias. Tu mensaje fue enviado. Te respondo pronto.",
+      "errorSend": "No se pudo enviar el mensaje. Escribime a",
+      "errorTurnstile": "Falló la verificación anti-spam. Intentá de nuevo.",
+      "errors": {
+        "name": "Ingresá tu nombre (2 a 80 caracteres).",
+        "email": "Ingresá un correo válido.",
+        "message": "Escribí un mensaje (20 a 2000 caracteres)."
+      }
+    }
+  },
+  "Project": {
+    "back": "Volver al inicio",
+    "role": "Rol",
+    "context": "Contexto",
+    "year": "Año",
+    "stack": "Stack",
+    "demo": "Ver demo",
+    "repo": "Ver repositorio",
+    "next": "Siguiente proyecto",
+    "wakeUp": "El demo puede tardar ~30 s en despertar."
+  },
+  "NotFound": {
+    "title": "Página no encontrada",
+    "text": "La página que buscás no existe.",
+    "home": "Ir al inicio",
+    "projects": "Ver proyectos"
+  }
+}

@@ -1,0 +1,98 @@
+---
+slug: purareserva
+title: PuraReserva
+summary: Tour booking for Guanacaste with an AI assistant, built with Next.js and Supabase.
+role: Full stack developer, solo project
+context: personal
+year: 2026
+stack:
+  - Next.js
+  - React
+  - TypeScript
+  - Tailwind CSS
+  - Supabase
+  - Stripe
+  - Vercel AI SDK
+metrics:
+  - value: '36'
+    label: assistant test cases (18 ES, 18 EN)
+  - value: '25'
+    label: hand-written tourism guide cards
+  - value: 30 min
+    label: seat hold on a pending booking
+links:
+  demo: https://purareserva.vercel.app
+  repo: https://github.com/Frandercc1234/purareserva
+cover: /projects/purareserva/cover.webp
+coverAlt: PuraReserva home page with an aerial photo of the Guanacaste coast and a button to view tours
+featured: true
+order: 1
+---
+
+## Problem
+
+Small tour operators in Guanacaste often take bookings on WhatsApp and keep seat counts on paper. That makes overbooking easy.
+
+Tourists, mostly from the US, Canada and Europe, use their phone. They want to find a tour, check that there is a seat on their day and pay a deposit in under two minutes.
+
+## My role
+
+I designed and built it end to end: the database, the booking and payment flow, the owner dashboard, the bilingual public site and the AI assistant.
+
+It is a portfolio project, so there is no real client. Everything runs in Stripe test mode and no real money is charged.
+
+## What I built
+
+Owners sign up, publish tours and schedule departures with a seat limit. Tourists book without an account, in Spanish or English, and pay a deposit with Stripe Checkout. The rest is paid on site. The owner sees the agenda, the income of the month and how full each departure is.
+
+A chat assistant answers questions about tours, seats and tourism in Guanacaste. It cannot create bookings or take payments. The tourist always finishes in the normal booking form.
+
+<Figure
+  src="/projects/purareserva/tour.webp"
+  alt="Tour page for Rincón Canopy with a photo, the price, a day picker with seats left and the booking form"
+/>
+
+The stack is Next.js 15 with React 19 and Server Actions, TypeScript, Tailwind CSS 4, Supabase (Postgres, Auth, RLS and Storage), next-intl, Stripe, Resend, the Vercel AI SDK with Groq, pgvector, Zod, Vitest and Playwright.
+
+## Key decisions
+
+### No overbooking
+
+The `crear_reserva` function runs inside the database and locks the departure row while it counts seats. Two bookings for the last seat cannot both win. A script launches 10 bookings in parallel on a departure with 3 seats and checks that exactly 3 are created.
+
+I could have counted seats in the app code. That leaves a gap between reading the count and saving the booking, so I did not do it.
+
+### Deposit confirmed only by webhook
+
+Price, total and deposit are calculated in the database, never in the browser. A booking is confirmed only by a Stripe webhook with a verified signature. Each event is logged, so a resent event does nothing.
+
+I could have confirmed the booking when the tourist returns from Checkout. The tourist can skip that step by closing the tab, so I did not do it.
+
+### Bookings without an account
+
+When someone books, the app creates a random 32-byte token. The tourist gets it in a link and the database stores only its SHA-256 hash. Anyone with the link can see and cancel the booking.
+
+I could have asked for sign-up. That adds a step to a flow that should take two minutes, so I did not do it.
+
+### Access rules in the database
+
+Every table uses Row Level Security. An owner reads and writes only their own business. The public sees only active businesses and tours and future departures. Bookings cannot be read without a session.
+
+I could have checked permissions only in the app code. A bug there would expose data, so the rules also live in the database.
+
+## Results
+
+The demo runs on Vercel with Supabase Cloud and Stripe in test mode.
+
+The concurrency script creates exactly 3 bookings out of 10 parallel attempts on a departure with 3 seats.
+
+The assistant has 36 test cases, 18 in Spanish and 18 in English. On 18 November 2026 I ran the 6 booking cases against the real model and passed 6 of 6. I did not rerun the other cases, so there is no recent score for all 36.
+
+The tourism guide has 25 hand-written cards, each with an official source. When no card is close enough to the question, the assistant says it does not have the data. The app does not store the text of the conversations.
+
+## What I'd do next
+
+- Let one user own more than one business.
+- Move payments to Stripe Connect, so each operator receives its own deposits.
+- Support businesses outside Costa Rica, with other time zones and currencies.
+- Replace the demo photos, which are illustrative, with photos from real operators.
