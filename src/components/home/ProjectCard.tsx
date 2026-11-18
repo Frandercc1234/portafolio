@@ -27,7 +27,7 @@ function Cover({ meta, priority }: { meta: ProjectMeta; priority: boolean }) {
       className="flex aspect-[16/10] items-end rounded-image bg-surface p-6 md:p-8"
     >
       <span className="font-serif text-[32px] leading-[1.1] font-medium tracking-[-0.02em] md:text-4xl">
-        {meta.title}
+        {meta.coverLabel ?? meta.title}
       </span>
     </div>
   );

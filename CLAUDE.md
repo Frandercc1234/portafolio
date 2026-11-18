@@ -155,6 +155,7 @@ export const projectSchema = z.object({
   }),
   cover: z.string().startsWith('/projects/').optional(),  // imagen 16:10; sin captura real, portada tipográfica
   coverAlt: z.string().min(10).optional(),                // va junto con cover
+  coverLabel: z.string().max(40).optional(),              // texto del bloque tipográfico (por defecto, el título)
   demoSleeps: z.boolean().optional(),                     // el demo se duerme: se avisa "may take ~30 s to wake up"
   featured: z.boolean(),
   order: z.number().int().min(1),

@@ -32,6 +32,8 @@ export const projectSchema = z
     // Sin captura real, la portada es un bloque tipográfico: cover y coverAlt faltan juntos.
     cover: z.string().startsWith('/projects/').optional(),
     coverAlt: z.string().min(10).optional(),
+    // Texto del bloque tipográfico cuando no hay captura (por defecto, el título).
+    coverLabel: z.string().max(40).optional(),
     // El demo se duerme (Streamlit Community Cloud): la tarjeta y el caso lo avisan.
     demoSleeps: z.boolean().optional(),
     featured: z.boolean(),
