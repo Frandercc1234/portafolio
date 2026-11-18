@@ -9,6 +9,7 @@ import { Results } from '@/components/project/Results';
 import { mdxComponents } from '@/components/mdx';
 import { Link } from '@/i18n/routing';
 import { getProject, getProjectParams, getProjects, type Locale } from '@/lib/content';
+import { pageMetadata } from '@/lib/seo';
 
 export const dynamic = 'error';
 export const dynamicParams = false;
@@ -22,7 +23,13 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { locale, slug } = await params;
   const { meta } = getProject(locale as Locale, slug);
-  return { title: `${meta.title} | Frander Centeno`, description: meta.summary };
+  return pageMetadata({
+    locale: locale as Locale,
+    path: `/projects/${slug}`,
+    title: `${meta.title} | Frander Centeno`,
+    description: meta.summary,
+    type: 'article',
+  });
 }
 
 function BackLink() {

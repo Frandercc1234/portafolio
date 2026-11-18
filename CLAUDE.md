@@ -375,6 +375,7 @@ Antes de cada paso de diseño, cargar la skill que se indica. Después de cada p
 ### Paso 9. SEO y Open Graph
 
 - `generateMetadata` en inicio y casos (título, descripción, `alternates` con `hreflang`, `openGraph`, `twitter`). `sitemap.ts`, `robots.ts`, `opengraph-image.tsx` de inicio y de caso. JSON-LD `Person` en el inicio (nombre, cargo, URL, `sameAs` con GitHub y LinkedIn).
+- Las imágenes Open Graph usan instancias estáticas de Newsreader y Schibsted Grotesk en `src/assets/fonts/` (Satori no lee WOFF2 ni fuentes variables), con su licencia OFL.
 - **Verificación:** `npm run build`; `/sitemap.xml` lista 12 URLs (2 inicios y 10 casos); `/en/opengraph-image` y `/en/projects/purareserva/opengraph-image` devuelven PNG de 1200x630.
 
 ### Paso 10. Movimiento y detalles (Emil)
