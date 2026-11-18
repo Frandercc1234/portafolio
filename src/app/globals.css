@@ -65,3 +65,24 @@ h3 {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Contenedor de página: 1280 px máximo, márgenes de 24 px (48 px desde 768 px). */
+@utility wrap {
+  width: calc(100% - 48px);
+  max-width: 1280px;
+  margin-inline: auto;
+  @media (min-width: 768px) {
+    width: calc(100% - 96px);
+  }
+}
+
+/* Subrayado que se dibuja de izquierda a derecha (lo afina el paso 10). */
+.underline-draw {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 250ms var(--ease-out-strong);
+}
+a:hover > .underline-draw,
+a:hover.underline-draw,
+.group:hover .underline-draw {
+  background-size: 100% 1px;
+}

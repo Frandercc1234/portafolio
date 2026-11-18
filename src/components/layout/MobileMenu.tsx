@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { buttonClass } from '@/components/ui/Button';
 
 type Item = { href: string; label: string };
 
@@ -31,14 +32,14 @@ export function MobileMenu({ items, openLabel, closeLabel, cvHref, cvLabel }: Pr
         aria-expanded={open}
         aria-controls="mobile-menu"
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex min-h-11 min-w-11 items-center justify-center text-sm"
+        className={buttonClass('secondary', 'px-3.5 text-[15px]')}
       >
         {open ? closeLabel : openLabel}
       </button>
       {open && (
         <div
           id="mobile-menu"
-          className="absolute inset-x-0 top-full border-b border-neutral-200 bg-white p-4"
+          className="absolute inset-x-0 top-full z-40 border-b border-line bg-paper px-6 py-4 shadow-[0_12px_24px_rgb(26_25_23/0.08)]"
         >
           <ul className="flex flex-col">
             {items.map((item) => (
@@ -46,14 +47,18 @@ export function MobileMenu({ items, openLabel, closeLabel, cvHref, cvLabel }: Pr
                 <a
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="flex min-h-11 items-center"
+                  className="flex min-h-11 items-center font-medium"
                 >
                   {item.label}
                 </a>
               </li>
             ))}
             <li>
-              <a href={cvHref} download className="flex min-h-11 items-center font-semibold">
+              <a
+                href={cvHref}
+                download
+                className="flex min-h-11 items-center font-semibold text-accent"
+              >
                 {cvLabel}
               </a>
             </li>

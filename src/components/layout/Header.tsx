@@ -1,4 +1,5 @@
 import { getLocale, getTranslations } from 'next-intl/server';
+import { ButtonLink } from '@/components/ui/Button';
 import { Link } from '@/i18n/routing';
 import { CV_URL } from '@/lib/site';
 import { LocaleSwitch } from './LocaleSwitch';
@@ -14,27 +15,32 @@ export async function Header() {
   ];
 
   return (
-    <header className="relative border-b border-neutral-200">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2">
-        <Link href="/" className="flex min-h-11 items-center font-semibold">
+    <header className="relative border-b border-line">
+      <div className="wrap flex min-h-14 items-center justify-between gap-4 md:min-h-[72px]">
+        <Link
+          href="/"
+          className="flex min-h-11 shrink-0 items-center font-serif text-lg font-semibold whitespace-nowrap md:text-[22px]"
+        >
           {t('name')}
         </Link>
-        <nav aria-label={t('mainNav')} className="hidden items-center gap-6 md:flex">
+        <nav aria-label={t('mainNav')} className="hidden items-center gap-8 md:flex">
           {items.map((item) => (
-            <a key={item.href} href={item.href} className="flex min-h-11 items-center">
+            <a
+              key={item.href}
+              href={item.href}
+              className="flex min-h-11 items-center font-medium hover:text-accent"
+            >
               {item.label}
             </a>
           ))}
         </nav>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 md:gap-5">
           <LocaleSwitch />
-          <a
-            href={CV_URL[locale]}
-            download
-            className="hidden min-h-11 items-center border border-neutral-900 px-4 md:inline-flex"
-          >
-            {t('downloadCv')}
-          </a>
+          <div className="hidden md:block">
+            <ButtonLink href={CV_URL[locale]} download variant="secondary">
+              {t('downloadCv')}
+            </ButtonLink>
+          </div>
           <MobileMenu
             items={items}
             openLabel={t('openMenu')}

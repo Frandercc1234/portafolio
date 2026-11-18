@@ -6,14 +6,21 @@
   "Layout": {
     "skipToContent": "Skip to content",
     "name": "Frander Centeno",
-    "nav": { "projects": "Projects", "experience": "Experience", "contact": "Contact" },
+    "nav": {
+      "projects": "Projects",
+      "experience": "Experience",
+      "contact": "Contact"
+    },
     "downloadCv": "Download CV",
-    "openMenu": "Open menu",
-    "closeMenu": "Close menu",
+    "openMenu": "Menu",
+    "closeMenu": "Close",
     "menu": "Menu",
     "language": "Language",
     "mainNav": "Main navigation",
-    "footer": { "built": "Built with Next.js, deployed on Vercel", "rights": "Frander Centeno" },
+    "footer": {
+      "built": "Built with Next.js, deployed on Vercel",
+      "rights": "Frander Centeno"
+    },
     "external": "(opens in a new tab)"
   },
   "Home": {
@@ -34,10 +41,23 @@
         "client": "Client"
       }
     },
-    "other": { "title": "Other projects", "demo": "Demo", "repo": "Repository" },
-    "stack": { "title": "Stack" },
-    "experience": { "title": "Experience and education" },
-    "about": { "title": "About me" },
+    "other": {
+      "title": "Other projects",
+      "demo": "Demo",
+      "repo": "Repository"
+    },
+    "stack": {
+      "title": "Stack"
+    },
+    "experience": {
+      "title": "Experience and education",
+      "certifications": "Certifications",
+      "languages": "Languages"
+    },
+    "about": {
+      "title": "About me",
+      "text": "I plan before I write code. I test on a phone before I call a feature done, and I deliver work that has been tested. I am looking for a full stack role where I can keep building and keep learning."
+    },
     "contact": {
       "title": "Contact",
       "name": "Name",
@@ -52,7 +72,8 @@
         "name": "Enter your name (2 to 80 characters).",
         "email": "Enter a valid email.",
         "message": "Write a message (20 to 2000 characters)."
-      }
+      },
+      "turnstileSlot": "Anti-spam check goes here"
     }
   },
   "Project": {

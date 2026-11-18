@@ -9,7 +9,7 @@ export function LocaleSwitch() {
   const pathname = usePathname();
 
   return (
-    <nav aria-label={t('language')} className="flex items-center gap-1">
+    <nav aria-label={t('language')} className="flex items-center">
       {routing.locales.map((l) => (
         <Link
           key={l}
@@ -18,7 +18,7 @@ export function LocaleSwitch() {
           lang={l}
           aria-current={l === locale ? 'true' : undefined}
           className={`inline-flex min-h-11 min-w-11 items-center justify-center text-sm uppercase ${
-            l === locale ? 'font-semibold underline' : ''
+            l === locale ? 'font-semibold text-ink underline' : 'text-ink-soft hover:text-ink'
           }`}
         >
           {l}

@@ -7,12 +7,12 @@ context: personal
 year: 2026
 stack:
   - Next.js
-  - React
-  - TypeScript
-  - Tailwind CSS
   - Supabase
   - Stripe
   - Vercel AI SDK
+  - React
+  - TypeScript
+  - Tailwind CSS
 metrics:
   - value: '36'
     label: assistant test cases (18 ES, 18 EN)
@@ -72,7 +72,7 @@ I could have confirmed the booking when the tourist returns from Checkout. The t
 
 When someone books, the app creates a random 32-byte token. The tourist gets it in a link and the database stores only its SHA-256 hash. Anyone with the link can see and cancel the booking.
 
-I could have asked for sign-up. That adds a step to a flow that should take two minutes, so I did not do it.
+I could have asked for sign-up. That adds a step to the booking flow, so I did not do it.
 
 ### Access rules in the database
 

@@ -7,12 +7,12 @@ context: personal
 year: 2026
 stack:
   - Next.js
-  - React
-  - TypeScript
-  - Tailwind CSS
   - Supabase
   - Stripe
   - Vercel AI SDK
+  - React
+  - TypeScript
+  - Tailwind CSS
 metrics:
   - value: '36'
     label: casos de prueba del asistente
@@ -72,7 +72,7 @@ Pude confirmar la reserva cuando el turista vuelve de Checkout. El turista puede
 
 Al reservar, la app genera un token aleatorio de 32 bytes. El turista lo recibe en un enlace y la base guarda solo su hash SHA-256. Quien tenga el enlace puede ver y cancelar la reserva.
 
-Pude pedir registro. Eso agrega un paso a un flujo que debe tomar dos minutos, así que no lo hice.
+Pude pedir registro. Eso agrega un paso al flujo de reserva, así que no lo hice.
 
 ### Reglas de acceso en la base de datos
 

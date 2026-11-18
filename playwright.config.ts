@@ -1,11 +1,14 @@
 import { defineConfig } from '@playwright/test';
 
+// Puerto propio para no chocar con otros servidores locales (y no reutilizar uno ajeno).
+const PORT = Number(process.env.E2E_PORT ?? 3100);
+
 export default defineConfig({
   testDir: 'tests/e2e',
   fullyParallel: true,
   reporter: 'list',
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: `http://localhost:${PORT}`,
   },
   projects: [
     {
@@ -15,9 +18,9 @@ export default defineConfig({
     { name: 'desktop', use: { browserName: 'chromium', viewport: { width: 1440, height: 900 } } },
   ],
   webServer: {
-    command: 'npm run build && npm run start',
-    url: 'http://localhost:3000',
-    reuseExistingServer: true,
+    command: `npm run build && npx next start -p ${PORT}`,
+    url: `http://localhost:${PORT}`,
+    reuseExistingServer: false,
     timeout: 180000,
   },
 });

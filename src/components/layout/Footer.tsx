@@ -1,32 +1,41 @@
 import { getTranslations } from 'next-intl/server';
+import { ExternalLink } from '@/components/ui/ExternalLink';
 import { SOCIAL } from '@/lib/site';
 
 export async function Footer() {
   const t = await getTranslations('Layout');
   const year = new Date().getFullYear();
-  const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
 
   return (
-    <footer className="border-t border-neutral-200">
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-8 text-sm">
-        <ul className="flex flex-wrap gap-x-6">
+    <footer className="border-t border-line">
+      <div className="wrap flex flex-col gap-4 pt-8 pb-10 text-sm md:flex-row md:items-center md:justify-between">
+        <ul className="flex flex-col gap-1 text-[15px] md:flex-row md:gap-8">
           <li>
-            <a href={`mailto:${SOCIAL.email}`} className="flex min-h-11 items-center">
+            <a
+              href={`mailto:${SOCIAL.email}`}
+              className="flex min-h-11 items-center hover:text-accent"
+            >
               {SOCIAL.email}
             </a>
           </li>
           <li>
-            <a href={SOCIAL.github} {...external} className="flex min-h-11 items-center">
-              GitHub<span className="sr-only"> {t('external')}</span>
-            </a>
+            <ExternalLink
+              href={SOCIAL.github}
+              className="flex min-h-11 items-center hover:text-accent"
+            >
+              GitHub
+            </ExternalLink>
           </li>
           <li>
-            <a href={SOCIAL.linkedin} {...external} className="flex min-h-11 items-center">
-              LinkedIn<span className="sr-only"> {t('external')}</span>
-            </a>
+            <ExternalLink
+              href={SOCIAL.linkedin}
+              className="flex min-h-11 items-center hover:text-accent"
+            >
+              LinkedIn
+            </ExternalLink>
           </li>
         </ul>
-        <p>
+        <p className="text-ink-soft">
           © {year} {t('footer.rights')}. {t('footer.built')}.
         </p>
       </div>
