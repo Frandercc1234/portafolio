@@ -29,6 +29,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Sin el indicador de Next en desarrollo, para que no aparezca en las capturas de Playwright.
+  devIndicators: false,
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
   },
