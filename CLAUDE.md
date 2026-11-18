@@ -390,6 +390,7 @@ Antes de cada paso de diseño, cargar la skill que se indica. Después de cada p
 ### Paso 12. Pruebas e2e
 
 - Escribir las pruebas de la sección 13 en `tests/e2e/`.
+- Playwright corre contra `next dev` en el puerto 3100 (`playwright.config.ts`), con las claves de prueba de Turnstile y `RESEND_API_KEY` vacía: así `NODE_ENV` no es `production` y el formulario no envía correos reales.
 - **Verificación:** `npx playwright test` pasa en `mobile` y `desktop`.
 
 ### Paso 13. CI

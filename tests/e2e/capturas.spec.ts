@@ -8,8 +8,10 @@ const OUT = path.join(process.cwd(), 'design', 'capturas');
 for (const locale of ['en', 'es']) {
   test(`captura del inicio (${locale})`, async ({ page }, testInfo) => {
     fs.mkdirSync(OUT, { recursive: true });
-    await page.goto(`/${locale}`, { waitUntil: 'networkidle' });
+    // El widget de Turnstile mantiene conexiones abiertas: no se espera a networkidle.
+    await page.goto(`/${locale}`, { waitUntil: 'load' });
     await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(1500);
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - window.innerWidth,
     );
