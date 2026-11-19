@@ -19,7 +19,7 @@ metrics:
   - value: '25'
     label: hand-written tourism guide cards
   - value: 3 / 10
-    label: bookings created, 10 tries on 3 seats
+    label: bookings from 10 parallel tries, 3 seats
 links:
   demo: https://purareserva.vercel.app
   repo: https://github.com/Frandercc1234/purareserva
@@ -33,7 +33,7 @@ order: 1
 
 Small tour operators in Guanacaste often take bookings on WhatsApp and keep seat counts on paper. That makes overbooking easy.
 
-Tourists, mostly from the US, Canada and Europe, use their phone. They want to find a tour, check that there is a seat on their day and pay a deposit in under two minutes.
+Tourists, mostly from the US, Canada and Europe, book from their phones. They want to find a tour, check that there is a seat on their day and pay a deposit in under two minutes.
 
 ## My role
 
@@ -43,7 +43,7 @@ It is a portfolio project, so there is no real client. Everything runs in Stripe
 
 ## What I built
 
-Owners sign up, publish tours and schedule departures with a seat limit. Tourists book without an account, in Spanish or English, and pay a deposit with Stripe Checkout. The rest is paid on site. The owner sees the agenda, the income of the month and how full each departure is.
+Owners sign up, publish tours and schedule departures with a seat limit. Tourists book without an account, in Spanish or English, and pay a deposit with Stripe Checkout. The rest is paid on site. The owner sees the schedule, the monthly income and how full each departure is.
 
 A chat assistant answers questions about tours, seats and tourism in Guanacaste. It cannot create bookings or take payments. The tourist always finishes in the normal booking form.
 
@@ -58,23 +58,23 @@ A chat assistant answers questions about tours, seats and tourism in Guanacaste.
 
 The `crear_reserva` function runs inside the database and locks the departure row while it counts seats. Two bookings for the last seat cannot both win. A script launches 10 bookings in parallel on a departure with 3 seats and checks that exactly 3 are created.
 
-I could have counted seats in the app code. That leaves a gap between reading the count and saving the booking, so I did not do it.
+I could have counted seats in the app code. That leaves a gap between reading the count and saving the booking.
 
 ### Deposit confirmed only by webhook
 
 Price, total and deposit are calculated in the database, never in the browser. A booking is confirmed only by a Stripe webhook with a verified signature. Each event is logged, so a resent event does nothing.
 
-I could have confirmed the booking when the tourist returns from Checkout. The tourist can skip that step by closing the tab, so I did not do it.
+I could have confirmed the booking when the tourist returns from Checkout. But the tourist can skip that step by closing the tab.
 
 ### Bookings without an account
 
 When someone books, the app creates a random 32-byte token. The tourist gets it in a link and the database stores only its SHA-256 hash. Anyone with the link can see and cancel the booking.
 
-I could have asked for sign-up. That adds a step to the booking flow, so I did not do it.
+I could have required sign-up, but that adds a step to the booking flow.
 
 ### Access rules in the database
 
-Every table uses Row Level Security. An owner reads and writes only their own business. The public sees only active businesses and tours and future departures. Bookings cannot be read without a session.
+Every table uses Row Level Security. An owner reads and writes only their own business. Visitors see only active businesses, active tours and upcoming departures. Bookings cannot be read without a session.
 
 I could have checked permissions only in the app code. A bug there would expose data, so the rules also live in the database.
 

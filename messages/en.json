@@ -56,7 +56,7 @@
     },
     "about": {
       "title": "About me",
-      "text": "I plan before I write code. I test on a phone before I call a feature done, and I deliver work that has been tested. I am looking for a full stack role where I can keep building and keep learning."
+      "text": "I plan before I write code, and I test on a real phone before I call a feature done. I am looking for a full stack role where I can keep building and learning."
     },
     "contact": {
       "title": "Contact",
@@ -70,7 +70,7 @@
       "errorTurnstile": "The anti-spam check failed. Try again.",
       "errors": {
         "name": "Enter your name (2 to 80 characters).",
-        "email": "Enter a valid email.",
+        "email": "Enter a valid email address.",
         "message": "Write a message (20 to 2000 characters)."
       },
       "turnstileSlot": "Anti-spam check goes here"
@@ -90,7 +90,7 @@
   "NotFound": {
     "title": "Page not found",
     "text": "The page you are looking for does not exist.",
-    "home": "Go to home",
+    "home": "Go home",
     "projects": "See projects"
   }
 }

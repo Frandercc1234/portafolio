@@ -48,13 +48,13 @@ An ETL in Python 3.12 runs on GitHub Actions twice a day. It downloads six indic
 
 A NestJS API serves the data read-only: all the indicators with their last value, one indicator, a series between two dates, and two health routes. It has Swagger and a limit of 60 requests per minute per IP. A Next.js dashboard with Tailwind and Recharts shows the indicators and renders with ISR.
 
-Monitoring runs on GitHub Actions. `/salud` answers 503 after 36 hours without a load, and Playwright tests run every hour against production, at 375 and 1280 px. They also run locally and after each deploy. The API runs on the free plan of Render and it kept falling asleep, because the ping from GitHub Actions was too irregular. A free outside ping from cron-job.org now calls `/salud/vivo` every 5 minutes. That route does not touch the database, so Neon still suspends.
+Monitoring runs on GitHub Actions. `/salud` answers 503 after 36 hours without a data load, and Playwright tests run every hour against production, at 375 and 1280 px. They also run locally and after each deploy. The API runs on the free plan of Render and it kept spinning down, because the ping from GitHub Actions was too irregular. A free outside ping from cron-job.org now calls `/salud/vivo` every 5 minutes. That route does not touch the database, so the Neon database can still scale to zero.
 
 ## Key decisions
 
 ### No ORM
 
-Three read tables do not need one. The API uses parameterized SQL with `pg`. I did not use an ORM.
+Three read-only tables do not need one. The API uses parameterized SQL with `pg`. I did not use an ORM.
 
 ### Gaps are never filled
 
@@ -74,9 +74,9 @@ The dashboard and the API are published, and the history starts in 2015.
 
 On 16 November 2026 I checked 18 values, 3 dates for each of the 6 indicators, against sdd.bccr.fi.cr. All 18 matched.
 
-GitHub crons can be late or skipped, so the load runs twice a day over a window of 60 days, and the hourly check warns when the last scheduled run is older than 18 hours.
+GitHub Actions cron jobs can run late or be skipped, so the load runs twice a day over a window of 60 days, and the hourly check warns when the last scheduled run is older than 18 hours.
 
 ## What I'd do next
 
-- Handle a new CPI base without a manual step. Today, if the BCCR publishes another base, I change the code in `etl/indicadores.yaml` and repeat the backfill of the two CPI series.
+- Handle a new CPI base without a manual step. Today, if the BCCR publishes another base, I edit `etl/indicadores.yaml` and repeat the backfill of the two CPI series.
 - Move the API off the free plan, so it does not need an outside ping to stay awake.
