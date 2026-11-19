@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/routing';
+import { TransitionLink } from '@/components/ui/TransitionLink';
 import type { ProjectMeta } from '@/lib/content';
 import { ProjectCover } from '@/components/project/ProjectCover';
 import { Eyebrow } from './Section';
@@ -11,9 +11,9 @@ export function ProjectCard({ meta, featured = false }: Props) {
   const p = useTranslations('Project');
 
   return (
-    <Link
+    <TransitionLink
       href={`/projects/${meta.slug}`}
-      className={`group block transition-transform duration-200 ease-out-strong hover:-translate-y-0.5 ${
+      className={`group block transition-transform duration-200 ease-out-strong hover:-translate-y-0.5 active:scale-[0.99] ${
         featured ? 'md:grid md:grid-cols-12 md:gap-6' : ''
       }`}
     >
@@ -41,6 +41,6 @@ export function ProjectCard({ meta, featured = false }: Props) {
         <p className="mt-3 text-[15px] font-medium">{meta.stack.slice(0, 4).join(' · ')}</p>
         {meta.demoSleeps && <p className="mt-2 text-[13px] text-ink-soft">{p('wakeUp')}</p>}
       </div>
-    </Link>
+    </TransitionLink>
   );
 }

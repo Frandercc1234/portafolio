@@ -57,12 +57,83 @@ h3 {
   outline-offset: 2px;
 }
 
+/* Movimiento (DESIGN.md 6 y design/movimiento.md): solo transform y opacity, salida con ease-out fuerte. */
+@keyframes enter-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Entrada del hero: una vez al cargar, escalonada y con retrasos no uniformes. */
+.enter {
+  animation: enter-up 500ms var(--ease-out-strong) both;
+}
+.enter-1 {
+  animation-delay: 0ms;
+}
+.enter-2 {
+  animation-delay: 60ms;
+}
+.enter-3 {
+  animation-delay: 120ms;
+}
+.enter-4 {
+  animation-delay: 190ms;
+}
+.enter-5 {
+  animation-delay: 270ms;
+}
+
+.fade-in {
+  animation: fade-in 200ms var(--ease-out-strong) both;
+}
+
+/* Sin View Transitions, la página del caso entra con un fundido (solo opacidad). */
+@supports not (view-transition-name: none) {
+  .vt-fallback {
+    animation: fade-in 200ms var(--ease-out-strong) both;
+  }
+}
+
+/* Transición de la portada de la tarjeta a la del caso. */
+::view-transition-group(project-cover) {
+  animation-duration: 320ms;
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Con movimiento reducido: sin desplazamientos. Quedan solo los cambios de opacidad. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+  .enter,
+  .vt-fallback {
+    animation: none !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }
 

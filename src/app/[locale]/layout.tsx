@@ -7,6 +7,7 @@ import { SITE_URL } from '@/lib/site';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { SkipLink } from '@/components/layout/SkipLink';
+import { ViewTransitionReady } from '@/components/layout/ViewTransitionReady';
 import { Newsreader, Schibsted_Grotesk } from 'next/font/google';
 import '../globals.css';
 
@@ -53,6 +54,7 @@ export default async function LocaleLayout({
     <html lang={locale} className={`${newsreader.variable} ${schibsted.variable}`}>
       <body>
         <NextIntlClientProvider>
+          <ViewTransitionReady />
           <SkipLink />
           <Header />
           <main id="main">{children}</main>

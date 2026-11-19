@@ -3,7 +3,7 @@ import type { ComponentPropsWithoutRef } from 'react';
 type Variant = 'primary' | 'secondary';
 
 const base =
-  'inline-flex min-h-11 items-center justify-center rounded-control border px-6 py-2.5 font-medium transition-[background-color,transform] duration-200 ease-out-strong active:translate-y-px';
+  'inline-flex min-h-11 items-center justify-center rounded-control border px-6 py-2.5 font-medium transition-[background-color,transform] duration-150 ease-out-strong active:scale-[0.97]';
 
 const variants: Record<Variant, string> = {
   primary: 'border-accent bg-accent text-white hover:border-accent-strong hover:bg-accent-strong',

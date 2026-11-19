@@ -7,9 +7,12 @@ test('el menú abre, lleva a las anclas y cierra con Escape', async ({ page }, t
   const panel = page.locator('#mobile-menu');
 
   await expect(panel).toHaveCount(0);
-  await toggle.click();
+  // Hasta que hidrata, el clic no abre nada: se repite hasta que el panel aparece.
+  await expect(async () => {
+    if ((await toggle.getAttribute('aria-expanded')) !== 'true') await toggle.click();
+    await expect(panel).toBeVisible({ timeout: 1500 });
+  }).toPass({ timeout: 20_000 });
   await expect(toggle).toHaveAttribute('aria-expanded', 'true');
-  await expect(panel).toBeVisible();
 
   // Los tres enlaces llevan a su ancla y el menú se cierra.
   for (const [name, id] of [

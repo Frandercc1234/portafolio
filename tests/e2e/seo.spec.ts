@@ -6,8 +6,11 @@ test.describe('SEO', () => {
   // El servidor de desarrollo compila cada ruta de imagen la primera vez; en serie no hay carreras.
   test.describe.configure({ mode: 'serial' });
 
-  test.beforeEach(async ({ browserName: _ }, testInfo) => {
-    test.skip(testInfo.project.name !== 'desktop', 'no depende del tamaño');
+  test.beforeEach(async ({ browserName }, testInfo) => {
+    test.skip(
+      browserName !== 'chromium' || testInfo.project.name !== 'desktop',
+      'no depende del tamaño',
+    );
   });
 
   test('el sitemap lista 12 URLs (2 inicios y 10 casos) con hreflang', async ({ request }) => {

@@ -15,7 +15,11 @@ for (const locale of ['en', 'es'] as const) {
 
     // Botón de la cabecera (escritorio) o del menú (móvil).
     if (testInfo.project.name === 'mobile') {
-      await page.getByRole('button', { name: /menu|menú/i }).click();
+      // Hasta que hidrata, el clic no abre nada: se repite hasta que el panel aparece.
+      await expect(async () => {
+        await page.locator('button[aria-controls="mobile-menu"]').click();
+        await expect(page.locator('#mobile-menu')).toBeVisible({ timeout: 1500 });
+      }).toPass({ timeout: 20_000 });
       await expect(page.locator('#mobile-menu a[download]')).toHaveAttribute('href', expected);
     } else {
       await expect(page.locator('header a[download]')).toHaveAttribute('href', expected);

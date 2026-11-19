@@ -48,7 +48,7 @@ export function ContactForm() {
     <div>
       <div role="status" aria-live="polite">
         {state?.ok && (
-          <p className="font-serif text-2xl leading-[1.3] font-medium">{t('success')}</p>
+          <p className="fade-in font-serif text-2xl leading-[1.3] font-medium">{t('success')}</p>
         )}
       </div>
       {!state?.ok && (

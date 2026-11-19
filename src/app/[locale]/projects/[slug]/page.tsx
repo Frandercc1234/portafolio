@@ -53,11 +53,17 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
   const next = all[(all.findIndex((p) => p.meta.slug === slug) + 1) % all.length].meta;
 
   return (
-    <div className="wrap overflow-x-clip">
+    <div className="wrap vt-fallback overflow-x-clip">
       <BackLink />
       <CaseHeader meta={meta} />
       <div className="mt-12">
-        <ProjectCover meta={meta} priority large sizes="(min-width: 1280px) 1280px, 100vw" />
+        <ProjectCover
+          meta={meta}
+          priority
+          large
+          transitionTarget
+          sizes="(min-width: 1280px) 1280px, 100vw"
+        />
       </div>
       <Results metrics={meta.metrics} />
       <article className="case-prose mt-16 md:mt-24">
