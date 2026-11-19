@@ -41,11 +41,12 @@ export async function sendContact(
     return fail('TURNSTILE');
   }
 
+  // CI y pruebas e2e: se valida y se verifica Turnstile, pero no se llama a Resend.
+  // Esta variable nunca se define en producción.
+  if (process.env.CONTACT_DRY_RUN === '1') return { ok: true };
+
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    // Sin clave: en desarrollo y en CI no se envía; en producción es un error.
-    return process.env.NODE_ENV !== 'production' ? { ok: true } : fail('SEND');
-  }
+  if (!apiKey) return fail('SEND');
   const to = process.env.CONTACT_TO_EMAIL;
   const from = process.env.CONTACT_FROM_EMAIL;
   if (!to || !from) return fail('SEND');

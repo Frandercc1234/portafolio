@@ -40,7 +40,7 @@ beforeEach(() => {
   vi.stubEnv('RESEND_API_KEY', 're_test');
   vi.stubEnv('CONTACT_TO_EMAIL', 'dueno@example.com');
   vi.stubEnv('CONTACT_FROM_EMAIL', 'Portfolio <onboarding@resend.dev>');
-  vi.stubEnv('NODE_ENV', 'production');
+  vi.stubEnv('CONTACT_DRY_RUN', '');
 });
 
 afterEach(() => {
@@ -109,17 +109,36 @@ describe('sendContact', () => {
     expect(await sendContact(null, form())).toEqual({ ok: false, error: 'SEND' });
   });
 
-  it('sin clave de Resend: en producción responde SEND', async () => {
+  it('sin clave de Resend y sin CONTACT_DRY_RUN responde SEND, en cualquier entorno', async () => {
     vi.stubEnv('RESEND_API_KEY', '');
-    expect(await sendContact(null, form())).toEqual({ ok: false, error: 'SEND' });
+    for (const env of ['production', 'development', 'test']) {
+      vi.stubEnv('NODE_ENV', env);
+      expect(await sendContact(null, form())).toEqual({ ok: false, error: 'SEND' });
+    }
     expect(send).not.toHaveBeenCalled();
   });
 
-  it('sin clave de Resend fuera de producción responde ok sin enviar', async () => {
-    vi.stubEnv('RESEND_API_KEY', '');
-    vi.stubEnv('NODE_ENV', 'test');
+  it('con CONTACT_DRY_RUN=1 responde ok sin llamar a Resend, aunque haya clave', async () => {
+    vi.stubEnv('CONTACT_DRY_RUN', '1');
     expect(await sendContact(null, form())).toEqual({ ok: true });
     expect(send).not.toHaveBeenCalled();
+  });
+
+  it('con CONTACT_DRY_RUN=1 sigue validando y verificando Turnstile', async () => {
+    vi.stubEnv('CONTACT_DRY_RUN', '1');
+    expect(await sendContact(null, form({ name: 'A' }))).toEqual({
+      ok: false,
+      error: 'VALIDATION',
+      fields: ['name'],
+    });
+    verifyTurnstile.mockResolvedValue(false);
+    expect(await sendContact(null, form())).toEqual({ ok: false, error: 'TURNSTILE' });
+  });
+
+  it('CONTACT_DRY_RUN con otro valor no activa el modo de prueba', async () => {
+    vi.stubEnv('CONTACT_DRY_RUN', 'true');
+    expect(await sendContact(null, form())).toEqual({ ok: true });
+    expect(send).toHaveBeenCalledTimes(1);
   });
 
   it('nunca registra el mensaje del visitante, solo el código', async () => {

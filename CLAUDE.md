@@ -194,7 +194,7 @@ Componentes permitidos dentro del MDX (`src/components/mdx/`): `<Figure src alt 
   3. Verifica el token de Turnstile contra `https://challenges.cloudflare.com/turnstile/v0/siteverify` con `TURNSTILE_SECRET_KEY`. Si falla, error `TURNSTILE`.
   4. Envía con Resend. `replyTo` es el correo del visitante. El asunto lleva el nombre, nunca HTML del usuario: el cuerpo es texto plano.
   5. No registra el mensaje en logs. Solo registra el código de error.
-  6. Si `RESEND_API_KEY` está vacía y `NODE_ENV !== 'production'`, no envía y devuelve `{ ok: true }` (para CI y e2e). En producción, sin clave devuelve `SEND`.
+  6. Si `CONTACT_DRY_RUN=1`, la acción valida y verifica Turnstile pero no llama a Resend y devuelve `{ ok: true }` (para CI y e2e). Esa variable nunca se define en producción. Sin `CONTACT_DRY_RUN` y sin `RESEND_API_KEY` devuelve `SEND`, en cualquier entorno.
 - **Encabezados** en `next.config.ts`: `Content-Security-Policy` que permita `self`, `challenges.cloudflare.com` (script y frame) y `va.vercel-scripts.com`; `X-Content-Type-Options: nosniff`; `Referrer-Policy: strict-origin-when-cross-origin`; `Permissions-Policy` sin cámara, micrófono ni geolocalización.
 - **MDX:** solo se renderizan archivos del repo y solo con los componentes de la sección 6.2.
 - **Enlaces externos:** `rel="noopener noreferrer"` y `target="_blank"` con texto visible que lo indique para lectores de pantalla.
@@ -302,6 +302,7 @@ Lo decide la skill de Emil (`emil-design-eng`), con estas reglas:
 | `CONTACT_FROM_EMAIL` | `Portfolio <onboarding@resend.dev>` | Remitente de prueba de Resend. Cambia cuando haya dominio |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | `0x4AAAA...` | dash.cloudflare.com → Turnstile → Add widget (hostnames: `localhost` y el dominio de Vercel) |
 | `TURNSTILE_SECRET_KEY` | `0x4AAAA...` | El mismo widget |
+| `CONTACT_DRY_RUN` | `1` | Solo CI y pruebas e2e: el formulario valida y verifica Turnstile pero no envía. Nunca se define en producción ni en Preview |
 
 `.env.example` lleva todas con valores vacíos. Para pruebas locales y e2e, usar las claves de prueba de Turnstile: site `1x00000000000000000000AA` y secret `1x0000000000000000000000000000000AA`. En Preview de Vercel también se usan las de prueba.
 
@@ -391,12 +392,12 @@ Antes de cada paso de diseño, cargar la skill que se indica. Después de cada p
 ### Paso 12. Pruebas e2e
 
 - Escribir las pruebas de la sección 13 en `tests/e2e/`.
-- Playwright corre contra `next dev` en el puerto 3100 (`playwright.config.ts`), con las claves de prueba de Turnstile y `RESEND_API_KEY` vacía: así `NODE_ENV` no es `production` y el formulario no envía correos reales. Un `globalSetup` compila las rutas una vez antes de las pruebas y se usan 2 procesos, porque el servidor de desarrollo falla de forma intermitente si se compilan rutas en paralelo.
+- Playwright corre contra `npm run build` + `next start` en el puerto 3100 (`playwright.config.ts`), con las claves de prueba de Turnstile, `RESEND_API_KEY` vacía y `CONTACT_DRY_RUN=1`: el formulario no envía correos reales y la prueba usa el mismo build que se despliega (el servidor de desarrollo fallaba de forma intermitente).
 - **Verificación:** `npx playwright test` pasa en `mobile` y `desktop`.
 
 ### Paso 13. CI
 
-- GitHub Actions en cada PR: `npm ci`, lint, typecheck (`tsc --noEmit`), `npm run test`, `npm run build` y Playwright (con claves de prueba de Turnstile y sin envío real: el action de contacto no llama a Resend si `RESEND_API_KEY` está vacía y devuelve `{ ok: true }` solo cuando `NODE_ENV !== 'production'`).
+- GitHub Actions en cada PR: `npm ci`, lint, typecheck (`tsc --noEmit`), `npm run test`, `npm run build` y Playwright (con claves de prueba de Turnstile y sin envío real: con `CONTACT_DRY_RUN=1` el action de contacto no llama a Resend y devuelve `{ ok: true }`; en producción esa variable nunca se define).
 - **Verificación:** un PR de prueba deja el check en verde.
 
 ### Paso 14. Despliegue

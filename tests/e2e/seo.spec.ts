@@ -3,9 +3,6 @@ import { expect, test } from '@playwright/test';
 const SLUGS = ['purareserva', 'nicoya-zmt', 'pipeline-bccr', 'asada-gamalotal', 'turismo-cr'];
 
 test.describe('SEO', () => {
-  // El servidor de desarrollo compila cada ruta de imagen la primera vez; en serie no hay carreras.
-  test.describe.configure({ mode: 'serial' });
-
   test.beforeEach(async ({ browserName }, testInfo) => {
     test.skip(
       browserName !== 'chromium' || testInfo.project.name !== 'desktop',

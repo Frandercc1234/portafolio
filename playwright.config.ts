@@ -5,12 +5,7 @@ const PORT = Number(process.env.E2E_PORT ?? 3100);
 
 export default defineConfig({
   testDir: 'tests/e2e',
-  globalSetup: './tests/e2e/global-setup.ts',
   fullyParallel: true,
-  // El servidor de desarrollo compila rutas al vuelo: con muchos procesos en paralelo hay carreras.
-  workers: 2,
-  // Un reintento: el servidor de desarrollo aún falla de vez en cuando bajo carga.
-  retries: 1,
   reporter: 'list',
   use: {
     baseURL: `http://localhost:${PORT}`,
@@ -22,18 +17,19 @@ export default defineConfig({
     },
     { name: 'desktop', use: { browserName: 'chromium', viewport: { width: 1440, height: 900 } } },
   ],
-  // Servidor de desarrollo: ahí NODE_ENV no es "production", así que el formulario de contacto
-  // no llama a Resend sin clave (sección 7). Las claves de Turnstile son las de prueba y
-  // RESEND_API_KEY queda vacía a propósito, aunque exista un .env.local con la clave real.
+  // Build de producción + next start: lo mismo que se despliega. CONTACT_DRY_RUN=1 evita que el
+  // formulario envíe correos (valida y verifica Turnstile, pero no llama a Resend), y las claves
+  // de Turnstile son las de prueba. RESEND_API_KEY queda vacía aunque exista un .env.local.
   webServer: {
-    command: `npx next dev -p ${PORT}`,
+    command: `npm run build && npx next start -p ${PORT}`,
     url: `http://localhost:${PORT}`,
     reuseExistingServer: false,
-    timeout: 180000,
+    timeout: 240000,
     env: {
       NEXT_PUBLIC_TURNSTILE_SITE_KEY: '1x00000000000000000000AA',
       TURNSTILE_SECRET_KEY: '1x0000000000000000000000000000000AA',
       RESEND_API_KEY: '',
+      CONTACT_DRY_RUN: '1',
     },
   },
 });
