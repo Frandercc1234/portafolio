@@ -18,7 +18,7 @@ export function Experience() {
             <Eyebrow>{row.period[locale]}</Eyebrow>
             <div>
               <h3 className="text-2xl tracking-[-0.01em] md:text-[28px]">{row.title[locale]}</h3>
-              <p className="mt-1.5 text-ink-soft">{row.detail[locale]}</p>
+              {row.detail[locale] && <p className="mt-1.5 text-ink-soft">{row.detail[locale]}</p>}
             </div>
           </li>
         ))}

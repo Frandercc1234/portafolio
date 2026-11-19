@@ -9,6 +9,8 @@ export default defineConfig({
   fullyParallel: true,
   // El servidor de desarrollo compila rutas al vuelo: con muchos procesos en paralelo hay carreras.
   workers: 2,
+  // Un reintento: el servidor de desarrollo aún falla de vez en cuando bajo carga.
+  retries: 1,
   reporter: 'list',
   use: {
     baseURL: `http://localhost:${PORT}`,

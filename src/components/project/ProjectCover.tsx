@@ -23,7 +23,7 @@ export function ProjectCover({
     return (
       <div
         data-cover
-        className={`aspect-[16/10] overflow-hidden rounded-image bg-surface${target}`}
+        className={`relative aspect-[16/10] overflow-hidden rounded-image bg-surface after:pointer-events-none after:absolute after:inset-0 after:rounded-image after:ring-1 after:ring-ink/10 after:ring-inset${target}`}
       >
         <Image
           src={meta.cover}

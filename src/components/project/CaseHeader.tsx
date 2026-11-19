@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { ButtonLink } from '@/components/ui/Button';
+import { TagLine } from '@/components/ui/TagLine';
 import { Eyebrow } from '@/components/home/Section';
 import type { ProjectMeta } from '@/lib/content';
 
@@ -13,7 +14,7 @@ export function CaseHeader({ meta }: { meta: ProjectMeta }) {
     [t('role'), meta.role],
     [t('context'), ctx(meta.context)],
     [t('year'), String(meta.year)],
-    [t('stack'), meta.stack.join(' · ')],
+    [t('stack'), ''],
   ];
 
   return (
@@ -28,7 +29,9 @@ export function CaseHeader({ meta }: { meta: ProjectMeta }) {
             <dt>
               <Eyebrow>{label}</Eyebrow>
             </dt>
-            <dd className="mt-1 text-[15px] font-medium">{value}</dd>
+            <dd className="mt-1 text-[15px] font-medium">
+              {label === t('stack') ? <TagLine items={meta.stack} /> : value}
+            </dd>
           </div>
         ))}
       </dl>

@@ -31,7 +31,7 @@ export default function MobileMenuPanel({ open, items, cvHref, cvLabel, onNaviga
             animate={{ ...shown, transition: { duration: 0.2, ease: EASE_OUT } }}
             exit={{ ...hidden, transition: { duration: 0.15, ease: EASE_OUT } }}
             style={{ transformOrigin: 'top' }}
-            className="absolute inset-x-0 top-full z-40 border-b border-line bg-paper px-6 py-4 shadow-[0_12px_24px_rgb(26_25_23/0.08)]"
+            className="absolute inset-x-0 top-full z-40 border-b border-line bg-paper px-6 py-4 shadow-[0_12px_24px_color-mix(in_srgb,var(--color-ink)_8%,transparent)]"
           >
             <ul className="flex flex-col">
               {items.map((item) => (

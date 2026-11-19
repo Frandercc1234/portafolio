@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl';
+import { TagLine } from '@/components/ui/TagLine';
 import { TransitionLink } from '@/components/ui/TransitionLink';
 import type { ProjectMeta } from '@/lib/content';
 import { ProjectCover } from '@/components/project/ProjectCover';
@@ -38,7 +39,7 @@ export function ProjectCard({ meta, featured = false }: Props) {
           <span className="underline-draw">{meta.title}</span>
         </h3>
         <p className="mt-3 text-[17px] leading-[1.5] text-ink-soft md:text-lg">{meta.summary}</p>
-        <p className="mt-3 text-[15px] font-medium">{meta.stack.slice(0, 4).join(' · ')}</p>
+        <TagLine items={meta.stack.slice(0, 4)} className="mt-3 text-[15px] font-medium" />
         {meta.demoSleeps && <p className="mt-2 text-[13px] text-ink-soft">{p('wakeUp')}</p>}
       </div>
     </TransitionLink>

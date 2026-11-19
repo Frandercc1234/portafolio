@@ -32,7 +32,7 @@ export const timeline: TimelineEntry[] = [
       en: 'Systems Engineering, Universidad Nacional',
       es: 'Ingeniería en Sistemas, Universidad Nacional',
     },
-    detail: { en: 'Education.', es: 'Educación.' },
+    detail: { en: '', es: '' },
   },
 ];
 

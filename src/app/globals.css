@@ -50,6 +50,31 @@ h3 {
   font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.1;
+  text-wrap: balance;
+}
+
+/* Sin palabras sueltas en la última línea de los párrafos. */
+p,
+li,
+dd {
+  text-wrap: pretty;
+}
+
+/* Superficies del navegador con la paleta del sitio. */
+:root {
+  accent-color: var(--color-accent);
+}
+::selection {
+  background: color-mix(in srgb, var(--color-accent) 22%, var(--color-paper));
+  color: var(--color-ink);
+}
+input,
+textarea {
+  caret-color: var(--color-accent);
+}
+a {
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
 }
 
 :focus-visible {
@@ -121,10 +146,13 @@ h3 {
 
 /* Con movimiento reducido: sin desplazamientos. Quedan solo los cambios de opacidad. */
 @media (prefers-reduced-motion: reduce) {
+  /* Se conservan las transiciones de color y opacidad (son la respuesta al puntero);
+     transform queda fuera de la lista, así que el hover y la presión cambian sin desplazarse. */
   *,
   *::before,
   *::after {
-    transition-duration: 0.01ms !important;
+    transition-property:
+      color, background-color, border-color, text-decoration-color, opacity !important;
   }
   .enter,
   .vt-fallback {
@@ -159,8 +187,9 @@ a:hover.underline-draw,
 }
 
 /* Cuerpo del caso en MDX: columna de 68 caracteres; las figuras salen más anchas. */
+/* 54ch con Schibsted Grotesk son unos 68 caracteres por línea (68ch medía 87). */
 .case-prose {
-  width: min(68ch, 100%);
+  width: min(54ch, 100%);
   margin-inline: auto;
 }
 .case-prose h2 {

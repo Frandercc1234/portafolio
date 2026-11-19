@@ -16,7 +16,7 @@ export function Contact() {
             <Eyebrow>{t('email')}</Eyebrow>
             <a
               href={`mailto:${SOCIAL.email}`}
-              className="inline-block font-serif text-2xl font-medium tracking-[-0.01em] break-words underline"
+              className="inline-flex min-h-11 items-center font-serif text-2xl font-medium tracking-[-0.01em] break-words underline"
             >
               {SOCIAL.email}
             </a>
@@ -25,7 +25,7 @@ export function Contact() {
             <Eyebrow>LinkedIn</Eyebrow>
             <ExternalLink
               href={SOCIAL.linkedin}
-              className="inline-block font-serif text-2xl font-medium tracking-[-0.01em] underline"
+              className="inline-flex min-h-11 items-center font-serif text-2xl font-medium tracking-[-0.01em] underline"
             >
               frander-centeno
             </ExternalLink>
@@ -34,7 +34,7 @@ export function Contact() {
             <Eyebrow>GitHub</Eyebrow>
             <ExternalLink
               href={SOCIAL.github}
-              className="inline-block font-serif text-2xl font-medium tracking-[-0.01em] underline"
+              className="inline-flex min-h-11 items-center font-serif text-2xl font-medium tracking-[-0.01em] underline"
             >
               Frandercc1234
             </ExternalLink>

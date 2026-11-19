@@ -51,7 +51,7 @@ Escala (base 16 px en móvil, 17 px desde 768 px):
 | Cuerpo                         | 16 px                                               | 17 px       | 1.65         | 0                  |
 | Etiqueta (eyebrow, meta)       | 13 px                                               | 14 px       | 1.3          | 0.04em, mayúsculas |
 
-Ancho de lectura del cuerpo MDX: 68 caracteres (`max-width: 68ch`). Nunca Inter, Roboto, Arial ni la fuente del sistema como principal (la pila de respaldo solo sirve mientras carga).
+Ancho de lectura del cuerpo MDX: 68 caracteres por línea. Con Schibsted Grotesk eso es `max-width: 54ch` (con `68ch` las líneas medían unos 87 caracteres). Los títulos van con `text-wrap: balance` y los párrafos con `text-wrap: pretty`, para que no quede una palabra sola en la última línea. Nunca Inter, Roboto, Arial ni la fuente del sistema como principal (la pila de respaldo solo sirve mientras carga).
 
 ## 4. Espacio, forma y contenedor
 
@@ -113,3 +113,12 @@ Mensaje en h1 serif, una línea, dos enlaces en fila. Centrado a la izquierda de
 
 - Paleta y tipografía: los valores por defecto de 10.2 se mantienen; la skill ofrecía azules y sans únicas, que chocan con la regla de serif y acento cálido del blueprint.
 - Contrastes calculados con la fórmula WCAG 2.x sobre `#FAF8F5`.
+
+## 9. Detalles del navegador y de las imágenes (paso 11)
+
+- Las portadas llevan un anillo interior de 1 px (`ink` al 10 %) para que las capturas claras no se fundan con el fondo.
+- La selección de texto usa el acento al 22 % sobre el fondo; el cursor de los campos y el `accent-color` usan el acento; el subrayado de enlaces va a 0,18 em de distancia y 1 px de grosor.
+- Las cifras de las métricas usan numerales tabulares.
+- Las listas en una línea (etiquetas de stack) unen cada elemento con su punto con espacios de no separación: el punto nunca abre una línea.
+- El filete lateral de un `Callout` es de 1 px.
+- Objetivos táctiles de 44 px también en los enlaces de contacto.
