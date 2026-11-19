@@ -24,14 +24,16 @@ Variables de entorno: ver `.env.example`.
 
 ## Lighthouse de producción
 
-Medido con `lighthouse` (CLI) sobre https://frandercenteno.vercel.app el 2026-11-19, antes de activar Analytics.
+Medido con `lighthouse` (CLI) sobre https://frandercenteno.vercel.app el 2026-11-18, con Vercel Analytics activo (commit `fcd710e`).
 
 | Página                     | Dispositivo | Rendimiento | Accesibilidad | Buenas prácticas | SEO |
 | -------------------------- | ----------- | ----------- | ------------- | ---------------- | --- |
-| `/en`                      | Móvil       | 96          | 100           | 96               | 100 |
-| `/en`                      | Escritorio  | 99          | 100           | 96               | 100 |
-| `/en/projects/purareserva` | Móvil       | 99          | 100           | 96               | 100 |
-| `/en/projects/purareserva` | Escritorio  | 98          | 100           | 96               | 100 |
+| `/en`                      | Móvil       | 96          | 100           | 100              | 100 |
+| `/en`                      | Escritorio  | 100         | 100           | 100              | 100 |
+| `/en/projects/purareserva` | Móvil       | 99          | 100           | 100              | 100 |
+| `/en/projects/purareserva` | Escritorio  | 100         | 100           | 100              | 100 |
+
+El rendimiento del inicio en móvil es la mediana de 4 corridas (81, 95, 97, 97). La de 81 fue atípica: bloqueo total de 650 ms contra 120 a 180 ms en las otras tres. El resto es una sola corrida.
 
 ## Pendientes
 
