@@ -26,14 +26,14 @@ cover: /projects/turismo-cr/cover.webp
 coverAlt: Dashboard with the Liberia airport selected, three headline numbers and a monthly arrivals line chart
 demoSleeps: true
 featured: true
-order: 4
+order: 5
 ---
 
 ## Problem
 
 The Costa Rican Tourism Board (ICT) publishes its arrival statistics as PDF files, not Excel. Empty cells leave no mark in the text of the PDF, so the numbers cannot be read as plain text.
 
-I built the dashboard for a tourism chamber in Guanacaste. It answers three questions:
+I designed it with the needs of a tourism chamber in Guanacaste in mind. It answers three questions:
 
 - How did tourist arrivals evolve after 2020? This shows whether the market has recovered.
 - Which countries bring the most visitors, and which grow fastest? This shows where to focus promotion and service languages.
@@ -62,7 +62,7 @@ Each number is located by its x position under the header of its column. I could
 
 ### Fail instead of loading wrong numbers
 
-Each table must add up to its published TOTAL row, and two reports must agree month by month. If the ICT changes the layout of the PDF, the load fails with "fuera de columna". I could have loaded whatever parses and shown a warning, but a wrong number on a dashboard is worse than no update.
+Each table must add up to its published TOTAL row, and two reports must agree month by month. If the ICT changes the layout of the PDF, the load fails with "fuera de columna" (out of column). I could have loaded whatever parses and shown a warning, but a wrong number on a dashboard is worse than no update.
 
 ### Keep the published totals as their own table
 
@@ -70,7 +70,7 @@ Each table must add up to its published TOTAL row, and two reports must agree mo
 
 ### A missing month stays empty
 
-A month with no data is empty, not zero. A zero would look like a real drop in arrivals. The README also states what the data cannot say: country detail exists only from 2019, and 2020 and 2021 are affected by the border closure.
+A month with no data is empty, not zero. A zero would look like a real drop in arrivals. The README also lists what the data cannot show: country detail exists only from 2019, and 2020 and 2021 are affected by the border closure.
 
 ## Results
 
@@ -87,4 +87,4 @@ The tests check that the sum of countries matches the published TOTAL in the tab
 
 - Automate the monthly update. Today it takes five manual steps: download the report, list its tables, load, test and push.
 - Add the maritime route for 2025 when the ICT publishes it. The 2025 report does not include it.
-- Add country detail before 2019 from older yearbooks.
+- Add country detail before 2019. Today only the total series exists for those years, from 2012.

@@ -4,7 +4,7 @@ import matter from 'gray-matter';
 import { describe, expect, it } from 'vitest';
 import { projectSchema, getProjects, LOCALES, type Locale } from '@/lib/content';
 
-const SLUGS = ['purareserva', 'turismo-cr', 'asada-gamalotal', 'nicoya-zmt'];
+const SLUGS = ['purareserva', 'nicoya-zmt', 'pipeline-bccr', 'asada-gamalotal', 'turismo-cr'];
 
 const HEADINGS: Record<Locale, string[]> = {
   en: ['Problem', 'My role', 'What I built', 'Key decisions', 'Results', "What I'd do next"],
@@ -33,7 +33,7 @@ describe.each(LOCALES)('proyectos (%s)', (locale) => {
     }
   });
 
-  it('tiene los 4 casos de estudio', () => {
+  it('tiene los 5 casos de estudio', () => {
     expect(
       files(locale)
         .map((f) => f.file.replace(/\.mdx$/, ''))
@@ -59,6 +59,22 @@ describe.each(LOCALES)('proyectos (%s)', (locale) => {
           fs.existsSync(path.join(process.cwd(), 'public', ref)),
           `${locale}/${file}: ${ref}`,
         ).toBe(true);
+      }
+    }
+  });
+});
+
+describe.each(LOCALES)('MDX seguro (%s)', (locale) => {
+  it('solo usa los componentes permitidos y no trae HTML suelto ni scripts', () => {
+    const allowed = new Set(['Figure', 'Callout', 'Columns']);
+    for (const { file, raw } of files(locale)) {
+      const body = matter(raw)
+        .content.replace(/```[\s\S]*?```/g, '')
+        .replace(/`[^`]*`/g, '');
+      expect(body, `${locale}/${file}`).not.toMatch(/<script/i);
+      expect(body, `${locale}/${file}`).not.toMatch(/\{[^}]*\}/); // sin expresiones JS
+      for (const m of body.matchAll(/<\/?([A-Za-z][\w-]*)/g)) {
+        expect(allowed.has(m[1]), `${locale}/${file}: <${m[1]}>`).toBe(true);
       }
     }
   });

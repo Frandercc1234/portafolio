@@ -1,0 +1,1 @@
+Fuentes de las imágenes Open Graph: instancias estáticas y subconjunto latino de Newsreader (opsz 72, wght 500) y Schibsted Grotesk (wght 400 y 500), de https://github.com/google/fonts (licencia SIL OFL 1.1, ver los OFL-*.txt).

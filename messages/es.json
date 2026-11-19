@@ -6,14 +6,21 @@
   "Layout": {
     "skipToContent": "Saltar al contenido",
     "name": "Frander Centeno",
-    "nav": { "projects": "Proyectos", "experience": "Experiencia", "contact": "Contacto" },
+    "nav": {
+      "projects": "Proyectos",
+      "experience": "Experiencia",
+      "contact": "Contacto"
+    },
     "downloadCv": "Descargar CV",
-    "openMenu": "Abrir menú",
-    "closeMenu": "Cerrar menú",
+    "openMenu": "Menú",
+    "closeMenu": "Cerrar",
     "menu": "Menú",
     "language": "Idioma",
     "mainNav": "Navegación principal",
-    "footer": { "built": "Hecho con Next.js, desplegado en Vercel", "rights": "Frander Centeno" },
+    "footer": {
+      "built": "Hecho con Next.js, desplegado en Vercel",
+      "rights": "Frander Centeno"
+    },
     "external": "(se abre en una pestaña nueva)"
   },
   "Home": {
@@ -34,10 +41,23 @@
         "client": "Cliente"
       }
     },
-    "other": { "title": "Otros proyectos", "demo": "Demo", "repo": "Repositorio" },
-    "stack": { "title": "Stack" },
-    "experience": { "title": "Experiencia y educación" },
-    "about": { "title": "Sobre mí" },
+    "other": {
+      "title": "Otros proyectos",
+      "demo": "Demo",
+      "repo": "Repositorio"
+    },
+    "stack": {
+      "title": "Stack"
+    },
+    "experience": {
+      "title": "Experiencia y educación",
+      "certifications": "Certificaciones",
+      "languages": "Idiomas"
+    },
+    "about": {
+      "title": "Sobre mí",
+      "text": "Planifico antes de escribir código y pruebo en un celular real antes de dar una función por terminada. Busco un puesto full stack donde pueda seguir construyendo y aprendiendo."
+    },
     "contact": {
       "title": "Contacto",
       "name": "Nombre",
@@ -52,7 +72,8 @@
         "name": "Ingresá tu nombre (2 a 80 caracteres).",
         "email": "Ingresá un correo válido.",
         "message": "Escribí un mensaje (20 a 2000 caracteres)."
-      }
+      },
+      "turnstileSlot": "Aquí va la verificación anti-spam"
     }
   },
   "Project": {

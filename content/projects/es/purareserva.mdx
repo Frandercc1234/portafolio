@@ -7,19 +7,19 @@ context: personal
 year: 2026
 stack:
   - Next.js
-  - React
-  - TypeScript
-  - Tailwind CSS
   - Supabase
   - Stripe
   - Vercel AI SDK
+  - React
+  - TypeScript
+  - Tailwind CSS
 metrics:
   - value: '36'
     label: casos de prueba del asistente
   - value: '25'
     label: fichas de guía escritas a mano
-  - value: 30 min
-    label: retención de cupo en reserva pendiente
+  - value: 3 / 10
+    label: reservas creadas en 10 intentos, 3 cupos
 links:
   demo: https://purareserva.vercel.app
   repo: https://github.com/Frandercc1234/purareserva
@@ -52,8 +52,6 @@ Un asistente en el chat responde sobre tours, cupos y turismo en Guanacaste. No 
   alt="Página del tour Rincón Canopy con una foto, el precio, un selector de días con cupos libres y el formulario de reserva"
 />
 
-El stack es Next.js 15 con React 19 y Server Actions, TypeScript, Tailwind CSS 4, Supabase (Postgres, Auth, RLS y Storage), next-intl, Stripe, Resend, el Vercel AI SDK con Groq, pgvector, Zod, Vitest y Playwright.
-
 ## Decisiones clave
 
 ### Sin sobreventa
@@ -72,7 +70,7 @@ Pude confirmar la reserva cuando el turista vuelve de Checkout. El turista puede
 
 Al reservar, la app genera un token aleatorio de 32 bytes. El turista lo recibe en un enlace y la base guarda solo su hash SHA-256. Quien tenga el enlace puede ver y cancelar la reserva.
 
-Pude pedir registro. Eso agrega un paso a un flujo que debe tomar dos minutos, así que no lo hice.
+Pude pedir registro. Eso agrega un paso al flujo de reserva, así que no lo hice.
 
 ### Reglas de acceso en la base de datos
 
@@ -86,7 +84,7 @@ La demo corre en Vercel, con Supabase Cloud y Stripe en modo prueba.
 
 El script de concurrencia crea exactamente 3 reservas de 10 intentos en paralelo sobre una salida con 3 cupos.
 
-El asistente tiene 36 casos de prueba, 18 en español y 18 en inglés. El 18 de noviembre de 2026 corrí los 6 casos de reserva contra el modelo real y pasaron 6 de 6. No repetí los otros casos, así que no hay un puntaje reciente de los 36.
+El asistente tiene 36 casos de prueba, 18 en español y 18 en inglés.
 
 La guía de turismo tiene 25 fichas escritas a mano, cada una con su fuente oficial. Cuando ninguna ficha se parece lo bastante a la pregunta, el asistente dice que no tiene el dato. La app no guarda el texto de las conversaciones.
 

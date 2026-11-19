@@ -6,14 +6,21 @@
   "Layout": {
     "skipToContent": "Skip to content",
     "name": "Frander Centeno",
-    "nav": { "projects": "Projects", "experience": "Experience", "contact": "Contact" },
+    "nav": {
+      "projects": "Projects",
+      "experience": "Experience",
+      "contact": "Contact"
+    },
     "downloadCv": "Download CV",
-    "openMenu": "Open menu",
-    "closeMenu": "Close menu",
+    "openMenu": "Menu",
+    "closeMenu": "Close",
     "menu": "Menu",
     "language": "Language",
     "mainNav": "Main navigation",
-    "footer": { "built": "Built with Next.js, deployed on Vercel", "rights": "Frander Centeno" },
+    "footer": {
+      "built": "Built with Next.js, deployed on Vercel",
+      "rights": "Frander Centeno"
+    },
     "external": "(opens in a new tab)"
   },
   "Home": {
@@ -34,10 +41,23 @@
         "client": "Client"
       }
     },
-    "other": { "title": "Other projects", "demo": "Demo", "repo": "Repository" },
-    "stack": { "title": "Stack" },
-    "experience": { "title": "Experience and education" },
-    "about": { "title": "About me" },
+    "other": {
+      "title": "Other projects",
+      "demo": "Demo",
+      "repo": "Repository"
+    },
+    "stack": {
+      "title": "Stack"
+    },
+    "experience": {
+      "title": "Experience and education",
+      "certifications": "Certifications",
+      "languages": "Languages"
+    },
+    "about": {
+      "title": "About me",
+      "text": "I plan before I write code, and I test on a real phone before I call a feature done. I am looking for a full stack role where I can keep building and learning."
+    },
     "contact": {
       "title": "Contact",
       "name": "Name",
@@ -50,9 +70,10 @@
       "errorTurnstile": "The anti-spam check failed. Try again.",
       "errors": {
         "name": "Enter your name (2 to 80 characters).",
-        "email": "Enter a valid email.",
+        "email": "Enter a valid email address.",
         "message": "Write a message (20 to 2000 characters)."
-      }
+      },
+      "turnstileSlot": "Anti-spam check goes here"
     }
   },
   "Project": {
@@ -69,7 +90,7 @@
   "NotFound": {
     "title": "Page not found",
     "text": "The page you are looking for does not exist.",
-    "home": "Go to home",
+    "home": "Go home",
     "projects": "See projects"
   }
 }

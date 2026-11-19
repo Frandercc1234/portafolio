@@ -21,17 +21,17 @@ order: 2
 
 ## Problem
 
-The system is for the Maritime Zone department of the Municipality of Nicoya. It moves two things online: the procedures and appointments of citizens, and the department's view of its requests.
+The system is for the Maritime Zone department of the Municipality of Nicoya. It brings two things online: citizen paperwork and appointments, and the department's tracking of requests.
 
 ## My role
 
-I worked as a full stack developer in a team of four or more people. It was a university project at Universidad Nacional, in 2024 and 2025.
+It was a university project at Universidad Nacional, in 2024 and 2025, built by a team of four or more people. My part was full stack.
 
 ## What I built
 
-An information system with two parts. A citizen portal, where people handle procedures and book appointments online. An admin dashboard, where the department sees the state of each request in three categories: pending, approved and rejected.
+We built it as a team. It is an information system with two parts. A citizen portal, where people handle paperwork and book appointments online. An admin dashboard, where the department sees the state of each request in three categories: pending, approved and rejected.
 
-The system sends the citizen email notices. It has tests, and the design works on phones.
+The system emails citizens about their requests. It has tests, and the design works on phones.
 
 React and Next.js build the interface, and Next.js also acts as the backend. The data lives in MariaDB, and the code is TypeScript.
 
@@ -42,17 +42,19 @@ React and Next.js build the interface, and Next.js also acts as the backend. The
 
 ## Key decisions
 
+The team made these decisions.
+
 ### Separate citizen portal and admin dashboard
 
-The citizen portal and the admin dashboard are two separate parts, and each has its own permissions.
+The team split the citizen portal and the admin dashboard into two parts, each with its own permissions.
 
-### MariaDB, because the Municipality's server had it
+### MariaDB, the database the Municipality already used
 
-I used MariaDB because it was what the Municipality's own server already had. The alternative was a cloud database, and I did not use it.
+This was a constraint more than a choice. The Municipality already used MariaDB and gave us access to its database server, so we built the system on it.
 
 ### Appointments in fixed half-hour slots
 
-Appointments come in fixed slots of half an hour. The head of the department manages them from the dashboard and can block hours, so those hours do not show to citizens.
+Appointments use fixed 30-minute slots. The head of the department manages them from the dashboard and can block hours, so citizens do not see them.
 
 ## Results
 

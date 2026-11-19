@@ -29,6 +29,7 @@ Portafolio web de Frander Centeno, desarrollador fullstack en Costa Rica.
 | `purareserva` | Reservas de tours en Guanacaste, Next.js + Supabase + asistente IA | README, `DESIGN.md` y `PRODUCT.md` del repo `Frandercc1234/purareserva`. Demo: https://purareserva.vercel.app |
 | `turismo-cr` | Dashboard de llegadas internacionales del ICT, Python + DuckDB + Streamlit | README del repo `Frandercc1234/turismo-cr`. Demo: https://turismo-cr-7juydxs6ebdqwumreibouf.streamlit.app/ |
 | `asada-gamalotal` | Sistema de inventario para una ASADA (práctica profesional), Next.js + Supabase | README del repo `Frandercc1234/asada-gamalotal-inventario` |
+| `pipeline-bccr` | Pipeline diario de indicadores económicos del BCCR con API pública y dashboard, Python + PostgreSQL + NestJS + Next.js | README y documentos del repo `Frandercc1234/pipeline-indicadores-cr`. Demo: https://pipeline-indicadores-cr.vercel.app |
 | `nicoya-zmt` | Sistema de la Zona Marítimo Terrestre, Municipalidad de Nicoya (proyecto universitario) | Texto de la sección 9.4. En producción: https://zmtmn-usuarios.municoya.go.cr |
 
 `risk-calculator` (https://risk-calculator-web.vercel.app) entra como proyecto secundario: tarjeta en la lista "Otros proyectos", sin caso propio.
@@ -39,7 +40,6 @@ Portafolio web de Frander Centeno, desarrollador fullstack en Costa Rica.
 - Modo oscuro (se evalúa después del lanzamiento).
 - Dominio propio: se publica en `*.vercel.app`. El cambio a un `.dev` es solo configuración (sección 14.4).
 - 3D, WebGL, GSAP, scroll-jacking y cursores personalizados.
-- El caso del pipeline BCCR: se agrega cuando ese proyecto exista, con el mismo formato MDX.
 
 ## 3. Usuarios y roles
 
@@ -155,6 +155,7 @@ export const projectSchema = z.object({
   }),
   cover: z.string().startsWith('/projects/').optional(),  // imagen 16:10; sin captura real, portada tipográfica
   coverAlt: z.string().min(10).optional(),                // va junto con cover
+  coverLabel: z.string().max(40).optional(),              // texto del bloque tipográfico (por defecto, el título)
   demoSleeps: z.boolean().optional(),                     // el demo se duerme: se avisa "may take ~30 s to wake up"
   featured: z.boolean(),
   order: z.number().int().min(1),
@@ -193,7 +194,7 @@ Componentes permitidos dentro del MDX (`src/components/mdx/`): `<Figure src alt 
   3. Verifica el token de Turnstile contra `https://challenges.cloudflare.com/turnstile/v0/siteverify` con `TURNSTILE_SECRET_KEY`. Si falla, error `TURNSTILE`.
   4. Envía con Resend. `replyTo` es el correo del visitante. El asunto lleva el nombre, nunca HTML del usuario: el cuerpo es texto plano.
   5. No registra el mensaje en logs. Solo registra el código de error.
-  6. Si `RESEND_API_KEY` está vacía y `NODE_ENV !== 'production'`, no envía y devuelve `{ ok: true }` (para CI y e2e). En producción, sin clave devuelve `SEND`.
+  6. Si `CONTACT_DRY_RUN=1`, la acción valida y verifica Turnstile pero no llama a Resend y devuelve `{ ok: true }` (para CI y e2e). Esa variable nunca se define en producción. Sin `CONTACT_DRY_RUN` y sin `RESEND_API_KEY` devuelve `SEND`, en cualquier entorno.
 - **Encabezados** en `next.config.ts`: `Content-Security-Policy` que permita `self`, `challenges.cloudflare.com` (script y frame) y `va.vercel-scripts.com`; `X-Content-Type-Options: nosniff`; `Referrer-Policy: strict-origin-when-cross-origin`; `Permissions-Policy` sin cámara, micrófono ni geolocalización.
 - **MDX:** solo se renderizan archivos del repo y solo con los componentes de la sección 6.2.
 - **Enlaces externos:** `rel="noopener noreferrer"` y `target="_blank"` con texto visible que lo indique para lectores de pantalla.
@@ -224,7 +225,7 @@ Todas las páginas son estáticas (`dynamic = 'error'` en páginas de contenido)
 ### 9.2 Inicio `/[locale]`
 
 1. **Hero:** nombre, rol ("Full stack developer"), una línea de valor (web apps y dashboards de datos para pymes e instituciones públicas), ubicación (Costa Rica, UTC-6), estado ("Open to full stack roles and freelance projects") y dos botones: "Download CV" (principal) y "Contact".
-2. **Casos destacados:** los proyectos con `featured: true` en orden. El primero ocupa más espacio. Cada tarjeta: imagen, título, `summary`, contexto (internship, university, personal) y 3 etiquetas de stack. Toda la tarjeta enlaza al caso.
+2. **Casos destacados:** los proyectos con `featured: true` en orden. El primero ocupa más espacio y los demás van en una cuadrícula de 2×2 en 1440, apilados en 375. Orden: `purareserva`, `nicoya-zmt`, `pipeline-bccr`, `asada-gamalotal`, `turismo-cr`. Cada tarjeta: imagen, título, `summary`, contexto (internship, university, personal) y 3 etiquetas de stack. Toda la tarjeta enlaza al caso.
 3. **Otros proyectos:** lista compacta (risk-calculator) con enlaces a demo y repo.
 4. **Stack:** los 4 grupos de `stack.ts`, como texto, sin logos de colores.
 5. **Experiencia y educación:** línea de tiempo simple con `experience.ts`.
@@ -301,6 +302,7 @@ Lo decide la skill de Emil (`emil-design-eng`), con estas reglas:
 | `CONTACT_FROM_EMAIL` | `Portfolio <onboarding@resend.dev>` | Remitente de prueba de Resend. Cambia cuando haya dominio |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | `0x4AAAA...` | dash.cloudflare.com → Turnstile → Add widget (hostnames: `localhost` y el dominio de Vercel) |
 | `TURNSTILE_SECRET_KEY` | `0x4AAAA...` | El mismo widget |
+| `CONTACT_DRY_RUN` | `1` | Solo CI y pruebas e2e: el formulario valida y verifica Turnstile pero no envía. Nunca se define en producción ni en Preview |
 
 `.env.example` lleva todas con valores vacíos. Para pruebas locales y e2e, usar las claves de prueba de Turnstile: site `1x00000000000000000000AA` y secret `1x0000000000000000000000000000000AA`. En Preview de Vercel también se usan las de prueba.
 
@@ -349,7 +351,7 @@ Antes de cada paso de diseño, cargar la skill que se indica. Después de cada p
 
 ### Paso 5. Contenido
 
-- Clonar en `/tmp` los repos de la sección 2 y leer sus README (y `DESIGN.md`/`PRODUCT.md` en purareserva). Escribir los 4 MDX en inglés y en español con el esquema de 6.1 y las secciones de 6.2.
+- Clonar en `/tmp` los repos de la sección 2 y leer sus README (y `DESIGN.md`/`PRODUCT.md` en purareserva). Escribir los 5 MDX en inglés y en español con el esquema de 6.1 y las secciones de 6.2.
 - Solo datos que estén en los repos o en la sección 9.4. Métricas solo si aparecen escritas ahí; si el README de un proyecto (por ejemplo `purareserva`) no trae cifras, `metrics` queda vacío y el bloque de métricas no se muestra. Tono: oraciones cortas, en primera persona, sin adjetivos de relleno ("robusto", "innovador", "seamless"), sin emojis.
 - Capturas: con Playwright, sacar capturas de los demos en vivo (inicio y una pantalla clave, 1440x900) y guardarlas como `.webp` en `public/projects/<slug>/`. Para `asada-gamalotal` usar las capturas del README del repo si existen; si no, la portada es un bloque tipográfico con el nombre (sin imagen inventada).
 - `src/data/experience.ts` y `stack.ts` con la sección 6.3.
@@ -364,7 +366,7 @@ Antes de cada paso de diseño, cargar la skill que se indica. Después de cada p
 ### Paso 7. Caso de estudio
 
 - `projects/[slug]/page.tsx`, componentes de `components/project/` y `components/mdx/`, `generateStaticParams`, metadatos por caso, "Next project".
-- **Verificación:** `npm run build` genera las 8 páginas de casos. Capturas a 375 y 1440 de `purareserva` en los dos idiomas. Slug inexistente da 404.
+- **Verificación:** `npm run build` genera las 10 páginas de casos. Capturas a 375 y 1440 de `purareserva` en los dos idiomas. Slug inexistente da 404.
 
 ### Paso 8. Formulario de contacto
 
@@ -374,7 +376,8 @@ Antes de cada paso de diseño, cargar la skill que se indica. Después de cada p
 ### Paso 9. SEO y Open Graph
 
 - `generateMetadata` en inicio y casos (título, descripción, `alternates` con `hreflang`, `openGraph`, `twitter`). `sitemap.ts`, `robots.ts`, `opengraph-image.tsx` de inicio y de caso. JSON-LD `Person` en el inicio (nombre, cargo, URL, `sameAs` con GitHub y LinkedIn).
-- **Verificación:** `npm run build`; `/sitemap.xml` lista 10 URLs (2 inicios y 8 casos); `/en/opengraph-image` y `/en/projects/purareserva/opengraph-image` devuelven PNG de 1200x630.
+- Las imágenes Open Graph usan instancias estáticas de Newsreader y Schibsted Grotesk en `src/assets/fonts/` (Satori no lee WOFF2 ni fuentes variables), con su licencia OFL.
+- **Verificación:** `npm run build`; `/sitemap.xml` lista 12 URLs (2 inicios y 10 casos); `/en/opengraph-image` y `/en/projects/purareserva/opengraph-image` devuelven PNG de 1200x630.
 
 ### Paso 10. Movimiento y detalles (Emil)
 
@@ -389,11 +392,12 @@ Antes de cada paso de diseño, cargar la skill que se indica. Después de cada p
 ### Paso 12. Pruebas e2e
 
 - Escribir las pruebas de la sección 13 en `tests/e2e/`.
+- Playwright corre contra `npm run build` + `next start` en el puerto 3100 (`playwright.config.ts`), con las claves de prueba de Turnstile, `RESEND_API_KEY` vacía y `CONTACT_DRY_RUN=1`: el formulario no envía correos reales y la prueba usa el mismo build que se despliega (el servidor de desarrollo fallaba de forma intermitente).
 - **Verificación:** `npx playwright test` pasa en `mobile` y `desktop`.
 
 ### Paso 13. CI
 
-- GitHub Actions en cada PR: `npm ci`, lint, typecheck (`tsc --noEmit`), `npm run test`, `npm run build` y Playwright (con claves de prueba de Turnstile y sin envío real: el action de contacto no llama a Resend si `RESEND_API_KEY` está vacía y devuelve `{ ok: true }` solo cuando `NODE_ENV !== 'production'`).
+- GitHub Actions en cada PR: `npm ci`, lint, typecheck (`tsc --noEmit`), `npm run test`, `npm run build` y Playwright (con claves de prueba de Turnstile y sin envío real: con `CONTACT_DRY_RUN=1` el action de contacto no llama a Resend y devuelve `{ ok: true }`; en producción esa variable nunca se define).
 - **Verificación:** un PR de prueba deja el check en verde.
 
 ### Paso 14. Despliegue

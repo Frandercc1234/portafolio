@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { buttonClass } from '@/components/ui/Button';
 
 type Item = { href: string; label: string };
 
@@ -12,8 +14,13 @@ type Props = {
   cvLabel: string;
 };
 
+// Motion y el panel no se descargan hasta que alguien toca el botón: así no pesan en la carga.
+const loadPanel = () => import('./MobileMenuPanel');
+const MobileMenuPanel = dynamic(loadPanel, { ssr: false });
+
 export function MobileMenu({ items, openLabel, closeLabel, cvHref, cvLabel }: Props) {
   const [open, setOpen] = useState(false);
+  const [used, setUsed] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -30,35 +37,24 @@ export function MobileMenu({ items, openLabel, closeLabel, cvHref, cvLabel }: Pr
         type="button"
         aria-expanded={open}
         aria-controls="mobile-menu"
-        onClick={() => setOpen((v) => !v)}
-        className="inline-flex min-h-11 min-w-11 items-center justify-center text-sm"
+        // Empieza a bajar el panel al apoyar el dedo, antes de que termine el toque.
+        onPointerDown={() => void loadPanel()}
+        onClick={() => {
+          setUsed(true);
+          setOpen((v) => !v);
+        }}
+        className={buttonClass('secondary', 'px-3.5 text-[15px]')}
       >
         {open ? closeLabel : openLabel}
       </button>
-      {open && (
-        <div
-          id="mobile-menu"
-          className="absolute inset-x-0 top-full border-b border-neutral-200 bg-white p-4"
-        >
-          <ul className="flex flex-col">
-            {items.map((item) => (
-              <li key={item.href}>
-                <a
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="flex min-h-11 items-center"
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-            <li>
-              <a href={cvHref} download className="flex min-h-11 items-center font-semibold">
-                {cvLabel}
-              </a>
-            </li>
-          </ul>
-        </div>
+      {used && (
+        <MobileMenuPanel
+          open={open}
+          items={items}
+          cvHref={cvHref}
+          cvLabel={cvLabel}
+          onNavigate={() => setOpen(false)}
+        />
       )}
     </div>
   );

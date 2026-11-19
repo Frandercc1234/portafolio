@@ -21,15 +21,15 @@ order: 2
 
 ## Problema
 
-El sistema es para el departamento de Zona Marítimo Terrestre de la Municipalidad de Nicoya. Lleva a línea dos cosas: los trámites y las citas de los ciudadanos, y la vista del departamento sobre sus solicitudes.
+El sistema es para el departamento de Zona Marítimo Terrestre de la Municipalidad de Nicoya. Pone en línea dos cosas: los trámites y las citas de los ciudadanos, y la vista del departamento sobre sus solicitudes.
 
 ## Mi rol
 
-Trabajé como desarrollador full stack en un equipo de cuatro o más personas. Fue un proyecto universitario de la Universidad Nacional, en 2024 y 2025.
+Fue un proyecto universitario de la Universidad Nacional, en 2024 y 2025, hecho por un equipo de cuatro o más personas. Mi parte fue full stack.
 
 ## Qué construí
 
-Un sistema de información con dos partes. Un portal ciudadano, donde las personas hacen trámites y reservan citas en línea. Un panel administrativo, donde el departamento ve el estado de cada solicitud en tres categorías: pendiente, aprobada y rechazada.
+Lo construimos entre todo el equipo. Es un sistema de información con dos partes. Un portal ciudadano, donde las personas hacen trámites y reservan citas en línea. Un panel administrativo, donde el departamento ve el estado de cada solicitud en tres categorías: pendiente, aprobada y rechazada.
 
 El sistema envía avisos por correo al ciudadano. Tiene pruebas y el diseño funciona en celular.
 
@@ -42,13 +42,15 @@ React y Next.js construyen la interfaz, y Next.js también hace de backend. Los 
 
 ## Decisiones clave
 
+Estas decisiones las tomó el equipo.
+
 ### Portal ciudadano y panel administrativo separados
 
-El portal ciudadano y el panel administrativo son dos partes separadas, y cada una tiene sus propios permisos.
+El equipo separó el portal ciudadano y el panel administrativo en dos partes, cada una con sus propios permisos.
 
-### MariaDB, porque la tenía el servidor de la Municipalidad
+### MariaDB, la base que ya usaba la Municipalidad
 
-Usé MariaDB porque era lo que ya tenía el servidor de la Municipalidad. La alternativa era una base de datos en la nube, y no la usé.
+Es una restricción más que una elección. La Municipalidad ya usaba MariaDB y nos dio acceso a su gestor, así que el sistema se construyó sobre esa base.
 
 ### Citas en franjas fijas de media hora
 
