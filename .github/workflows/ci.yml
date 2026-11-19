@@ -19,7 +19,8 @@ env:
 jobs:
   verificar:
     name: Lint, tipos, pruebas, build y e2e
-    runs-on: ubuntu-latest
+    # Versión fija: ubuntu-latest ya apunta a 26.04, que Playwright 1.59 todavía no soporta.
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     env:
       # El formulario de contacto valida y verifica Turnstile, pero no llama a Resend.
