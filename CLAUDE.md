@@ -296,7 +296,7 @@ Lo decide la skill de Emil (`emil-design-eng`), con estas reglas:
 
 | Nombre | Ejemplo | Dónde se obtiene |
 |---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | `https://frander-centeno.vercel.app` | URL de producción en Vercel (local: `http://localhost:3000`) |
+| `NEXT_PUBLIC_SITE_URL` | `https://frandercenteno.vercel.app` | URL de producción en Vercel (local: `http://localhost:3000`) |
 | `RESEND_API_KEY` | `re_xxx` | resend.com → API Keys (plan gratis) |
 | `CONTACT_TO_EMAIL` | `centenofrander@gmail.com` | Correo de la cuenta de Resend. Sin dominio propio, Resend solo envía a ese correo |
 | `CONTACT_FROM_EMAIL` | `Portfolio <onboarding@resend.dev>` | Remitente de prueba de Resend. Cambia cuando haya dominio |
@@ -424,7 +424,7 @@ Antes de cada paso de diseño, cargar la skill que se indica. Después de cada p
 
 1. Crear el repo público `Frandercc1234/portafolio` y subir `main`.
 2. Vercel → Add New → Project → importar el repo. Framework Next.js, sin cambios de build.
-3. Nombre del proyecto en Vercel: `frander-centeno`, para que la URL sea `frander-centeno.vercel.app`. Si está tomado, usar `frandercenteno`.
+3. Nombre del proyecto en Vercel: `frander-centeno`, para que la URL sea `frander-centeno.vercel.app`. Estaba tomado: el proyecto quedó en `frandercenteno` y la URL de producción es `https://frandercenteno.vercel.app` (`frander-centeno-orcin.vercel.app` redirige ahí con 308).
 4. Variables (Settings → Environment Variables):
    - Production: todas las de la sección 11 con los valores reales, y `NEXT_PUBLIC_SITE_URL` con la URL final.
    - Preview: las mismas, pero las claves de prueba de Turnstile.

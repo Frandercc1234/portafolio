@@ -32,6 +32,35 @@ test.describe('SEO', () => {
     expect(body).toMatch(/Sitemap: .+\/sitemap\.xml/);
   });
 
+  test('/icon.svg devuelve 200 como SVG, sin pasar por el middleware de idioma', async ({
+    request,
+  }) => {
+    const res = await request.get('/icon.svg', { maxRedirects: 0 });
+    expect(res.status()).toBe(200);
+    expect(res.headers()['content-type']).toContain('image/svg+xml');
+    expect(await res.text()).toContain('<svg');
+  });
+
+  test('/favicon.ico y otros archivos de la raíz no caen en [locale]', async ({ request }) => {
+    // Sin redirección a /en y sin pasar por el segmento [locale] (antes daba 500/ENOENT).
+    const ico = await request.get('/favicon.ico', { maxRedirects: 0 });
+    expect(ico.status()).toBe(200);
+    expect(ico.headers()['content-type']).toContain('image');
+    expect(ico.headers()['location']).toBeUndefined();
+    for (const path of ['/robots.txt', '/sitemap.xml']) {
+      const res = await request.get(path, { maxRedirects: 0 });
+      expect(res.status(), path).toBe(200);
+    }
+  });
+
+  test('el inicio declara el ícono en el <head>', async ({ page }) => {
+    await page.goto('/en');
+    await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toHaveAttribute(
+      'href',
+      /\/icon\.svg/,
+    );
+  });
+
   for (const path of [
     '/en/opengraph-image',
     '/es/opengraph-image',

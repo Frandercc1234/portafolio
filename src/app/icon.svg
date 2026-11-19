@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="FC">
+  <rect width="64" height="64" rx="10" fill="#FAF8F5"/>
+  <rect x="1" y="1" width="62" height="62" rx="9" fill="none" stroke="#E4E0D9" stroke-width="2"/>
+  <text x="32" y="43" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="30" font-weight="700" fill="#1A1917">F<tspan fill="#C2410C">C</tspan></text>
+</svg>
