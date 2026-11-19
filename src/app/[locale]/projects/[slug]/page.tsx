@@ -67,7 +67,12 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
       </div>
       <Results metrics={meta.metrics} />
       <article className="case-prose mt-16 md:mt-24">
-        <MDXRemote source={content} components={mdxComponents} />
+        <MDXRemote
+          source={content}
+          components={mdxComponents}
+          // Sin expresiones de JavaScript en el MDX (next-mdx-remote 6 las bloquea por defecto; se deja explícito).
+          options={{ blockJS: true, blockDangerousJS: true }}
+        />
       </article>
       <NextProject next={next} />
     </div>
