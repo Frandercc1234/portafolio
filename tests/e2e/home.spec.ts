@@ -64,5 +64,51 @@ for (const locale of ['en', 'es'] as const) {
       }));
       expect(overflow.scrollWidth).toBeLessThanOrEqual(overflow.innerWidth);
     });
+
+    // Los anchos donde el header y la sección de contacto se desbordaban (issues #1 y #2 de QA).
+    for (const width of [320, 375, 768, 1024, 1440]) {
+      test(`no hay scroll horizontal a ${width} px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto(`/${locale}`);
+        await page.evaluate(() => document.fonts.ready);
+        const overflow = await page.evaluate(() => ({
+          scrollWidth: document.documentElement.scrollWidth,
+          innerWidth: window.innerWidth,
+        }));
+        expect(overflow.scrollWidth).toBeLessThanOrEqual(overflow.innerWidth);
+        // El botón del menú (o el de Download CV en escritorio) queda dentro de la pantalla.
+        const right = await page.evaluate(() => {
+          const el = document.querySelector('header .wrap > div:last-child');
+          return el ? el.getBoundingClientRect().right : 0;
+        });
+        expect(right).toBeLessThanOrEqual(width);
+      });
+    }
+
+    test('a 320 px el widget de Turnstile (compacto) no se sale del contenedor', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 320, height: 900 });
+      await page.goto(`/${locale}`, { waitUntil: 'load' });
+      const slot = page.locator('[data-turnstile-slot]');
+      await slot.scrollIntoViewIfNeeded();
+      // El widget de prueba termina de montarse cuando deja su token en el campo oculto.
+      await page.waitForFunction(
+        () =>
+          Boolean(document.querySelector<HTMLInputElement>('input[name="cf-turnstile-response"]')),
+        undefined,
+        { timeout: 30_000 },
+      );
+      // Con 272 px disponibles se usa el tamaño compacto (150×140), no el de 300×65.
+      await expect(slot).toHaveCSS('height', '140px');
+      const medidas = await slot.evaluate((el) => {
+        const caja = el.getBoundingClientRect();
+        const hijos = [...el.querySelectorAll('*')].map((h) => h.getBoundingClientRect().right);
+        return { derecha: caja.right, ancho: caja.width, maxHijo: Math.max(0, ...hijos) };
+      });
+      expect(medidas.ancho).toBeLessThanOrEqual(300);
+      expect(medidas.maxHijo).toBeLessThanOrEqual(medidas.derecha + 0.5);
+      expect(medidas.derecha).toBeLessThanOrEqual(320);
+    });
   });
 }

@@ -19,11 +19,11 @@ export async function Header() {
       <div className="wrap flex min-h-14 items-center justify-between gap-4 md:min-h-[72px]">
         <Link
           href="/"
-          className="flex min-h-11 shrink-0 items-center font-serif text-lg font-semibold whitespace-nowrap md:text-[22px]"
+          className="flex min-h-11 shrink-0 items-center font-serif text-lg font-semibold whitespace-nowrap max-[359px]:shrink max-[359px]:leading-tight max-[359px]:whitespace-normal md:text-[22px]"
         >
           {t('name')}
         </Link>
-        <nav aria-label={t('mainNav')} className="hidden items-center gap-8 md:flex">
+        <nav aria-label={t('mainNav')} className="hidden items-center gap-8 lg:flex">
           {items.map((item) => (
             <a
               key={item.href}
@@ -34,9 +34,9 @@ export async function Header() {
             </a>
           ))}
         </nav>
-        <div className="flex items-center gap-1 md:gap-5">
+        <div className="flex items-center gap-1 lg:gap-5">
           <LocaleSwitch />
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <ButtonLink href={CV_URL[locale]} download variant="secondary">
               {t('downloadCv')}
             </ButtonLink>
