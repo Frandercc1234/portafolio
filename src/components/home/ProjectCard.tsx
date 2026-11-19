@@ -3,7 +3,6 @@ import { TagLine } from '@/components/ui/TagLine';
 import { TransitionLink } from '@/components/ui/TransitionLink';
 import type { ProjectMeta } from '@/lib/content';
 import { ProjectCover } from '@/components/project/ProjectCover';
-import { Eyebrow } from './Section';
 
 type Props = { meta: ProjectMeta; featured?: boolean };
 
@@ -30,16 +29,18 @@ export function ProjectCard({ meta, featured = false }: Props) {
         />
       </div>
       <div className={featured ? 'mt-4 md:col-span-5 md:mt-0 md:self-center md:pl-6' : 'mt-5'}>
-        <Eyebrow>{t(`context.${meta.context}`)}</Eyebrow>
         <h3
-          className={`mt-2 text-[28px] leading-[1.2] tracking-[-0.01em] ${
+          className={`text-[28px] leading-[1.2] tracking-[-0.01em] ${
             featured ? 'md:text-[36px]' : ''
           }`}
         >
           <span className="underline-draw">{meta.title}</span>
         </h3>
         <p className="mt-3 text-[17px] leading-[1.5] text-ink-soft md:text-lg">{meta.summary}</p>
-        <TagLine items={meta.stack.slice(0, 4)} className="mt-3 text-[15px] font-medium" />
+        <TagLine
+          items={[t(`context.${meta.context}`), ...meta.stack.slice(0, 4)]}
+          className="mt-3 text-[15px] font-medium"
+        />
         {meta.demoSleeps && <p className="mt-2 text-[13px] text-ink-soft">{p('wakeUp')}</p>}
       </div>
     </TransitionLink>

@@ -10,7 +10,7 @@ export function FeaturedProjects({ projects }: { projects: ProjectMeta[] }) {
   if (!first) return null;
 
   return (
-    <Section id="projects" title={t('title')}>
+    <Section id="projects" title={t('title')} padTop="pt-20" titleGap="mb-10">
       <ProjectCard meta={first} featured />
       {rest.length > 0 && (
         <ul className="mt-10 grid gap-10 md:mt-6 md:grid-cols-2 md:gap-6 md:gap-y-12">
