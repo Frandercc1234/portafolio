@@ -31,7 +31,9 @@ export function ProjectCover({
           width={1440}
           height={900}
           sizes={sizes}
+          quality={70}
           priority={priority}
+          fetchPriority={priority ? 'high' : undefined}
           className="h-full w-full object-cover transition-transform duration-300 ease-out-strong group-hover:scale-[1.02]"
         />
       </div>

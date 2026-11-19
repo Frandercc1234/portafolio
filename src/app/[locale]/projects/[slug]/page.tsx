@@ -62,7 +62,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
           priority
           large
           transitionTarget
-          sizes="(min-width: 1280px) 1280px, 100vw"
+          sizes="(min-width: 1280px) 1280px, (min-width: 768px) calc(100vw - 96px), calc(100vw - 48px)"
         />
       </div>
       <Results metrics={meta.metrics} />

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { AnimatePresence, LazyMotion, m, useReducedMotion } from 'motion/react';
+import dynamic from 'next/dynamic';
 import { buttonClass } from '@/components/ui/Button';
 
 type Item = { href: string; label: string };
@@ -14,17 +14,13 @@ type Props = {
   cvLabel: string;
 };
 
-// Las funciones de animación se cargan aparte, solo cuando el menú existe.
-const loadFeatures = () => import('motion/react').then((mod) => mod.domAnimation);
-
-const EASE_OUT = [0.23, 1, 0.32, 1] as const;
+// Motion y el panel no se descargan hasta que alguien toca el botón: así no pesan en la carga.
+const loadPanel = () => import('./MobileMenuPanel');
+const MobileMenuPanel = dynamic(loadPanel, { ssr: false });
 
 export function MobileMenu({ items, openLabel, closeLabel, cvHref, cvLabel }: Props) {
   const [open, setOpen] = useState(false);
-  const reduce = useReducedMotion();
-  // Transform completo (acelerado por hardware). Con movimiento reducido solo cambia la opacidad.
-  const hidden = { opacity: 0, transform: reduce ? 'none' : 'translateY(-8px)' };
-  const shown = { opacity: 1, transform: reduce ? 'none' : 'translateY(0px)' };
+  const [used, setUsed] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -41,48 +37,25 @@ export function MobileMenu({ items, openLabel, closeLabel, cvHref, cvLabel }: Pr
         type="button"
         aria-expanded={open}
         aria-controls="mobile-menu"
-        onClick={() => setOpen((v) => !v)}
+        // Empieza a bajar el panel al apoyar el dedo, antes de que termine el toque.
+        onPointerDown={() => void loadPanel()}
+        onClick={() => {
+          setUsed(true);
+          setOpen((v) => !v);
+        }}
         className={buttonClass('secondary', 'px-3.5 text-[15px]')}
       >
         {open ? closeLabel : openLabel}
       </button>
-      <LazyMotion features={loadFeatures} strict>
-        <AnimatePresence>
-          {open && (
-            <m.div
-              id="mobile-menu"
-              initial={hidden}
-              animate={{ ...shown, transition: { duration: 0.2, ease: EASE_OUT } }}
-              exit={{ ...hidden, transition: { duration: 0.15, ease: EASE_OUT } }}
-              style={{ transformOrigin: 'top' }}
-              className="absolute inset-x-0 top-full z-40 border-b border-line bg-paper px-6 py-4 shadow-[0_12px_24px_rgb(26_25_23/0.08)]"
-            >
-              <ul className="flex flex-col">
-                {items.map((item) => (
-                  <li key={item.href}>
-                    <a
-                      href={item.href}
-                      onClick={() => setOpen(false)}
-                      className="flex min-h-11 items-center font-medium"
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
-                <li>
-                  <a
-                    href={cvHref}
-                    download
-                    className="flex min-h-11 items-center font-semibold text-accent"
-                  >
-                    {cvLabel}
-                  </a>
-                </li>
-              </ul>
-            </m.div>
-          )}
-        </AnimatePresence>
-      </LazyMotion>
+      {used && (
+        <MobileMenuPanel
+          open={open}
+          items={items}
+          cvHref={cvHref}
+          cvLabel={cvLabel}
+          onNavigate={() => setOpen(false)}
+        />
+      )}
     </div>
   );
 }

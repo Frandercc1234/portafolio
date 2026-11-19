@@ -23,8 +23,8 @@ export function ProjectCard({ meta, featured = false }: Props) {
           priority={featured}
           sizes={
             featured
-              ? '(min-width: 1280px) 736px, (min-width: 768px) 58vw, 100vw'
-              : '(min-width: 1280px) 628px, (min-width: 768px) 50vw, 100vw'
+              ? '(min-width: 1280px) 736px, (min-width: 768px) 58vw, calc(100vw - 48px)'
+              : '(min-width: 1280px) 628px, (min-width: 768px) calc(50vw - 72px), calc(100vw - 48px)'
           }
         />
       </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Script from 'next/script';
 
 type TurnstileApi = {
@@ -30,6 +30,8 @@ type Props = {
 export function TurnstileWidget({ siteKey, locale, resetKey, placeholder }: Props) {
   const box = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | null>(null);
+  // El script de Cloudflare pesa y el formulario está al final: se pide solo al acercarse.
+  const [near, setNear] = useState(false);
 
   const render = useCallback(() => {
     if (!siteKey || !box.current || !window.turnstile || widgetId.current) return;
@@ -39,6 +41,26 @@ export function TurnstileWidget({ siteKey, locale, resetKey, placeholder }: Prop
       language: locale,
     });
   }, [siteKey, locale]);
+
+  useEffect(() => {
+    const el = box.current;
+    if (!el || near) return;
+    if (!('IntersectionObserver' in window)) {
+      setNear(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setNear(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '800px 0px' },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [near, siteKey]);
 
   useEffect(() => {
     const id = widgetId;
@@ -67,11 +89,13 @@ export function TurnstileWidget({ siteKey, locale, resetKey, placeholder }: Prop
 
   return (
     <>
-      <Script
-        src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
-        strategy="afterInteractive"
-        onReady={render}
-      />
+      {near && (
+        <Script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+          strategy="afterInteractive"
+          onReady={render}
+        />
+      )}
       <div ref={box} data-turnstile-slot className="h-[65px] w-[300px] max-w-full" />
     </>
   );
