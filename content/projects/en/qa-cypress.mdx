@@ -1,0 +1,88 @@
+---
+slug: qa-cypress
+title: QA suite for this portfolio
+summary: Cypress suite that tests this live portfolio with E2E and API checks. It found two real responsive bugs, now fixed.
+role: QA automation, solo project
+context: personal
+year: 2026
+stack:
+  - Cypress
+  - TypeScript
+  - ESLint
+  - GitHub Actions
+metrics:
+  - value: '82'
+    label: automated tests
+  - value: '17'
+    label: test cases
+  - value: '2'
+    label: real bugs found and fixed
+links:
+  repo: https://github.com/Frandercc1234/portafolio-qa-cypress
+coverLabel: QA suite · Cypress
+featured: false
+order: 6
+---
+
+## Problem
+
+This portfolio is what a recruiter sees first. It has two languages, a phone layout and a desktop layout, and a contact form. A change in any of them can break something a visitor uses.
+
+I wanted a test project that checks the live site, not a copy of it, and that comes with a written test plan.
+
+## My role
+
+I did all of it: the test plan, the tests, the CI and the bug template. The project does not change the site. When it finds a defect, it becomes an issue.
+
+## What I built
+
+A test plan in `docs/plan-de-pruebas.md`: scope, what is left out, environments, entry and exit criteria, 17 test cases (CP-01 to CP-17) and risks.
+
+The suite runs 82 automated tests in Cypress 16 with TypeScript and ESLint:
+
+- 37 E2E tests at 375×812.
+- The same 37 at 1440×900.
+- 8 API tests with `cy.request`.
+
+The E2E tests cover the home in English and Spanish, the five case cards, the five cases in both languages, the language switch, the 404 page, the mobile menu, the empty contact form and the absence of horizontal scroll from 320 to 1440 px. The API tests cover the sitemap, `robots.txt`, the Open Graph images, the CV PDFs, the security headers and the redirect by `Accept-Language`.
+
+I pick elements by role or visible text, and I never use a fixed `cy.wait`. Every test has its CP-xx ID in the name.
+
+GitHub Actions runs lint, the API tests and the E2E tests (mobile and desktop) on every push. It also runs once a day at 06:00 UTC against production. On a failure it uploads screenshots and videos.
+
+There is also a bug template in `.github/ISSUE_TEMPLATE/bug.md`. It asks for environment, steps, expected and actual result, severity in four levels and evidence.
+
+## Key decisions
+
+### The form is never sent with valid data
+
+A valid message would reach my inbox, and I do not try to solve or skip Turnstile. The test sends the form empty. The server rejects it with `VALIDATION`, and the test fails if the response ever contains `"ok":true`. I could have sent a real test message, but that means mail in my inbox on every run.
+
+### Analytics requests are blocked
+
+A support file blocks the requests to `/_vercel/insights/` in every test. I could have left them alone, but then every CI run and the daily check would count as a visit in Vercel Analytics.
+
+### Overflow is measured with `scrollWidth` against `innerWidth`
+
+The headless browser in Cypress reserves a classic scrollbar of 15 px. Comparing against `clientWidth` would distort the result, so the test compares against `window.innerWidth`.
+
+### The suite reports, it does not fix
+
+The tests repo does not modify the site. Each finding becomes an issue with the bug template. I could have patched the site from the test project, but then the tests would no longer be an independent check.
+
+## Results
+
+All 17 test cases pass, and the suite counts 82 automated tests.
+
+It found two real bugs in this site, both horizontal overflow:
+
+- Issue #1: the header went past the viewport at 320 px and at 768 px.
+- Issue #2: the contact section of the home scrolled sideways at 1024 px.
+
+Both were fixed in pull request #5 of this repo. Test CP-10 now guards against a regression: it checks four pages at 320, 375, 768, 1024 and 1440 px.
+
+## What I'd do next
+
+- Stop hard-coding the sitemap size. CP-11 expects a fixed number of URLs, so it needs a manual update every time I add a case.
+- Keep the daily check alive. GitHub turns off scheduled workflows after 60 days without activity in the repo, and I want to notice if that happens.
+- Cover what the plan leaves out: browsers other than Electron and headless Chrome, visual comparison and performance.

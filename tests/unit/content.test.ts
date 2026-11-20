@@ -4,7 +4,14 @@ import matter from 'gray-matter';
 import { describe, expect, it } from 'vitest';
 import { projectSchema, getProjects, LOCALES, type Locale } from '@/lib/content';
 
-const SLUGS = ['purareserva', 'nicoya-zmt', 'pipeline-bccr', 'asada-gamalotal', 'turismo-cr'];
+const SLUGS = [
+  'purareserva',
+  'nicoya-zmt',
+  'pipeline-bccr',
+  'asada-gamalotal',
+  'turismo-cr',
+  'qa-cypress',
+];
 
 const HEADINGS: Record<Locale, string[]> = {
   en: ['Problem', 'My role', 'What I built', 'Key decisions', 'Results', "What I'd do next"],
@@ -33,7 +40,7 @@ describe.each(LOCALES)('proyectos (%s)', (locale) => {
     }
   });
 
-  it('tiene los 5 casos de estudio', () => {
+  it('tiene los 6 casos de estudio', () => {
     expect(
       files(locale)
         .map((f) => f.file.replace(/\.mdx$/, ''))

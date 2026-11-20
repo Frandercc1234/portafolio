@@ -43,6 +43,7 @@
     },
     "other": {
       "title": "Other projects",
+      "case": "Case study",
       "demo": "Demo",
       "repo": "Repository"
     },

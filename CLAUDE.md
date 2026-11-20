@@ -31,8 +31,9 @@ Portafolio web de Frander Centeno, desarrollador fullstack en Costa Rica.
 | `asada-gamalotal` | Sistema de inventario para una ASADA (práctica profesional), Next.js + Supabase | README del repo `Frandercc1234/asada-gamalotal-inventario` |
 | `pipeline-bccr` | Pipeline diario de indicadores económicos del BCCR con API pública y dashboard, Python + PostgreSQL + NestJS + Next.js | README y documentos del repo `Frandercc1234/pipeline-indicadores-cr`. Demo: https://pipeline-indicadores-cr.vercel.app |
 | `nicoya-zmt` | Sistema de la Zona Marítimo Terrestre, Municipalidad de Nicoya (proyecto universitario) | Texto de la sección 9.4. En producción: https://zmtmn-usuarios.municoya.go.cr |
+| `qa-cypress` | Suite de QA con Cypress y TypeScript que prueba este portafolio en producción (82 pruebas, 17 casos, CI diario). Encontró 2 bugs reales de responsive. Contexto `personal`, 2026, `featured: false`, `order: 6` | README y `docs/plan-de-pruebas.md` del repo `Frandercc1234/portafolio-qa-cypress`. Sin demo |
 
-`risk-calculator` (https://risk-calculator-web.vercel.app) entra como proyecto secundario: tarjeta en la lista "Otros proyectos", sin caso propio.
+`risk-calculator` (https://risk-calculator-web.vercel.app) entra como proyecto secundario: tarjeta en la lista "Otros proyectos", sin caso propio. `qa-cypress` también va en "Otros proyectos" (arriba de risk-calculator), pero con caso propio y sin entrar a los destacados.
 
 ### Fuera de alcance
 
@@ -226,7 +227,7 @@ Todas las páginas son estáticas (`dynamic = 'error'` en páginas de contenido)
 
 1. **Hero:** nombre, rol ("Full stack developer"), una línea de valor (web apps y dashboards de datos para pymes e instituciones públicas), ubicación (Costa Rica, UTC-6), estado ("Open to full stack roles and freelance projects") y dos botones: "Download CV" (principal) y "Contact".
 2. **Casos destacados:** los proyectos con `featured: true` en orden. El primero ocupa más espacio y los demás van en una cuadrícula de 2×2 en 1440, apilados en 375. Orden: `purareserva`, `nicoya-zmt`, `pipeline-bccr`, `asada-gamalotal`, `turismo-cr`. Cada tarjeta: imagen, título, `summary`, contexto (internship, university, personal) y 3 etiquetas de stack. Toda la tarjeta enlaza al caso.
-3. **Otros proyectos:** lista compacta (risk-calculator) con enlaces a demo y repo.
+3. **Otros proyectos:** lista compacta (qa-cypress y risk-calculator). qa-cypress enlaza a su caso y al repo; risk-calculator, a demo y repo.
 4. **Stack:** los 4 grupos de `stack.ts`, como texto, sin logos de colores.
 5. **Experiencia y educación:** línea de tiempo simple con `experience.ts`.
 6. **Sobre mí:** 3 o 4 oraciones en primera persona: cómo trabaja (planifica, prueba en móvil, entrega probado) y qué busca.
@@ -366,7 +367,7 @@ Antes de cada paso de diseño, cargar la skill que se indica. Después de cada p
 ### Paso 7. Caso de estudio
 
 - `projects/[slug]/page.tsx`, componentes de `components/project/` y `components/mdx/`, `generateStaticParams`, metadatos por caso, "Next project".
-- **Verificación:** `npm run build` genera las 10 páginas de casos. Capturas a 375 y 1440 de `purareserva` en los dos idiomas. Slug inexistente da 404.
+- **Verificación:** `npm run build` genera las 12 páginas de casos (6 casos × 2 idiomas). Capturas a 375 y 1440 de `purareserva` en los dos idiomas. Slug inexistente da 404.
 
 ### Paso 8. Formulario de contacto
 
@@ -377,7 +378,7 @@ Antes de cada paso de diseño, cargar la skill que se indica. Después de cada p
 
 - `generateMetadata` en inicio y casos (título, descripción, `alternates` con `hreflang`, `openGraph`, `twitter`). `sitemap.ts`, `robots.ts`, `opengraph-image.tsx` de inicio y de caso. JSON-LD `Person` en el inicio (nombre, cargo, URL, `sameAs` con GitHub y LinkedIn).
 - Las imágenes Open Graph usan instancias estáticas de Newsreader y Schibsted Grotesk en `src/assets/fonts/` (Satori no lee WOFF2 ni fuentes variables), con su licencia OFL.
-- **Verificación:** `npm run build`; `/sitemap.xml` lista 12 URLs (2 inicios y 10 casos); `/en/opengraph-image` y `/en/projects/purareserva/opengraph-image` devuelven PNG de 1200x630.
+- **Verificación:** `npm run build`; `/sitemap.xml` lista 14 URLs (2 inicios y 12 casos); `/en/opengraph-image` y `/en/projects/purareserva/opengraph-image` devuelven PNG de 1200x630.
 
 ### Paso 10. Movimiento y detalles (Emil)
 

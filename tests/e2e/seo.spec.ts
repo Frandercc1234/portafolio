@@ -1,6 +1,13 @@
 import { expect, test } from '@playwright/test';
 
-const SLUGS = ['purareserva', 'nicoya-zmt', 'pipeline-bccr', 'asada-gamalotal', 'turismo-cr'];
+const SLUGS = [
+  'purareserva',
+  'nicoya-zmt',
+  'pipeline-bccr',
+  'asada-gamalotal',
+  'turismo-cr',
+  'qa-cypress',
+];
 
 test.describe('SEO', () => {
   test.beforeEach(async ({ browserName }, testInfo) => {
@@ -10,19 +17,19 @@ test.describe('SEO', () => {
     );
   });
 
-  test('el sitemap lista 12 URLs (2 inicios y 10 casos) con hreflang', async ({ request }) => {
+  test('el sitemap lista 14 URLs (2 inicios y 12 casos) con hreflang', async ({ request }) => {
     const res = await request.get('/sitemap.xml');
     expect(res.status()).toBe(200);
     const xml = await res.text();
     const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-    expect(locs).toHaveLength(12);
-    expect(new Set(locs).size).toBe(12);
+    expect(locs).toHaveLength(14);
+    expect(new Set(locs).size).toBe(14);
     for (const slug of SLUGS) {
       expect(locs.some((l) => l.endsWith(`/en/projects/${slug}`))).toBe(true);
       expect(locs.some((l) => l.endsWith(`/es/projects/${slug}`))).toBe(true);
     }
     // Cada URL trae sus dos alternativas (incluida ella misma).
-    expect([...xml.matchAll(/hreflang="/g)]).toHaveLength(24);
+    expect([...xml.matchAll(/hreflang="/g)]).toHaveLength(28);
   });
 
   test('robots.txt permite todo y apunta al sitemap', async ({ request }) => {
