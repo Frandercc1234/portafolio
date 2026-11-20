@@ -11,7 +11,7 @@ stack:
   - ESLint
   - GitHub Actions
 metrics:
-  - value: '82'
+  - value: '86'
     label: pruebas automatizadas
   - value: '17'
     label: casos de prueba
@@ -38,10 +38,10 @@ Hice todo: el plan de pruebas, las pruebas, el CI y la plantilla de bug. El proy
 
 Un plan de pruebas en `docs/plan-de-pruebas.md`: alcance, lo que queda fuera, entornos, criterios de entrada y salida, 17 casos de prueba (CP-01 a CP-17) y riesgos.
 
-La suite corre 82 pruebas automatizadas en Cypress 16 con TypeScript y ESLint:
+La suite corre 86 pruebas automatizadas en Cypress 16 con TypeScript y ESLint:
 
-- 37 pruebas E2E en 375×812.
-- Las mismas 37 en 1440×900.
+- 39 pruebas E2E en 375×812.
+- Las mismas 39 en 1440×900.
 - 8 pruebas de API con `cy.request`.
 
 Las pruebas E2E cubren el inicio en inglés y español, las tarjetas de los casos, los cinco casos en ambos idiomas, el selector de idioma, la página 404, el menú móvil, el formulario de contacto vacío y la ausencia de scroll horizontal de 320 a 1440 px. Las de API cubren el sitemap, `robots.txt`, las imágenes Open Graph, los PDF del CV, los encabezados de seguridad y la redirección por `Accept-Language`.
@@ -72,7 +72,7 @@ El repo de pruebas no modifica el sitio. Cada hallazgo queda como un issue con l
 
 ## Resultados
 
-Los 17 casos de prueba pasan y la suite suma 82 pruebas automatizadas.
+Los 17 casos de prueba pasan y la suite suma 86 pruebas automatizadas.
 
 Encontró dos bugs reales en este sitio, los dos de desborde horizontal:
 
