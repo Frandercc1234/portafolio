@@ -1,0 +1,88 @@
+---
+slug: qa-cypress
+title: Suite de QA para este portafolio
+summary: Suite de Cypress que prueba este portafolio en producción con pruebas E2E y de API. Encontró dos bugs reales de responsive, ya corregidos.
+role: Automatización de QA, proyecto individual
+context: personal
+year: 2026
+stack:
+  - Cypress
+  - TypeScript
+  - ESLint
+  - GitHub Actions
+metrics:
+  - value: '82'
+    label: pruebas automatizadas
+  - value: '17'
+    label: casos de prueba
+  - value: '2'
+    label: bugs reales encontrados y corregidos
+links:
+  repo: https://github.com/Frandercc1234/portafolio-qa-cypress
+coverLabel: Suite de QA · Cypress
+featured: false
+order: 6
+---
+
+## Problema
+
+Este portafolio es lo primero que ve un reclutador. Tiene dos idiomas, una vista para celular y otra para escritorio, y un formulario de contacto. Un cambio en cualquiera de ellos puede romper algo que usa un visitante.
+
+Quería un proyecto de pruebas que revise el sitio en producción, no una copia, y que venga con un plan de pruebas escrito.
+
+## Mi rol
+
+Hice todo: el plan de pruebas, las pruebas, el CI y la plantilla de bug. El proyecto no modifica el sitio. Cuando encuentra un defecto, queda como un issue.
+
+## Qué construí
+
+Un plan de pruebas en `docs/plan-de-pruebas.md`: alcance, lo que queda fuera, entornos, criterios de entrada y salida, 17 casos de prueba (CP-01 a CP-17) y riesgos.
+
+La suite corre 82 pruebas automatizadas en Cypress 16 con TypeScript y ESLint:
+
+- 37 pruebas E2E en 375×812.
+- Las mismas 37 en 1440×900.
+- 8 pruebas de API con `cy.request`.
+
+Las pruebas E2E cubren el inicio en inglés y español, las tarjetas de los casos, los cinco casos en ambos idiomas, el selector de idioma, la página 404, el menú móvil, el formulario de contacto vacío y la ausencia de scroll horizontal de 320 a 1440 px. Las de API cubren el sitemap, `robots.txt`, las imágenes Open Graph, los PDF del CV, los encabezados de seguridad y la redirección por `Accept-Language`.
+
+Elijo los elementos por rol o texto visible y nunca uso un `cy.wait` de tiempo fijo. Cada prueba lleva su ID CP-xx en el nombre.
+
+GitHub Actions corre lint, las pruebas de API y las E2E (móvil y escritorio) en cada push. También corre una vez al día a las 06:00 UTC contra producción. Si algo falla, sube capturas y videos.
+
+También hay una plantilla de bug en `.github/ISSUE_TEMPLATE/bug.md`. Pide entorno, pasos, resultado esperado y obtenido, severidad en cuatro niveles y evidencia.
+
+## Decisiones clave
+
+### El formulario nunca se envía con datos válidos
+
+Un mensaje válido llegaría a mi correo, y no intento resolver ni saltar Turnstile. La prueba envía el formulario vacío. El servidor lo rechaza con `VALIDATION`, y la prueba falla si la respuesta llega a contener `"ok":true`. Pude enviar un mensaje de prueba real, pero eso significa un correo en mi bandeja en cada corrida.
+
+### Las peticiones de analítica se bloquean
+
+Un archivo de soporte bloquea las peticiones a `/_vercel/insights/` en todas las pruebas. Pude dejarlas pasar, pero entonces cada corrida de CI y la revisión diaria contarían como una visita en Vercel Analytics.
+
+### El desborde se mide con `scrollWidth` contra `innerWidth`
+
+El navegador headless de Cypress reserva un scrollbar clásico de 15 px. Comparar contra `clientWidth` distorsionaría el resultado, así que la prueba compara contra `window.innerWidth`.
+
+### La suite reporta, no corrige
+
+El repo de pruebas no modifica el sitio. Cada hallazgo queda como un issue con la plantilla de bug. Pude parchear el sitio desde el proyecto de pruebas, pero entonces las pruebas dejarían de ser una revisión independiente.
+
+## Resultados
+
+Los 17 casos de prueba pasan y la suite suma 82 pruebas automatizadas.
+
+Encontró dos bugs reales en este sitio, los dos de desborde horizontal:
+
+- Issue #1: el header se salía del viewport a 320 px y a 768 px.
+- Issue #2: la sección de contacto del inicio tenía scroll lateral a 1024 px.
+
+Los dos se corrigieron en el pull request #5 de este repo. La prueba CP-10 ahora cuida que no vuelvan: revisa cuatro páginas a 320, 375, 768, 1024 y 1440 px.
+
+## Qué haría después
+
+- Dejar de fijar el tamaño del sitemap. CP-11 espera un número fijo de URLs, así que hay que actualizarla a mano cada vez que agrego un caso.
+- Mantener vivo el chequeo diario. GitHub desactiva los workflows programados tras 60 días sin actividad en el repo, y quiero enterarme si pasa.
+- Cubrir lo que el plan deja fuera: navegadores distintos de Electron y Chrome headless, comparación visual y rendimiento.

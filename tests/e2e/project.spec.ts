@@ -1,7 +1,14 @@
 import { expect, test } from '@playwright/test';
 
 // Orden de los casos (campo `order` del frontmatter).
-const SLUGS = ['purareserva', 'nicoya-zmt', 'pipeline-bccr', 'asada-gamalotal', 'turismo-cr'];
+const SLUGS = [
+  'purareserva',
+  'nicoya-zmt',
+  'pipeline-bccr',
+  'asada-gamalotal',
+  'turismo-cr',
+  'qa-cypress',
+];
 
 for (const locale of ['en', 'es'] as const) {
   for (const slug of SLUGS) {

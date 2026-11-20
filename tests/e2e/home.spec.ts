@@ -55,6 +55,23 @@ for (const locale of ['en', 'es'] as const) {
       await expect(page.locator('h1')).toBeVisible();
     });
 
+    test('"Otros proyectos" lista la suite de QA sobre risk-calculator, fuera de los destacados', async ({
+      page,
+    }) => {
+      await page.goto(`/${locale}`);
+      const items = page.locator('#other li');
+      await expect(items).toHaveCount(2);
+      await expect(items.nth(0).locator('h3')).toHaveText('QA suite');
+      await expect(items.nth(1).locator('h3')).toHaveText('Risk calculator');
+      await expect(items.nth(0).locator(`a[href$="/${locale}/projects/qa-cypress"]`)).toHaveCount(
+        1,
+      );
+      await expect(
+        items.nth(0).locator('a[href="https://github.com/Frandercc1234/portafolio-qa-cypress"]'),
+      ).toHaveCount(1);
+      await expect(page.locator('#projects a[href$="/projects/qa-cypress"]')).toHaveCount(0);
+    });
+
     test('no hay scroll horizontal', async ({ page }) => {
       await page.goto(`/${locale}`);
       await page.evaluate(() => document.fonts.ready);
