@@ -31,7 +31,7 @@ Portafolio web de Frander Centeno, desarrollador fullstack en Costa Rica.
 | `asada-gamalotal` | Sistema de inventario para una ASADA (práctica profesional), Next.js + Supabase | README del repo `Frandercc1234/asada-gamalotal-inventario` |
 | `pipeline-bccr` | Pipeline diario de indicadores económicos del BCCR con API pública y dashboard, Python + PostgreSQL + NestJS + Next.js | README y documentos del repo `Frandercc1234/pipeline-indicadores-cr`. Demo: https://pipeline-indicadores-cr.vercel.app |
 | `nicoya-zmt` | Sistema de la Zona Marítimo Terrestre, Municipalidad de Nicoya (proyecto universitario) | Texto de la sección 9.4. En producción: https://zmtmn-usuarios.municoya.go.cr |
-| `qa-cypress` | Suite de QA con Cypress y TypeScript que prueba este portafolio en producción (82 pruebas, 17 casos, CI diario). Encontró 2 bugs reales de responsive. Contexto `personal`, 2026, `featured: false`, `order: 6` | README y `docs/plan-de-pruebas.md` del repo `Frandercc1234/portafolio-qa-cypress`. Sin demo |
+| `qa-cypress` | Suite de QA con Cypress y TypeScript que prueba este portafolio en producción (86 pruebas, 17 casos, CI diario). Encontró 2 bugs reales de responsive. Contexto `personal`, 2026, `featured: false`, `order: 6` | README y `docs/plan-de-pruebas.md` del repo `Frandercc1234/portafolio-qa-cypress`. Sin demo |
 
 `risk-calculator` (https://risk-calculator-web.vercel.app) entra como proyecto secundario: tarjeta en la lista "Otros proyectos", sin caso propio. `qa-cypress` también va en "Otros proyectos" (arriba de risk-calculator), pero con caso propio y sin entrar a los destacados.
 

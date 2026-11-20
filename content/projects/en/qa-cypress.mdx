@@ -11,7 +11,7 @@ stack:
   - ESLint
   - GitHub Actions
 metrics:
-  - value: '82'
+  - value: '86'
     label: automated tests
   - value: '17'
     label: test cases
@@ -38,10 +38,10 @@ I did all of it: the test plan, the tests, the CI and the bug template. The proj
 
 A test plan in `docs/plan-de-pruebas.md`: scope, what is left out, environments, entry and exit criteria, 17 test cases (CP-01 to CP-17) and risks.
 
-The suite runs 82 automated tests in Cypress 16 with TypeScript and ESLint:
+The suite runs 86 automated tests in Cypress 16 with TypeScript and ESLint:
 
-- 37 E2E tests at 375×812.
-- The same 37 at 1440×900.
+- 39 E2E tests at 375×812.
+- The same 39 at 1440×900.
 - 8 API tests with `cy.request`.
 
 The E2E tests cover the home in English and Spanish, the five case cards, the five cases in both languages, the language switch, the 404 page, the mobile menu, the empty contact form and the absence of horizontal scroll from 320 to 1440 px. The API tests cover the sitemap, `robots.txt`, the Open Graph images, the CV PDFs, the security headers and the redirect by `Accept-Language`.
@@ -72,7 +72,7 @@ The tests repo does not modify the site. Each finding becomes an issue with the 
 
 ## Results
 
-All 17 test cases pass, and the suite counts 82 automated tests.
+All 17 test cases pass, and the suite counts 86 automated tests.
 
 It found two real bugs in this site, both horizontal overflow:
 
