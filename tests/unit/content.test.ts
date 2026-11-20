@@ -6,6 +6,7 @@ import { projectSchema, getProjects, LOCALES, type Locale } from '@/lib/content'
 
 const SLUGS = [
   'purareserva',
+  'payments-service',
   'nicoya-zmt',
   'pipeline-bccr',
   'asada-gamalotal',
@@ -40,7 +41,7 @@ describe.each(LOCALES)('proyectos (%s)', (locale) => {
     }
   });
 
-  it('tiene los 6 casos de estudio', () => {
+  it('tiene los 7 casos de estudio', () => {
     expect(
       files(locale)
         .map((f) => f.file.replace(/\.mdx$/, ''))

@@ -1,0 +1,95 @@
+---
+slug: payments-service
+title: Servicio de pagos con microservicios
+summary: Backend de pagos con dos servicios Spring Boot, pagos idempotentes, libro mayor de doble entrada, webhooks firmados y un outbox transaccional hacia RabbitMQ.
+role: Desarrollador back-end, proyecto individual
+context: personal
+year: 2026
+stack:
+  - Java 21
+  - Spring Boot
+  - PostgreSQL
+  - Flyway
+  - RabbitMQ
+  - Testcontainers
+  - Docker Compose
+  - GitHub Actions
+metrics:
+  - value: '96'
+    label: pruebas automatizadas
+  - value: '2'
+    label: microservicios
+  - value: '10/50'
+    label: pagos paralelos aceptados
+links:
+  repo: https://github.com/Frandercc1234/payments-service
+coverLabel: Pagos · Spring Boot
+featured: true
+order: 2
+---
+
+## Problema
+
+Los sistemas de pago fallan de formas muy específicas. Un cliente reintenta una petición por un corte de red y se le cobra dos veces. Dos pagos gastan el mismo saldo. Un proveedor reenvía una confirmación. Alguien falsifica un webhook. La aplicación se cae entre guardar un pago y avisar a otro servicio.
+
+Este proyecto es una implementación pequeña de la defensa contra cada uno de esos problemas, y cada defensa tiene su prueba.
+
+Es un proyecto de portafolio. El proveedor de pagos es simulado, las notificaciones son simuladas y no hay dinero real.
+
+## Mi rol
+
+Lo hice yo solo: la API, el relay del outbox, el servicio de notificaciones, las pruebas y el CI.
+
+## Qué construí
+
+Dos servicios, dos bases de datos y un broker. No comparten código ni tablas. Solo comparten el contrato del evento, en su versión 1.
+
+**payments-service** es una API en Java 21 y Spring Boot 3.5. Abre cuentas en CRC o USD, con montos en centavos enteros. Crea pagos con `POST /payments`, que exige el header `Idempotency-Key`. Cada pago escribe un débito y un crédito en un libro mayor de doble entrada donde solo se agregan filas. Un webhook del proveedor confirma o rechaza el pago. Su firma es HMAC-SHA256 sobre el cuerpo crudo. Un pago rechazado se revierte con dos asientos nuevos. Los errores siguen RFC 7807 y Swagger UI documenta la API.
+
+**notifications-service** consume los eventos de pago y guarda una notificación por cada uno. Las notificaciones son simuladas: solo guarda un registro con el canal `LOG`.
+
+Entre los dos hay un outbox transaccional. El evento se escribe en la misma transacción de base de datos que el pago. Un proceso aparte, el relay, lee los eventos pendientes cada 500 ms y los publica en un exchange de tipo topic de RabbitMQ, con confirmaciones del publicador. El consumidor es idempotente. Un mensaje que no se puede procesar va a una cola de mensajes muertos (DLQ) después de tres reintentos.
+
+Cada servicio tiene su propia base PostgreSQL y sus migraciones de Flyway. `docker compose up --build` levanta todo: PostgreSQL, RabbitMQ, la API, el relay y el servicio de notificaciones. Un script de prueba de humo corre el flujo completo de punta a punta, y GitHub Actions compila, prueba y lo corre en cada push.
+
+## Decisiones clave
+
+### La idempotencia vive en la base de datos
+
+La clave se reclama con `INSERT … ON CONFLICT DO NOTHING`, en la misma transacción que crea el pago. La misma clave con el mismo cuerpo devuelve el mismo resultado. La misma clave con otro cuerpo devuelve 409. Un intento fallido hace rollback también de la clave, así que no queda consumida. Pude haber comprobado "si existe, no inserto" en Java, pero hay una carrera entre el `SELECT` y el `INSERT`. También descarté una caché en memoria, que se pierde al reiniciar y falla con varias instancias, y Redis, que agrega una pieza de infraestructura que no hace falta.
+
+### Bloqueo pesimista de filas, siempre en el mismo orden
+
+Cada pago bloquea las dos cuentas con `SELECT … FOR UPDATE`, por ID ascendente. Como el orden es fijo, un pago de A a B y uno de B a A no se bloquean entre sí. Pude haber usado bloqueo optimista con `@Version` y reintentos. Con contención sobre una sola cuenta produce una avalancha de reintentos. Con bloqueo pesimista cada pago espera su turno y el resultado es determinista. El costo es que los pagos de una misma cuenta se serializan.
+
+### Un outbox transaccional, con un relay aparte
+
+La base de datos y el broker no comparten transacción. Si publico dentro de `POST /payments` y la aplicación muere entre el commit y la publicación, el pago existe y nadie se entera. Descarté eso, y también publicar después del commit con un `@TransactionalEventListener`, que tiene el mismo hueco. Descarté además CDC con Debezium: resuelve el mismo problema, pero suma Kafka Connect, demasiada infraestructura para este alcance.
+
+El relay corre como un proceso propio, así que la API nunca habla con RabbitMQ. Descarté un hilo `@Scheduled` dentro de la API, que es más simple pero ata la API al broker.
+
+La entrega es al menos una vez. Descarté "exactamente una vez": no existe entre dos sistemas sin una transacción distribuida. En su lugar, el consumidor es idempotente.
+
+### Pruebas contra PostgreSQL y RabbitMQ reales
+
+Las pruebas usan Testcontainers. Descarté H2 y un broker simulado, porque no implementan igual `FOR UPDATE`, `ON CONFLICT`, los niveles de aislamiento ni las confirmaciones del publicador. Eso es justo lo que quería probar.
+
+## Resultados
+
+Los dos servicios suman 96 pruebas automatizadas: 87 en payments-service y 9 en notifications-service.
+
+- 50 pagos en paralelo contra un saldo para 10: se aceptan exactamente 10 y el saldo nunca baja de cero. La prueba se repite 5 veces.
+- 40 pagos opuestos al mismo tiempo terminan sin deadlocks.
+- 10 peticiones simultáneas con la misma clave crean un solo pago.
+- Con RabbitMQ detenido, `POST /payments` sigue respondiendo 201. El evento sale cuando el broker vuelve. Lo comprobé deteniendo el contenedor.
+- Diez copias del mismo mensaje producen una sola notificación, y ninguna termina en la DLQ.
+
+Validé las pruebas críticas con mutaciones. Sin `@Lock(PESSIMISTIC_WRITE)` fallan las 6 pruebas de concurrencia. Sin el bloqueo de filas del relay falla la prueba de dos relays.
+
+## Qué haría después
+
+- Modelar retenciones y saldos disponibles. El dinero se mueve al crear el pago, así que una reversión responde 422 si el destino ya lo gastó.
+- Agregar autenticación, entre el cliente y la API y entre los servicios. Hoy no hay ninguna, y las claves de idempotencia no están ligadas a un cliente.
+- Clasificar los errores del consumidor, para que un mensaje ilegible vaya directo a la DLQ, y agregar una herramienta para reprocesar mensajes desde ella.
+- Agregar pruebas de contrato entre los dos servicios. Hoy cada uno prueba su propia copia del evento.
+- Migrar a Spring Boot 4. El proyecto usa 3.5.16, la última línea 3.x, y Spring Initializr ahora solo ofrece la 4.x.

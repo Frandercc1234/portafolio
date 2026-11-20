@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
-const SLUGS = ['purareserva', 'nicoya-zmt', 'pipeline-bccr', 'asada-gamalotal', 'turismo-cr'];
+// Orden de los destacados (campo `order`, solo los `featured: true`).
+const SLUGS = ['purareserva', 'payments-service', 'nicoya-zmt', 'pipeline-bccr', 'asada-gamalotal'];
 
 test.describe('redirección según Accept-Language', () => {
   test.describe('inglés', () => {
@@ -48,6 +49,11 @@ for (const locale of ['en', 'es'] as const) {
           1,
         );
       }
+      // Solo esos cinco, en ese orden.
+      const hrefs = await page.locator('#projects a[href*="/projects/"]').evaluateAll((els) =>
+        els.map((el) => (el as HTMLAnchorElement).getAttribute('href')!.split('/').pop()),
+      );
+      expect(hrefs).toEqual(SLUGS);
       await page.locator(`#projects a[href$="/${locale}/projects/${SLUGS[0]}"]`).click();
       await expect(page).toHaveURL(new RegExp(`/${locale}/projects/${SLUGS[0]}$`), {
         timeout: 20_000,
@@ -55,14 +61,22 @@ for (const locale of ['en', 'es'] as const) {
       await expect(page.locator('h1')).toBeVisible();
     });
 
-    test('"Otros proyectos" lista la suite de QA sobre risk-calculator, fuera de los destacados', async ({
+    test('"Otros proyectos" lista la suite de QA, turismo-cr y risk-calculator, fuera de los destacados', async ({
       page,
     }) => {
       await page.goto(`/${locale}`);
       const items = page.locator('#other li');
-      await expect(items).toHaveCount(2);
+      await expect(items).toHaveCount(3);
       await expect(items.nth(0).locator('h3')).toHaveText('QA suite');
-      await expect(items.nth(1).locator('h3')).toHaveText('Risk calculator');
+      await expect(items.nth(1).locator('h3')).toHaveText('Tourism dashboard');
+      await expect(items.nth(2).locator('h3')).toHaveText('Risk calculator');
+      await expect(items.nth(1).locator(`a[href$="/${locale}/projects/turismo-cr"]`)).toHaveCount(
+        1,
+      );
+      await expect(
+        items.nth(1).locator('a[href="https://github.com/Frandercc1234/turismo-cr"]'),
+      ).toHaveCount(1);
+      await expect(page.locator('#projects a[href$="/projects/turismo-cr"]')).toHaveCount(0);
       await expect(items.nth(0).locator(`a[href$="/${locale}/projects/qa-cypress"]`)).toHaveCount(
         1,
       );

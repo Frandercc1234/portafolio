@@ -21,6 +21,17 @@ export const otherProjects: OtherProject[] = [
     caseSlug: 'qa-cypress',
   },
   {
+    id: 'turismo-cr',
+    name: 'Tourism dashboard',
+    description: {
+      en: 'Dashboard of international arrivals to Costa Rica, built with Python, DuckDB and Streamlit. The demo may take ~30 s to wake up.',
+      es: 'Dashboard de llegadas internacionales a Costa Rica, hecho con Python, DuckDB y Streamlit. El demo puede tardar ~30 s en despertar.',
+    },
+    demo: 'https://turismo-cr-7juydxs6ebdqwumreibouf.streamlit.app/',
+    repo: 'https://github.com/Frandercc1234/turismo-cr',
+    caseSlug: 'turismo-cr',
+  },
+  {
     id: 'risk-calculator',
     name: 'Risk calculator',
     description: {

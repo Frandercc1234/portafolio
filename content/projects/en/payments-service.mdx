@@ -1,0 +1,95 @@
+---
+slug: payments-service
+title: Payments service with microservices
+summary: Payments backend with two Spring Boot services, idempotent payments, a double-entry ledger, signed webhooks and a transactional outbox to RabbitMQ.
+role: Back-end developer, solo project
+context: personal
+year: 2026
+stack:
+  - Java 21
+  - Spring Boot
+  - PostgreSQL
+  - Flyway
+  - RabbitMQ
+  - Testcontainers
+  - Docker Compose
+  - GitHub Actions
+metrics:
+  - value: '96'
+    label: automated tests
+  - value: '2'
+    label: microservices
+  - value: '10/50'
+    label: parallel payments accepted
+links:
+  repo: https://github.com/Frandercc1234/payments-service
+coverLabel: Payments · Spring Boot
+featured: true
+order: 2
+---
+
+## Problem
+
+Payment systems fail in very specific ways. A client retries a request after a network cut and is charged twice. Two payments spend the same balance. A provider resends a confirmation. Someone forges a webhook. The application dies between saving a payment and telling another service.
+
+This project is a small implementation of the defence against each one of those problems, and each defence has a test.
+
+It is a portfolio project. The payment provider is simulated, the notifications are simulated and no real money is involved.
+
+## My role
+
+I built it alone: the API, the outbox relay, the notifications service, the tests and the CI.
+
+## What I built
+
+Two services, two databases and one broker. They do not share code or tables. They only share the version 1 contract of the event.
+
+**payments-service** is a Java 21 and Spring Boot 3.5 API. It opens accounts in CRC or USD, with amounts in integer cents. It creates payments with `POST /payments`, which requires an `Idempotency-Key` header. Every payment writes a debit and a credit in an append-only double-entry ledger. A provider webhook confirms or fails the payment. Its signature is HMAC-SHA256 over the raw body. A failed payment is reversed with two new ledger entries. Errors follow RFC 7807 and Swagger UI documents the API.
+
+**notifications-service** consumes the payment events and stores one notification per event. The notifications are simulated: it only saves a record with the `LOG` channel.
+
+Between them there is a transactional outbox. The event is written in the same database transaction as the payment. A separate process, the relay, reads the pending events every 500 ms and publishes them to a RabbitMQ topic exchange with publisher confirms. The consumer is idempotent. A message that cannot be processed goes to a dead-letter queue after three retries.
+
+Each service has its own PostgreSQL database and Flyway migrations. `docker compose up --build` starts everything: PostgreSQL, RabbitMQ, the API, the relay and the notifications service. A smoke test script runs the whole flow end to end, and GitHub Actions builds, tests and runs it on every push.
+
+## Key decisions
+
+### Idempotency lives in the database
+
+The key is claimed with `INSERT … ON CONFLICT DO NOTHING`, in the same transaction that creates the payment. The same key with the same body returns the same result. The same key with another body returns 409. A failed attempt rolls back the key too, so it is not consumed. I could have checked "if it exists, else insert" in Java, but there is a race between the `SELECT` and the `INSERT`. I also discarded an in-memory cache, which is lost on restart and fails with several instances, and Redis, which adds a piece of infrastructure that is not needed.
+
+### Pessimistic row locks, always in the same order
+
+Each payment locks the two accounts with `SELECT … FOR UPDATE`, by ascending ID. Because the order is fixed, a payment from A to B and one from B to A cannot block each other. I could have used optimistic locking with `@Version` and retries. Under contention on one account it causes an avalanche of retries. With pessimistic locks each payment waits its turn and the result is deterministic. The cost is that the payments of one account are serialized.
+
+### A transactional outbox, with a separate relay
+
+The database and the broker do not share a transaction. If I publish inside `POST /payments` and the application dies between the commit and the publish, the payment exists and nobody knows. I discarded that, and also publishing after the commit with a `@TransactionalEventListener`, which has the same gap. I discarded CDC with Debezium too: it solves the same problem but adds Kafka Connect, which is too much infrastructure for this scope.
+
+The relay runs as its own process, so the API never talks to RabbitMQ. I discarded a `@Scheduled` thread inside the API, which is simpler but ties the API to the broker.
+
+Delivery is at least once. I discarded exactly once: it does not exist between two systems without a distributed transaction. The consumer is idempotent instead.
+
+### Tests against real PostgreSQL and RabbitMQ
+
+The tests use Testcontainers. I discarded H2 and a simulated broker, because they do not implement `FOR UPDATE`, `ON CONFLICT`, isolation levels or publisher confirms in the same way. Those are exactly the things I wanted to test.
+
+## Results
+
+The two services have 96 automated tests: 87 in payments-service and 9 in notifications-service.
+
+- 50 parallel payments against a balance for 10: exactly 10 are accepted and the balance never goes below zero. The test repeats 5 times.
+- 40 opposite payments at the same time finish without deadlocks.
+- 10 simultaneous requests with the same key create one payment.
+- With RabbitMQ stopped, `POST /payments` still answers 201. The event leaves when the broker comes back. I checked it by stopping the container.
+- Ten copies of the same message produce one notification, and none ends in the dead-letter queue.
+
+I validated the critical tests with mutations. Without `@Lock(PESSIMISTIC_WRITE)`, the 6 concurrency tests fail. Without the row lock in the relay, the two-relays test fails.
+
+## What I'd do next
+
+- Model holds and available balances. Money moves when the payment is created, so a reversal fails with 422 if the destination already spent it.
+- Add authentication, between the client and the API and between the services. Today there is none, and the idempotency keys are not tied to a client.
+- Classify errors in the consumer, so an unreadable message goes straight to the dead-letter queue, and add a tool to reprocess messages from it.
+- Add contract tests between the two services. Each one tests its own copy of the event today.
+- Move to Spring Boot 4. The project uses 3.5.16, the last 3.x line, and Spring Initializr now only offers 4.x.
