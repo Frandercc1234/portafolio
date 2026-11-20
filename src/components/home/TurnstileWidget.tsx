@@ -6,7 +6,7 @@ import Script from 'next/script';
 type TurnstileApi = {
   render: (
     el: HTMLElement,
-    options: { sitekey: string; theme?: 'light'; language?: string },
+    options: { sitekey: string; theme?: 'light'; language?: string; size?: 'normal' | 'compact' },
   ) => string;
   reset: (widgetId?: string) => void;
   remove: (widgetId?: string) => void;
@@ -26,7 +26,7 @@ type Props = {
   placeholder: string;
 };
 
-/** Widget de Cloudflare Turnstile en un hueco de 300×65 px, para que la página no salte. */
+/** Widget de Cloudflare Turnstile en un hueco de 300×65 px (150×140 si no caben 300 px). */
 export function TurnstileWidget({ siteKey, locale, resetKey, placeholder }: Props) {
   const box = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | null>(null);
@@ -35,10 +35,14 @@ export function TurnstileWidget({ siteKey, locale, resetKey, placeholder }: Prop
 
   const render = useCallback(() => {
     if (!siteKey || !box.current || !window.turnstile || widgetId.current) return;
+    // El widget normal mide 300 px: si el hueco es más angosto se usa el compacto (150×140).
+    const compact = box.current.clientWidth < 300;
+    box.current.style.height = compact ? '140px' : '';
     widgetId.current = window.turnstile.render(box.current, {
       sitekey: siteKey,
       theme: 'light',
       language: locale,
+      size: compact ? 'compact' : 'normal',
     });
   }, [siteKey, locale]);
 

@@ -9,7 +9,7 @@ export function Contact() {
 
   return (
     <Section id="contact" title={t('title')} last>
-      <div className="grid gap-12 lg:grid-cols-[736px_410px] lg:justify-between">
+      <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,736px)_minmax(0,410px)] lg:justify-between">
         <ContactForm />
         <ul className="space-y-5">
           <li>

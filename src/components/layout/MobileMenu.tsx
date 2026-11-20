@@ -32,7 +32,7 @@ export function MobileMenu({ items, openLabel, closeLabel, cvHref, cvLabel }: Pr
   }, [open]);
 
   return (
-    <div className="md:hidden">
+    <div className="lg:hidden">
       <button
         type="button"
         aria-expanded={open}
