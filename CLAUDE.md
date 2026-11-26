@@ -28,13 +28,13 @@ Portafolio web de Frander Centeno, desarrollador fullstack en Costa Rica.
 |---|---|---|
 | `purareserva` | Reservas de tours en Guanacaste, Next.js + Supabase + asistente IA | README, `DESIGN.md` y `PRODUCT.md` del repo `Frandercc1234/purareserva`. Demo: https://purareserva.vercel.app |
 | `payments-service` | Backend de pagos con dos microservicios (pagos y notificaciones), Java 21 + Spring Boot 3 + PostgreSQL + RabbitMQ. Contexto `personal`, 2026, `featured: true`, `order: 2` | README y `docs/guia-de-estudio.md` del repo `Frandercc1234/payments-service`. Sin demo |
-| `turismo-cr` | Dashboard de llegadas internacionales del ICT, Python + DuckDB + Streamlit. Sale de los destacados (`featured: false`) y se lista en "Otros proyectos" | README del repo `Frandercc1234/turismo-cr`. Demo: https://turismo-cr-7juydxs6ebdqwumreibouf.streamlit.app/ |
+| `turismo-cr` | Dashboard de llegadas internacionales del ICT, Python + DuckDB + Streamlit. Sale de los destacados (`featured: false`) y va en "More projects" | README del repo `Frandercc1234/turismo-cr`. Demo: https://turismo-cr-7juydxs6ebdqwumreibouf.streamlit.app/ |
 | `asada-gamalotal` | Sistema de inventario para una ASADA (práctica profesional), Next.js + Supabase | README del repo `Frandercc1234/asada-gamalotal-inventario` |
 | `pipeline-bccr` | Pipeline diario de indicadores económicos del BCCR con API pública y dashboard, Python + PostgreSQL + NestJS + Next.js | README y documentos del repo `Frandercc1234/pipeline-indicadores-cr`. Demo: https://pipeline-indicadores-cr.vercel.app |
 | `nicoya-zmt` | Sistema de la Zona Marítimo Terrestre, Municipalidad de Nicoya (proyecto universitario) | Texto de la sección 9.4. En producción: https://zmtmn-usuarios.municoya.go.cr |
-| `qa-cypress` | Suite de QA con Cypress y TypeScript que prueba este portafolio en producción (90 pruebas, 17 casos, CI diario). Encontró 2 bugs reales de responsive. Contexto `personal`, 2026, `featured: false`, `order: 6` | README y `docs/plan-de-pruebas.md` del repo `Frandercc1234/portafolio-qa-cypress`. Sin demo |
+| `qa-cypress` | Suite de QA con Cypress y TypeScript que prueba este portafolio en producción (90 pruebas, 17 casos, CI diario). Encontró 2 bugs reales de responsive. Contexto `personal`, 2026, `featured: false`, `order: 7` | README y `docs/plan-de-pruebas.md` del repo `Frandercc1234/portafolio-qa-cypress`. Sin demo |
 
-`risk-calculator` (https://risk-calculator-web.vercel.app) entra como proyecto secundario: tarjeta en la lista "Otros proyectos", sin caso propio. `qa-cypress` y `turismo-cr` también van en "Otros proyectos" (arriba de risk-calculator), pero con caso propio y sin entrar a los destacados.
+`qa-cypress` y `turismo-cr` tienen caso propio, no entran a los destacados y van en la lista "More projects" / "Más proyectos" del inicio. `risk-calculator` salió del portafolio.
 
 ### Fuera de alcance
 
@@ -143,6 +143,9 @@ export const projectSchema = z.object({
   slug: z.string().regex(/^[a-z0-9-]+$/),
   title: z.string().max(60),
   summary: z.string().max(160),          // una oración, se usa en tarjetas y meta description
+  tagline: z.string().max(90),           // la línea de la tarjeta del inicio
+  type: z.enum(['web', 'back-end', 'data', 'qa']), // primer dato de la etiqueta de la tarjeta
+  cardStack: z.array(z.string()).length(2), // las 2 tecnologías de la etiqueta; salen de stack
   role: z.string().max(80),              // ej. "Full stack developer, solo project"
   context: z.enum(['personal', 'internship', 'university', 'client']),
   year: z.number().int().min(2023).max(2030),
@@ -184,7 +187,7 @@ Componentes permitidos dentro del MDX (`src/components/mdx/`): `<Figure src alt 
 ### 6.3 Datos fijos
 
 - `src/data/experience.ts`: ASADA Gamalotal (práctica, jul 2025 a dic 2025), proyecto Municipalidad de Nicoya (2024 a 2025), educación (Ingeniería en Sistemas, Universidad Nacional, 2025), certificaciones (DataCamp: AI Engineer for Developers, Data Engineer, Data Analyst, Python Developer, SQL Associate; Scrum Fundamentals Certified; PM4R Professional del BID), idiomas (español nativo, inglés B1).
-- `src/data/stack.ts`: Frontend (React, Next.js, TypeScript, Tailwind), Backend (NestJS, Supabase, PostgreSQL, REST), Datos (Python, pandas, DuckDB, Streamlit, Plotly), Calidad (Playwright, Vitest, GitHub Actions).
+- `src/data/stack.ts`: Frontend (React, Next.js, TypeScript, Tailwind), Backend (NestJS, Java, Spring Boot, Supabase, PostgreSQL, RabbitMQ, REST), Datos (Python, pandas, DuckDB, Streamlit, Plotly), Calidad (Playwright, Cypress, Vitest, GitHub Actions). Todo lo que aparece en el stack tiene respaldo en algún proyecto del sitio (lo comprueba `content.test.ts`).
 - `src/lib/site.ts`: `SITE_URL` desde env, GitHub `https://github.com/Frandercc1234`, LinkedIn `https://www.linkedin.com/in/frander-centeno-6a1982323/`, correo público `centenofrander@gmail.com`.
 
 ## 7. Seguridad
@@ -226,10 +229,10 @@ Todas las páginas son estáticas (`dynamic = 'error'` en páginas de contenido)
 
 ### 9.2 Inicio `/[locale]`
 
-1. **Hero:** nombre, rol ("Full stack developer"), una línea de valor (web apps y dashboards de datos para pymes e instituciones públicas), ubicación (Costa Rica, UTC-6), estado ("Open to full stack roles and freelance projects") y dos botones: "Download CV" (principal) y "Contact".
-2. **Casos destacados:** los proyectos con `featured: true` en orden. El primero ocupa más espacio y los demás van en una cuadrícula de 2×2 en 1440, apilados en 375. Orden: `purareserva`, `payments-service`, `nicoya-zmt`, `pipeline-bccr`, `asada-gamalotal`. Cada tarjeta: imagen, título, `summary`, contexto (internship, university, personal) y 3 etiquetas de stack. Toda la tarjeta enlaza al caso.
-3. **Otros proyectos:** lista compacta (qa-cypress, turismo-cr y risk-calculator). qa-cypress enlaza a su caso y al repo; turismo-cr, a su caso, demo y repo; risk-calculator, a demo y repo.
-4. **Stack:** los 4 grupos de `stack.ts`, como texto, sin logos de colores.
+1. **Hero:** nombre, rol ("Full stack developer"), una línea de valor (web apps y dashboards de datos para pymes e instituciones públicas) y dos botones: "Download CV" (principal) y "Contact". Tres datos cortos: "Now" (graduación, en qué anda y ubicación UTC-6), "Looking for" (puestos full stack, back-end o QA, y freelance) y "Before". Desde 1024 van en las columnas 9 a 12; antes, bajo los botones.
+2. **Casos destacados:** los proyectos con `featured: true` en orden, en filas con la misma estructura (portada, título, `tagline` y la etiqueta "TIPO · 2 tecnologías · contexto" en una línea; el rol solo va en el caso). Desde 1024: portada en las columnas 1 a 7 y texto en 8 a 12. Orden: `purareserva`, `payments-service`, `nicoya-zmt`, `pipeline-bccr`, `asada-gamalotal`. Toda la fila enlaza al caso.
+3. **More projects / Más proyectos:** lista compacta sin imagen con `turismo-cr` y `qa-cypress`: caso y repo, y demo si existe.
+4. **Stack:** los 4 grupos de `stack.ts`, como texto separado por comas, sin logos de colores.
 5. **Experiencia y educación:** línea de tiempo simple con `experience.ts`.
 6. **Sobre mí:** 3 o 4 oraciones en primera persona: cómo trabaja (planifica, prueba en móvil, entrega probado) y qué busca.
 7. **Contacto:** formulario (nombre, correo, mensaje, Turnstile) y al costado correo, LinkedIn y GitHub.

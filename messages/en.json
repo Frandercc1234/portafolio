@@ -28,9 +28,22 @@
       "role": "Full stack developer",
       "value": "I build web apps and data dashboards for small businesses and public institutions.",
       "location": "Costa Rica, UTC-6",
-      "status": "Open to full stack roles and freelance projects",
       "cv": "Download CV",
-      "contact": "Contact"
+      "contact": "Contact",
+      "facts": {
+        "now": {
+          "label": "Now",
+          "text": "Systems Engineering graduate (UNA, 2025). Lately: microservices with Spring Boot and automated QA with Cypress. Costa Rica, UTC-6."
+        },
+        "looking": {
+          "label": "Looking for",
+          "text": "Full stack, back-end or QA roles, and freelance projects."
+        },
+        "before": {
+          "label": "Before",
+          "text": "Internship at ASADA Gamalotal (2025) and a university project for the Municipality of Nicoya (2024–2025)."
+        }
+      }
     },
     "featured": {
       "title": "Selected work",
@@ -39,13 +52,19 @@
         "internship": "Internship",
         "university": "University",
         "client": "Client"
+      },
+      "more": "More projects",
+      "type": {
+        "web": "Web",
+        "back-end": "Back-end",
+        "data": "Data",
+        "qa": "QA"
+      },
+      "links": {
+        "case": "Case study",
+        "demo": "Demo",
+        "repo": "Repository"
       }
-    },
-    "other": {
-      "title": "Other projects",
-      "case": "Case study",
-      "demo": "Demo",
-      "repo": "Repository"
     },
     "stack": {
       "title": "Stack"
@@ -57,7 +76,7 @@
     },
     "about": {
       "title": "About me",
-      "text": "I plan before I write code, and I test on a real phone before I call a feature done. I am looking for a full stack role where I can keep building and learning."
+      "text": "I plan before I write code, and I test on a real phone before I call a feature done. I am looking for a full stack, back-end or QA role where I can keep building and learning."
     },
     "contact": {
       "title": "Contact",

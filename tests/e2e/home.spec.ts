@@ -3,6 +3,23 @@ import { expect, test } from '@playwright/test';
 // Orden de los destacados (campo `order`, solo los `featured: true`).
 const SLUGS = ['purareserva', 'payments-service', 'nicoya-zmt', 'pipeline-bccr', 'asada-gamalotal'];
 
+const TEXT = {
+  en: {
+    work: 'Selected work',
+    more: 'More projects',
+    caseLink: /^Case study/,
+    repo: /^Repository/,
+    facts: ['Now', 'Looking for', 'Before'],
+  },
+  es: {
+    work: 'Trabajo destacado',
+    more: 'Más proyectos',
+    caseLink: /^Caso de estudio/,
+    repo: /^Repositorio/,
+    facts: ['Ahora', 'Busco', 'Antes'],
+  },
+} as const;
+
 test.describe('redirección según Accept-Language', () => {
   test.describe('inglés', () => {
     test.use({ locale: 'en' });
@@ -49,9 +66,13 @@ for (const locale of ['en', 'es'] as const) {
           1,
         );
       }
-      // Solo esos cinco, en ese orden.
-      const hrefs = await page.locator('#projects a[href*="/projects/"]').evaluateAll((els) =>
-        els.map((el) => (el as HTMLAnchorElement).getAttribute('href')!.split('/').pop()),
+      // Las filas con portada son esos cinco y van en ese orden.
+      const rows = page
+        .getByRole('region', { name: TEXT[locale].work })
+        .getByRole('link')
+        .filter({ has: page.getByRole('heading', { level: 3 }) });
+      const hrefs = await rows.evaluateAll((els) =>
+        els.map((el) => el.getAttribute('href')!.split('/').pop()),
       );
       expect(hrefs).toEqual(SLUGS);
       await page.locator(`#projects a[href$="/${locale}/projects/${SLUGS[0]}"]`).click();
@@ -61,30 +82,104 @@ for (const locale of ['en', 'es'] as const) {
       await expect(page.locator('h1')).toBeVisible();
     });
 
-    test('"Otros proyectos" lista la suite de QA, turismo-cr y risk-calculator, fuera de los destacados', async ({
+    test('"More projects" lista turismo-cr y la suite de QA, sin imagen', async ({ page }) => {
+      await page.goto(`/${locale}`);
+      await expect(page.getByRole('heading', { level: 3, name: TEXT[locale].more })).toBeVisible();
+      const items = page.getByRole('list', { name: TEXT[locale].more }).locator(':scope > li');
+      await expect(items).toHaveCount(2);
+      await expect(items.getByRole('img')).toHaveCount(0);
+      for (const [i, slug, repo] of [
+        [0, 'turismo-cr', 'turismo-cr'],
+        [1, 'qa-cypress', 'portafolio-qa-cypress'],
+      ] as const) {
+        await expect(items.nth(i).getByRole('link', { name: TEXT[locale].caseLink })).toHaveAttribute(
+          'href',
+          `/${locale}/projects/${slug}`,
+        );
+        await expect(items.nth(i).getByRole('link', { name: TEXT[locale].repo })).toHaveAttribute(
+          'href',
+          `https://github.com/Frandercc1234/${repo}`,
+        );
+      }
+      await expect(items.nth(0).getByRole('link', { name: /^Demo/ })).toHaveCount(1);
+      await expect(items.nth(1).getByRole('link', { name: /^Demo/ })).toHaveCount(0);
+    });
+
+    test('risk-calculator ya no aparece', async ({ page }) => {
+      await page.goto(`/${locale}`);
+      await expect(page.getByText(/risk.calculator|calculadora de riesgos/i)).toHaveCount(0);
+      await expect(page.locator('a[href*="risk-calculator"]')).toHaveCount(0);
+    });
+
+    test('los títulos pequeños usan la sans de su nivel, no la serif de los h1 a h3', async ({
       page,
     }) => {
       await page.goto(`/${locale}`);
-      const items = page.locator('#other li');
-      await expect(items).toHaveCount(3);
-      await expect(items.nth(0).locator('h3')).toHaveText('QA suite');
-      await expect(items.nth(1).locator('h3')).toHaveText('Tourism dashboard');
-      await expect(items.nth(2).locator('h3')).toHaveText('Risk calculator');
-      await expect(items.nth(1).locator(`a[href$="/${locale}/projects/turismo-cr"]`)).toHaveCount(
-        1,
-      );
-      await expect(
-        items.nth(1).locator('a[href="https://github.com/Frandercc1234/turismo-cr"]'),
-      ).toHaveCount(1);
-      await expect(page.locator('#projects a[href$="/projects/turismo-cr"]')).toHaveCount(0);
-      await expect(items.nth(0).locator(`a[href$="/${locale}/projects/qa-cypress"]`)).toHaveCount(
-        1,
-      );
-      await expect(
-        items.nth(0).locator('a[href="https://github.com/Frandercc1234/portafolio-qa-cypress"]'),
-      ).toHaveCount(1);
-      await expect(page.locator('#projects a[href$="/projects/qa-cypress"]')).toHaveCount(0);
+      const fonts = await page
+        .locator('main :is(h1, h2, h3, h4):is(.type-label, .type-text)')
+        .evaluateAll((els) => els.map((el) => getComputedStyle(el).fontFamily));
+      expect(fonts.length).toBeGreaterThan(5);
+      expect(fonts.filter((f) => !/schibsted/i.test(f))).toEqual([]);
     });
+
+    test('el hero muestra los tres datos', async ({ page }) => {
+      await page.goto(`/${locale}`);
+      await expect(page.getByRole('term')).toHaveText(TEXT[locale].facts);
+      await expect(page.getByRole('definition').first()).toContainText('Spring Boot');
+    });
+
+    test('a 1440×900 el primer proyecto entra en la primera pantalla', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await page.goto(`/${locale}`);
+      await page.evaluate(() => document.fonts.ready);
+      const first = page.getByRole('heading', { level: 3, name: 'PuraReserva' });
+      await expect(first).toBeInViewport({ ratio: 1 });
+      const box = await page.locator('#projects [data-cover]').first().boundingBox();
+      // Al menos un cuarto de la primera portada se ve sin desplazarse.
+      expect((900 - box!.y) / box!.height).toBeGreaterThan(0.25);
+    });
+
+    for (const width of [375, 768, 1024, 1440]) {
+      test(`cada etiqueta de proyecto cabe en una línea a ${width} px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto(`/${locale}`);
+        await page.evaluate(() => document.fonts.ready);
+        const labels = await page.locator('[data-project-label]').evaluateAll((els) =>
+          els.map((el) => ({
+            text: el.textContent,
+            lines: Math.round(el.clientHeight / parseFloat(getComputedStyle(el).lineHeight)),
+          })),
+        );
+        expect(labels).toHaveLength(7);
+        expect(labels.filter((l) => l.lines !== 1)).toEqual([]);
+      });
+    }
+
+    for (const [width, sizes] of [
+      [375, ['13px', '16px', '28px', '44px']],
+      [1440, ['13px', '18px', '36px', '88px']],
+    ] as const) {
+      test(`el inicio usa solo los 4 niveles de texto a ${width} px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto(`/${locale}`);
+        await page.evaluate(() => document.fonts.ready);
+        const found = await page.evaluate(() => {
+          const out: Record<string, string> = {};
+          for (const el of document.querySelectorAll<HTMLElement>('header *, main *, footer *')) {
+            // Fuera: lo oculto, lo que solo leen los lectores de pantalla y el widget externo.
+            if (!el.getClientRects().length || el.closest('.sr-only, [aria-hidden="true"]')) continue;
+            if (el.closest('[data-turnstile-slot]')) continue;
+            const text = [...el.childNodes].find((n) => n.nodeType === 3 && n.textContent?.trim());
+            if (text) out[getComputedStyle(el).fontSize] = text.textContent!.trim().slice(0, 40);
+          }
+          return out;
+        });
+        expect(
+          Object.keys(found).filter((size) => !(sizes as readonly string[]).includes(size)),
+          JSON.stringify(found),
+        ).toEqual([]);
+      });
+    }
 
     test('no hay scroll horizontal', async ({ page }) => {
       await page.goto(`/${locale}`);

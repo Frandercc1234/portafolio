@@ -28,9 +28,22 @@
       "role": "Desarrollador full stack",
       "value": "Construyo aplicaciones web y dashboards de datos para pymes e instituciones públicas.",
       "location": "Costa Rica, UTC-6",
-      "status": "Disponible para puestos full stack y proyectos freelance",
       "cv": "Descargar CV",
-      "contact": "Contacto"
+      "contact": "Contacto",
+      "facts": {
+        "now": {
+          "label": "Ahora",
+          "text": "Graduado en Ingeniería en Sistemas (UNA, 2025). Últimamente: microservicios con Spring Boot y QA automatizado con Cypress. Costa Rica, UTC-6."
+        },
+        "looking": {
+          "label": "Busco",
+          "text": "Puestos full stack, back-end o QA, y proyectos freelance."
+        },
+        "before": {
+          "label": "Antes",
+          "text": "Práctica en la ASADA Gamalotal (2025) y un proyecto universitario para la Municipalidad de Nicoya (2024–2025)."
+        }
+      }
     },
     "featured": {
       "title": "Trabajo destacado",
@@ -39,13 +52,19 @@
         "internship": "Práctica",
         "university": "Universidad",
         "client": "Cliente"
+      },
+      "more": "Más proyectos",
+      "type": {
+        "web": "Web",
+        "back-end": "Back-end",
+        "data": "Datos",
+        "qa": "QA"
+      },
+      "links": {
+        "case": "Caso de estudio",
+        "demo": "Demo",
+        "repo": "Repositorio"
       }
-    },
-    "other": {
-      "title": "Otros proyectos",
-      "case": "Caso de estudio",
-      "demo": "Demo",
-      "repo": "Repositorio"
     },
     "stack": {
       "title": "Stack"
@@ -57,7 +76,7 @@
     },
     "about": {
       "title": "Sobre mí",
-      "text": "Planifico antes de escribir código y pruebo en un celular real antes de dar una función por terminada. Busco un puesto full stack donde pueda seguir construyendo y aprendiendo."
+      "text": "Planifico antes de escribir código y pruebo en un celular real antes de dar una función por terminada. Busco un puesto full stack, back-end o QA donde pueda seguir construyendo y aprendiendo."
     },
     "contact": {
       "title": "Contacto",

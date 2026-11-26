@@ -17,8 +17,8 @@ export function LocaleSwitch() {
           locale={l}
           lang={l}
           aria-current={l === locale ? 'true' : undefined}
-          className={`inline-flex min-h-11 min-w-11 items-center justify-center text-sm uppercase ${
-            l === locale ? 'font-semibold text-ink underline' : 'text-ink-soft hover:text-ink'
+          className={`inline-flex min-h-11 min-w-11 items-center justify-center fs-label uppercase ${
+            l === locale ? 'font-medium text-ink underline' : 'text-ink-soft hover:text-ink'
           }`}
         >
           {l}

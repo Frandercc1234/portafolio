@@ -5,7 +5,6 @@ import { Contact } from '@/components/home/Contact';
 import { Experience } from '@/components/home/Experience';
 import { FeaturedProjects } from '@/components/home/FeaturedProjects';
 import { Hero } from '@/components/home/Hero';
-import { OtherProjects } from '@/components/home/OtherProjects';
 import { Stack } from '@/components/home/Stack';
 import { getProjects, type Locale } from '@/lib/content';
 import { jsonLd, pageMetadata, SITE_NAME } from '@/lib/seo';
@@ -32,7 +31,6 @@ export default async function HomePage({ params }: Params) {
   setRequestLocale(locale);
   const hero = await getTranslations({ locale, namespace: 'Home.hero' });
   const projects = getProjects(locale as Locale)
-    .filter((p) => p.meta.featured)
     .map((p) => p.meta);
 
   // Datos estructurados Person: solo lo que la página muestra.
@@ -51,7 +49,6 @@ export default async function HomePage({ params }: Params) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(person) }} />
       <Hero cvHref={CV_URL[locale as Locale]} />
       <FeaturedProjects projects={projects} />
-      <OtherProjects />
       <Stack />
       <Experience />
       <About />

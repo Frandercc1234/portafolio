@@ -14,14 +14,14 @@ import '../globals.css';
 
 const newsreader = Newsreader({
   subsets: ['latin'],
-  weight: ['500', '600'],
+  weight: ['500'],
   variable: '--font-newsreader',
   display: 'swap',
 });
 
 const schibsted = Schibsted_Grotesk({
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
+  weight: ['400', '500'],
   variable: '--font-schibsted',
   display: 'swap',
 });

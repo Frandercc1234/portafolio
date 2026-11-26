@@ -15,7 +15,7 @@ export const stackGroups: StackGroup[] = [
   {
     id: 'backend',
     label: { en: 'Backend', es: 'Backend' },
-    items: ['NestJS', 'Supabase', 'PostgreSQL', 'REST'],
+    items: ['NestJS', 'Java', 'Spring Boot', 'Supabase', 'PostgreSQL', 'RabbitMQ', 'REST'],
   },
   {
     id: 'data',
@@ -25,6 +25,6 @@ export const stackGroups: StackGroup[] = [
   {
     id: 'quality',
     label: { en: 'Quality', es: 'Calidad' },
-    items: ['Playwright', 'Vitest', 'GitHub Actions'],
+    items: ['Playwright', 'Cypress', 'Vitest', 'GitHub Actions'],
   },
 ];

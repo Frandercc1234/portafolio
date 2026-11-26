@@ -13,6 +13,10 @@ export const projectSchema = z
     slug: z.string().regex(/^[a-z0-9-]+$/),
     title: z.string().max(60),
     summary: z.string().max(160), // una oración, se usa en tarjetas y meta description
+    // Tarjeta del inicio: una línea y la etiqueta "TIPO · 2 tecnologías · contexto".
+    tagline: z.string().max(90),
+    type: z.enum(['web', 'back-end', 'data', 'qa']),
+    cardStack: z.array(z.string()).length(2),
     role: z.string().max(80),
     context: z.enum(['personal', 'internship', 'university', 'client']),
     year: z.number().int().min(2023).max(2030),
@@ -38,6 +42,10 @@ export const projectSchema = z
     demoSleeps: z.boolean().optional(),
     featured: z.boolean(),
     order: z.number().int().min(1),
+  })
+  .refine((p) => p.cardStack.every((t) => p.stack.includes(t)), {
+    message: 'cardStack sale de stack',
+    path: ['cardStack'],
   })
   .refine((p) => Boolean(p.cover) === Boolean(p.coverAlt), {
     message: 'cover y coverAlt van juntos',

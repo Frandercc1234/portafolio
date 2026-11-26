@@ -48,7 +48,7 @@ export function ContactForm() {
     <div>
       <div role="status" aria-live="polite">
         {state?.ok && (
-          <p className="fade-in font-serif text-2xl leading-[1.3] font-medium">{t('success')}</p>
+          <p className="fade-in type-title">{t('success')}</p>
         )}
       </div>
       {!state?.ok && (
@@ -73,7 +73,7 @@ export function ContactForm() {
             };
             return (
               <div key={field} className="mb-5">
-                <label htmlFor={`contact-${field}`} className="mb-2 block text-sm font-medium">
+                <label htmlFor={`contact-${field}`} className="mb-2 block font-medium">
                   {t(field)}
                 </label>
                 {field === 'message' ? (
@@ -93,7 +93,7 @@ export function ContactForm() {
                   />
                 )}
                 {hasError && (
-                  <p id={`contact-${field}-error`} className="mt-2 text-sm text-accent">
+                  <p id={`contact-${field}-error`} className="mt-2 text-accent">
                     {t(`errors.${field}`)}
                   </p>
                 )}
@@ -111,12 +111,12 @@ export function ContactForm() {
           </div>
 
           {state && !state.ok && state.error === 'TURNSTILE' && (
-            <p role="alert" className="mb-5 text-sm text-accent">
+            <p role="alert" className="mb-5 text-accent">
               {t('errorTurnstile')}
             </p>
           )}
           {state && !state.ok && state.error === 'SEND' && (
-            <p role="alert" className="mb-5 text-sm text-accent">
+            <p role="alert" className="mb-5 text-accent">
               {t('errorSend')}{' '}
               <a href={`mailto:${SOCIAL.email}`} className="underline">
                 {SOCIAL.email}

@@ -18,20 +18,46 @@
 
   --container-page: 80rem;
   --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+
+  /* Ancho de diseño de escritorio (DESIGN.md 10.1). */
+  --breakpoint-wide: 90rem;
 }
 
+/* Grilla y tipografía (DESIGN.md 10.1 y 10.2). La raíz queda en 16 px para que el espaciado sea exacto. */
 :root {
-  --text-base: 16px;
+  --margin: 24px;
+  --gutter: 12px;
+  --size-display: 44px;
+  --size-title: 28px;
+  --size-text: 16px;
+  --size-label: 13px;
 }
-
 @media (min-width: 768px) {
   :root {
-    --text-base: 17px;
+    --margin: 32px;
+    --gutter: 16px;
+    --size-display: 64px;
+    --size-title: 32px;
+    --size-text: 17px;
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --margin: 48px;
+    --gutter: 24px;
+    --size-display: 68px;
+  }
+}
+@media (min-width: 1440px) {
+  :root {
+    --margin: 80px;
+    --size-display: 88px;
+    --size-title: 36px;
+    --size-text: 18px;
   }
 }
 
 html {
-  font-size: var(--text-base);
   scroll-behavior: auto;
 }
 
@@ -39,18 +65,22 @@ body {
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  line-height: 1.65;
+  font-size: var(--size-text);
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
-h1,
-h2,
-h3 {
-  font-family: var(--font-serif);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  text-wrap: balance;
+/* En la capa base: así las clases (type-label, type-text, leading-*) pueden cambiar estos valores. */
+@layer base {
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
 }
 
 /* Sin palabras sueltas en la última línea de los párrafos. */
@@ -165,13 +195,69 @@ a {
   }
 }
 
-/* Contenedor de página: 1280 px máximo, márgenes de 24 px (48 px desde 768 px). */
+/* Contenedor de página: 1280 px máximo; el margen cambia con el ancho. */
 @utility wrap {
-  width: calc(100% - 48px);
+  width: calc(100% - 2 * var(--margin));
   max-width: 1280px;
   margin-inline: auto;
-  @media (min-width: 768px) {
-    width: calc(100% - 96px);
+}
+
+/* Grilla de 12 columnas. */
+@utility grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+}
+
+/* Los cuatro niveles. El texto corriente es el del body. */
+@utility type-display {
+  font-family: var(--font-serif);
+  font-size: var(--size-display);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+}
+@utility type-title {
+  font-family: var(--font-serif);
+  font-size: var(--size-title);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+@utility type-text {
+  font-family: var(--font-sans);
+  font-size: var(--size-text);
+  line-height: 1.6;
+  letter-spacing: normal;
+}
+@utility type-label {
+  font-family: var(--font-sans);
+  font-size: var(--size-label);
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Texto pequeño sin mayúsculas (pie, selector de idioma): mismo cuerpo que la etiqueta. */
+@utility fs-label {
+  font-size: var(--size-label);
+}
+
+/* Solo se cargan los pesos 400 y 500: el énfasis usa 500. */
+b,
+strong {
+  font-weight: 500;
+}
+
+/* Etiqueta de proyecto: una sola línea. En pantallas angostas se junta el espaciado de letras. */
+.project-label {
+  letter-spacing: 0.02em;
+}
+@media (min-width: 768px) {
+  .project-label {
+    letter-spacing: 0.04em;
   }
 }
 
@@ -228,12 +314,6 @@ a:hover.underline-draw,
   }
 }
 .case-fig {
-  width: min(1000px, calc(100vw - 48px));
-  margin: 40px 0 40px calc(50% - min(500px, 50vw - 24px));
-}
-@media (min-width: 768px) {
-  .case-fig {
-    width: min(1000px, calc(100vw - 96px));
-    margin-left: calc(50% - min(500px, 50vw - 48px));
-  }
+  width: min(1000px, calc(100vw - 2 * var(--margin)));
+  margin: 40px 0 40px calc(50% - min(500px, 50vw - var(--margin)));
 }

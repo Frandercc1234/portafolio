@@ -19,7 +19,7 @@ export async function Header() {
       <div className="wrap flex min-h-14 items-center justify-between gap-4 md:min-h-[72px]">
         <Link
           href="/"
-          className="flex min-h-11 shrink-0 items-center font-serif text-lg font-semibold whitespace-nowrap max-[359px]:shrink max-[359px]:leading-tight max-[359px]:whitespace-normal md:text-[22px]"
+          className="flex min-h-11 shrink-0 items-center font-serif font-medium whitespace-nowrap max-[359px]:shrink max-[359px]:leading-tight max-[359px]:whitespace-normal"
         >
           {t('name')}
         </Link>

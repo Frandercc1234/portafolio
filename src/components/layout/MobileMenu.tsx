@@ -43,7 +43,7 @@ export function MobileMenu({ items, openLabel, closeLabel, cvHref, cvLabel }: Pr
           setUsed(true);
           setOpen((v) => !v);
         }}
-        className={buttonClass('secondary', 'px-3.5 text-[15px]')}
+        className={buttonClass('secondary', 'px-3.5')}
       >
         {open ? closeLabel : openLabel}
       </button>

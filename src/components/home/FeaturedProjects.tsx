@@ -1,26 +1,29 @@
 import { useTranslations } from 'next-intl';
 import type { ProjectMeta } from '@/lib/content';
+import { MoreProjects } from './MoreProjects';
 import { ProjectCard } from './ProjectCard';
-import { Section } from './Section';
 
-/** El primer caso ocupa más espacio; los demás van en fila de tres. */
+/** Los destacados en filas, en el orden de `order`, y al final la lista compacta con el resto. */
 export function FeaturedProjects({ projects }: { projects: ProjectMeta[] }) {
   const t = useTranslations('Home.featured');
-  const [first, ...rest] = projects;
-  if (!first) return null;
+  const featured = projects.filter((p) => p.featured);
 
   return (
-    <Section id="projects" title={t('title')} padTop="pt-20" titleGap="mb-10">
-      <ProjectCard meta={first} featured />
-      {rest.length > 0 && (
-        <ul className="mt-10 grid gap-10 md:mt-6 md:grid-cols-2 md:gap-6 md:gap-y-12">
-          {rest.map((meta) => (
+    // 64 px desde el hero en todos los anchos: a 1440×900 el primer proyecto entra en pantalla.
+    <section id="projects" aria-labelledby="projects-title" className="pt-16">
+      <div className="wrap">
+        <h2 id="projects-title" className="type-title">
+          {t('title')}
+        </h2>
+        <ul className="mt-8 space-y-12">
+          {featured.map((meta, i) => (
             <li key={meta.slug}>
-              <ProjectCard meta={meta} />
+              <ProjectCard meta={meta} priority={i === 0} />
             </li>
           ))}
         </ul>
-      )}
-    </Section>
+        <MoreProjects projects={projects.filter((p) => !p.featured)} />
+      </div>
+    </section>
   );
 }
