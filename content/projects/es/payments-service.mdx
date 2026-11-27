@@ -2,6 +2,8 @@
 slug: payments-service
 title: Servicio de pagos con microservicios
 summary: Backend de pagos con dos servicios Spring Boot, pagos idempotentes, libro mayor de doble entrada, webhooks firmados y un outbox transaccional hacia RabbitMQ.
+tagline: 'Pagos idempotentes y libro mayor de doble entrada, en dos servicios.'
+type: back-end
 role: Desarrollador back-end, proyecto individual
 context: personal
 year: 2026
@@ -14,6 +16,9 @@ stack:
   - Testcontainers
   - Docker Compose
   - GitHub Actions
+cardStack:
+  - Java 21
+  - Spring Boot
 metrics:
   - value: '96'
     label: pruebas automatizadas
@@ -23,7 +28,8 @@ metrics:
     label: pagos paralelos aceptados
 links:
   repo: https://github.com/Frandercc1234/payments-service
-coverLabel: Pagos · Spring Boot
+cover: /projects/payments-service/portada.es.webp
+coverAlt: 'Diagrama de arquitectura: la API de pagos escribe en PostgreSQL, un relay del outbox publica en RabbitMQ y un servicio de notificaciones consume los eventos'
 featured: true
 order: 2
 ---

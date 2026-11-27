@@ -122,3 +122,76 @@ Mensaje en h1 serif, una línea, dos enlaces en fila. Centrado a la izquierda de
 - Las listas en una línea (etiquetas de stack) unen cada elemento con su punto con espacios de no separación: el punto nunca abre una línea.
 - El filete lateral de un `Callout` es de 1 px.
 - Objetivos táctiles de 44 px también en los enlaces de contacto.
+
+## 10. Rediseño v2 de la home (aprobado por Frander: 2026-11-26)
+
+Maqueta: `design/maqueta-v2/`. Esta sección reemplaza las escalas de las secciones 3 y 4 y el inicio de la sección 5 (puntos 1 a 7). La grilla y los márgenes valen para todo el sitio. La identidad no cambia: Newsreader, Schibsted Grotesk, fondo cálido y un solo acento. La raíz queda en 16 px para que el espaciado sea exacto; lo que cambia con el ancho es el tamaño del texto.
+
+Cinco principios: espacio en blanco, jerarquía, grilla de 12 columnas, contraste y consistencia. Referencias de cofolios.com: Jonathan Lum (filas de proyectos), Grace Ma (datos cortos junto al nombre) y Ethan Chng (el tipo de cada proyecto, que va en su etiqueta y no en grupos). De `design-taste-frontend` 2.5 se toman la alineación, la jerarquía, el contraste y la consistencia. No se usan sus sorteos de paleta y tipografía, su verificador ni la regla de una sección por pantalla: cambiarían la identidad.
+
+### 10.1 Grilla
+
+12 columnas en todos los anchos. Debajo de 768 los bloques ocupan las 12.
+
+| Ancho | Margen | Medianil | Columna | Contenido |
+| ----- | ------ | -------- | ------- | --------- |
+| 375   | 24     | 12       | 16.25   | 327       |
+| 768   | 32     | 16       | 44      | 704       |
+| 1024  | 48     | 24       | 55.33   | 928       |
+| 1440  | 80     | 24       | 84.67   | 1280      |
+
+| Bloque                             | 768                              | 1024 y 1440                       |
+| ---------------------------------- | -------------------------------- | --------------------------------- |
+| Hero: nombre, rol, frase y botones | 1 a 12                           | 1 a 7                             |
+| Hero: Now, Looking for y Before    | debajo, 4 + 4 + 4                | apiladas en 9 a 12                |
+| Fila de proyecto                   | apilada                          | imagen 1 a 7, texto 8 a 12        |
+| Fila compacta                      | 1 a 4, 5 a 7, 8 a 12             | igual                             |
+| Secciones con título al lado       | título arriba                    | título 1 a 4, contenido 5 a 12    |
+| Stack                              | 6 + 6                            | cuatro columnas dentro de 5 a 12  |
+| Contacto                           | formulario 1 a 8, enlaces 9 a 12 | formulario 5 a 9, enlaces 10 a 12 |
+
+### 10.2 Tipografía: 4 niveles
+
+| Nivel       | Fuente                                    | 375 | 768 | 1024 | 1440 | Interlineado | Uso                                                                |
+| ----------- | ----------------------------------------- | --- | --- | ---- | ---- | ------------ | ------------------------------------------------------------------ |
+| 1. Display  | Newsreader 500                            | 44  | 64  | 68   | 88   | 1.02         | solo el nombre                                                     |
+| 2. Título   | Newsreader 500                            | 28  | 32  | 32   | 36   | 1.15         | secciones, proyectos con imagen, rol, sobre mí                     |
+| 3. Texto    | Schibsted Grotesk 400 y 500               | 16  | 17  | 17   | 18   | 1.6          | párrafos, interfaz, nombre de fila compacta                        |
+| 4. Etiqueta | Schibsted Grotesk 500, mayúsculas, 0.08em | 13  | 13  | 13   | 13   | 1.5          | "TIPO · 2 tecnologías · contexto", datos del hero, "More projects" |
+
+No hay tamaños fuera de estos cuatro. Salen los pesos 600.
+
+### 10.3 Espaciado
+
+Escala: 4, 8, 12, 16, 24, 32, 48, 64, 96 y 128. Entre secciones: 64 (375), 96 (768 y 1024) y 128 (1440). Del hero a "Selected work": 64 en todos los anchos, para que el primer proyecto entre en la primera pantalla. Antes de "More projects": 64. Entre filas de proyecto: 48. De una etiqueta a su contenido: 24. Dentro de un bloque de texto: 8 a 16.
+
+### 10.4 Contraste (WCAG 2.x)
+
+| Texto              | Fondo                   | Contraste | Uso                          |
+| ------------------ | ----------------------- | --------- | ---------------------------- |
+| ink `#1A1917`      | paper `#FAF8F5`         | 16.57:1   | texto y títulos              |
+| ink-soft `#5E5A54` | paper                   | 6.46:1    | texto secundario y etiquetas |
+| blanco             | accent `#C2410C`        | 5.18:1    | botón principal              |
+| blanco             | accent-strong `#9A3412` | 7.31:1    | hover y press del botón      |
+| accent             | paper                   | 4.89:1    | errores y enlaces en hover   |
+| ink                | surface `#F2EFEA`       | 15.32:1   | diagrama y código            |
+| ink-soft           | surface                 | 5.97:1    | diagrama                     |
+| accent             | surface                 | 4.52:1    | no se usa para texto nuevo   |
+
+Todas pasan AA para texto normal (4.5:1). `line` (1.24:1) es solo decorativo. `capturar.mjs` mide cada texto de la maqueta sobre su fondo: en reposo aparecen las tres primeras. Las capturas de pantalla de las portadas son contenido de otros sitios y no se miden.
+
+### 10.5 Inicio
+
+1. **Hero:** a la izquierda nombre (Display), rol (Título, ink-soft), línea de valor y dos botones. A la derecha, desde 1024, tres datos apilados con filete ink arriba: Now, Looking for y Before (en español: Ahora, Busco y Antes). La ubicación va en "Now". Debajo de 1024 los datos van bajo los botones.
+2. **Selected work:** cinco filas con la misma estructura, en este orden: `purareserva`, `payments-service`, `nicoya-zmt`, `pipeline-bccr` y `asada-gamalotal`. Cada una: portada, título, una línea (`tagline`) y la etiqueta "TIPO · 2 tecnologías · contexto", en una sola línea a 375, 768, 1024 y 1440 (con el espaciado de letras en 0.02em a 375 y 0.04em desde 768). El tipo es Web, Back-end o Data. El rol queda solo en la página del caso. No hay grupos. A 768 la fila va apilada: al lado, la etiqueta no cabía en una línea.
+3. **More projects / Más proyectos:** lista compacta sin imagen con `turismo-cr` y `qa-cypress`: nombre, una línea, etiqueta y enlaces. Reemplaza a "Other projects". `risk-calculator` sale del portafolio.
+4. "Next project" sigue el mismo orden: las cinco filas, después `turismo-cr`, `qa-cypress` y de vuelta a `purareserva`.
+5. Stack, experiencia, sobre mí y contacto usan el reparto de columnas de 10.1.
+
+### 10.6 Portadas
+
+Mismo marco para las 5: lienzo 16:10 en `surface`; pantalla a 1248 de 1440 px, 96 px a cada lado, 120 px arriba, apoyada en el borde inferior, radio 14 arriba y anillo de 1 px (`ink` al 14 %). Se generan con `design/maqueta-v2/portadas.mjs` y viven en `public/projects/<slug>/portada.webp`; la misma portada se usa en la página del caso.
+
+- `payments-service`: diagrama redibujado a partir del flowchart de su README, con los tokens y las fuentes del sitio, en una versión en inglés y otra en español. El acento marca el camino del outbox. A 375 sus textos no se leen: la imagen funciona como dibujo y el `alt` lo describe.
+- `nicoya-zmt`: página pública, sin los controles del carrusel.
+- `asada-gamalotal`: página pública del sitio publicado, sin sesión ni datos de personas.

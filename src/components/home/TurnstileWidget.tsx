@@ -84,7 +84,7 @@ export function TurnstileWidget({ siteKey, locale, resetKey, placeholder }: Prop
     return (
       <div
         data-turnstile-slot
-        className="flex h-[65px] w-[300px] max-w-full items-center justify-center rounded-control border border-dashed border-ink-soft px-2 text-center text-[13px] text-ink-soft"
+        className="flex h-[65px] w-[300px] max-w-full items-center justify-center rounded-control border border-dashed border-ink-soft px-2 text-center fs-label text-ink-soft"
       >
         {placeholder}
       </div>

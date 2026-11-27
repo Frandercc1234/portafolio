@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import { describe, expect, it } from 'vitest';
+import { stackGroups } from '@/data/stack';
 import { projectSchema, getProjects, LOCALES, type Locale } from '@/lib/content';
 
 const SLUGS = [
@@ -116,9 +117,45 @@ describe('traducciones', () => {
       expect(q.year).toBe(p.meta.year);
       expect(q.stack).toEqual(p.meta.stack);
       expect(q.links).toEqual(p.meta.links);
-      expect(q.cover).toBe(p.meta.cover);
+      // La única portada con texto propio por idioma es el diagrama de payments-service.
+      expect(q.cover?.replace('.es.webp', '.webp')).toBe(p.meta.cover);
+      expect(q.type).toBe(p.meta.type);
+      expect(q.cardStack).toEqual(p.meta.cardStack);
       expect(q.featured).toBe(p.meta.featured);
       expect(q.metrics.map((m) => m.value)).toEqual(p.meta.metrics.map((m) => m.value));
     });
+  });
+});
+
+describe('inicio', () => {
+  const projects = getProjects('en').map((p) => p.meta);
+
+  it('los destacados y "More projects" van en el orden aprobado', () => {
+    const slugs = (featured: boolean) =>
+      projects.filter((p) => p.featured === featured).map((p) => p.slug);
+    expect(slugs(true)).toEqual([
+      'purareserva',
+      'payments-service',
+      'nicoya-zmt',
+      'pipeline-bccr',
+      'asada-gamalotal',
+    ]);
+    expect(slugs(false)).toEqual(['turismo-cr', 'qa-cypress']);
+  });
+
+  it('cada tecnología del stack tiene respaldo en el stack de algún proyecto', () => {
+    // "REST" no es una tecnología de ningún frontmatter: la respaldan las API HTTP de estos casos.
+    const apis = ['payments-service', 'pipeline-bccr'];
+    const used = projects.flatMap((p) => p.stack);
+    for (const item of stackGroups.flatMap((g) => g.items)) {
+      if (item === 'REST') {
+        expect(projects.map((p) => p.slug)).toEqual(expect.arrayContaining(apis));
+        continue;
+      }
+      expect(
+        used.some((t) => t === item || t.startsWith(`${item} `)),
+        `sin respaldo: ${item}`,
+      ).toBe(true);
+    }
   });
 });

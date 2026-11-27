@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maqueta v2: inicio (es)</title>
+<link rel="stylesheet" href="maqueta.css">
+</head>
+<body>
+<header class="header"><div class="wrap bar">
+  <a class="brand" href="#">Frander Centeno</a>
+  <nav class="nav"><a href="#projects">Proyectos</a><a href="#experience">Experiencia</a><a href="#contact">Contacto</a></nav>
+  <div class="tools"><span class="lang"><span>EN</span> <b>ES</b></span><a class="btn btn-2 hide-s" href="#">Descargar CV</a><button class="btn btn-2 only-s">Menú</button></div>
+</div></header>
+<main>
+  <section class="hero wrap grid">
+    <div class="intro">
+      <h1 class="display">Frander Centeno</h1>
+      <p class="title soft">Desarrollador full stack</p>
+      <p class="value">Construyo aplicaciones web y dashboards de datos para pymes e instituciones públicas.</p>
+      <p class="actions"><a class="btn btn-1" href="#">Descargar CV</a><a class="btn btn-2" href="#contact">Contacto</a></p>
+    </div>
+    <dl class="facts grid">
+      <div><dt class="label">Ahora</dt><dd>Graduado en Ingeniería en Sistemas (UNA, 2025). Últimamente: microservicios con Spring Boot y QA automatizado con Cypress. Costa Rica, UTC-6.</dd></div>
+      <div><dt class="label">Busco</dt><dd>Puestos full stack, back-end o QA, y proyectos freelance.</dd></div>
+      <div><dt class="label">Antes</dt><dd>Práctica en la ASADA Gamalotal (2025) y un proyecto universitario para la Municipalidad de Nicoya (2024–2025).</dd></div>
+    </dl>
+  </section>
+  <section id="projects" class="wrap section work">
+    <h2 class="title">Trabajo destacado</h2>
+    <ul class="rows">
+      <li><a class="row" href="#">
+        <img class="cover" src="portadas/purareserva.webp" width="1440" height="900" alt="Página de inicio de PuraReserva">
+        <div class="row-text">
+          <h3 class="title">PuraReserva</h3>
+          <p class="line">Reservas de tours en Guanacaste, con un asistente de IA.</p>
+          <p class="label">Web<span aria-hidden="true"> · </span>Desarrollador full stack<span aria-hidden="true"> · </span>Next.js, Supabase<span aria-hidden="true"> · </span>Personal</p>
+        </div>
+      </a></li>
+      <li><a class="row" href="#">
+        <img class="cover" src="portadas/payments-service.es.webp" width="1440" height="900" alt="Diagrama de arquitectura: API de pagos, relay del outbox, RabbitMQ y servicio de notificaciones">
+        <div class="row-text">
+          <h3 class="title">Servicio de pagos con microservicios</h3>
+          <p class="line">Pagos idempotentes y libro mayor de doble entrada, en dos servicios.</p>
+          <p class="label">Back-end<span aria-hidden="true"> · </span>Desarrollador back-end<span aria-hidden="true"> · </span>Java 21, Spring Boot<span aria-hidden="true"> · </span>Personal</p>
+        </div>
+      </a></li>
+      <li><a class="row" href="#">
+        <img class="cover" src="portadas/nicoya-zmt.webp" width="1440" height="900" alt="Página pública del sistema de la Zona Marítimo Terrestre">
+        <div class="row-text">
+          <h3 class="title">Sistema de la Zona Marítimo Terrestre, Nicoya</h3>
+          <p class="line">Portal ciudadano y panel administrativo para un departamento municipal.</p>
+          <p class="label">Web<span aria-hidden="true"> · </span>Desarrollador full stack<span aria-hidden="true"> · </span>Next.js, MariaDB<span aria-hidden="true"> · </span>Universidad</p>
+        </div>
+      </a></li>
+      <li><a class="row" href="#">
+        <img class="cover" src="portadas/pipeline-bccr.webp" width="1440" height="900" alt="Dashboard de indicadores económicos">
+        <div class="row-text">
+          <h3 class="title">Pipeline de indicadores del BCCR</h3>
+          <p class="line">Indicadores diarios del Banco Central, con API pública y dashboard.</p>
+          <p class="label">Datos<span aria-hidden="true"> · </span>Full stack e ingeniero de datos<span aria-hidden="true"> · </span>Python, NestJS<span aria-hidden="true"> · </span>Personal</p>
+        </div>
+      </a></li>
+      <li><a class="row" href="#">
+        <img class="cover" src="portadas/asada-gamalotal.webp" width="1440" height="900" alt="Página pública del sistema de la ASADA Gamalotal">
+        <div class="row-text">
+          <h3 class="title">Sistema de inventario de la ASADA</h3>
+          <p class="line">Sistema de inventario para un acueducto rural.</p>
+          <p class="label">Web<span aria-hidden="true"> · </span>Desarrollador full stack<span aria-hidden="true"> · </span>Next.js, Supabase<span aria-hidden="true"> · </span>Práctica</p>
+        </div>
+      </a></li>
+    </ul>
+    <div class="more">
+      <h3 class="label more-name">Más proyectos</h3>
+      <ul class="minis">
+        <li class="mini grid">
+          <h4 class="mini-title">Dashboard de llegadas de turistas</h4>
+          <p class="mini-line">Llegadas internacionales con datos públicos del ICT. El demo puede tardar ~30 s en despertar.</p>
+          <div class="mini-meta">
+            <p class="label">Ingeniero de datos<span aria-hidden="true"> · </span>Python, DuckDB<span aria-hidden="true"> · </span>Personal</p>
+            <p class="links"><a href="#">Caso de estudio</a><a href="#">Demo</a><a href="#">Repositorio</a></p>
+          </div>
+        </li>
+        <li class="mini grid">
+          <h4 class="mini-title">Suite de QA para este portafolio</h4>
+          <p class="mini-line">Pruebas E2E y de API que corren contra este sitio en producción.</p>
+          <div class="mini-meta">
+            <p class="label">Automatización de QA<span aria-hidden="true"> · </span>Cypress, TypeScript<span aria-hidden="true"> · </span>Personal</p>
+            <p class="links"><a href="#">Caso de estudio</a><a href="#">Repositorio</a></p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+  <section class="wrap section split grid">
+    <h2 class="title">Stack</h2>
+    <div class="content stack">
+      <div><h3 class="label">Frontend</h3><p>React, Next.js, TypeScript, Tailwind</p></div>
+      <div><h3 class="label">Backend</h3><p>NestJS, Supabase, PostgreSQL, REST</p></div>
+      <div><h3 class="label">Datos</h3><p>Python, pandas, DuckDB, Streamlit, Plotly</p></div>
+      <div><h3 class="label">Calidad</h3><p>Playwright, Vitest, GitHub Actions</p></div>
+    </div>
+  </section>
+  <section id="experience" class="wrap section split grid">
+    <h2 class="title">Experiencia y educación</h2>
+    <ul class="content">
+      <li class="entry"><p class="label">Jul 2025 – Dic 2025</p><div><h3 class="entry-title">ASADA Gamalotal</h3><p class="soft">Práctica profesional.</p></div></li>
+      <li class="entry"><p class="label">2024 – 2025</p><div><h3 class="entry-title">Municipalidad de Nicoya</h3><p class="soft">Proyecto universitario para el departamento de Zona Marítimo Terrestre.</p></div></li>
+      <li class="entry"><p class="label">2025</p><div><h3 class="entry-title">Ingeniería en Sistemas, Universidad Nacional</h3></div></li>
+      <li class="entry"><p class="label">Certificaciones</p><div><p class="soft">DataCamp: AI Engineer for Developers, Data Engineer, Data Analyst, Python Developer, SQL Associate. Scrum Fundamentals Certified. PM4R Professional del BID.</p></div></li>
+      <li class="entry"><p class="label">Idiomas</p><div><p class="soft">Español, nativo. Inglés, B1.</p></div></li>
+    </ul>
+  </section>
+  <section class="wrap section split grid">
+    <h2 class="title">Sobre mí</h2>
+    <p class="content title about">Planifico antes de escribir código y pruebo en un celular real antes de dar una función por terminada. Busco un puesto full stack donde pueda seguir construyendo y aprendiendo.</p>
+  </section>
+  <section id="contact" class="wrap section split grid last">
+    <h2 class="title">Contacto</h2>
+    <form class="form">
+      <label>Nombre<input type="text"></label>
+      <label>Correo<input type="email"></label>
+      <label>Mensaje<textarea rows="5"></textarea></label>
+      <div class="turnstile">Aquí va la verificación anti-spam</div>
+      <button class="btn btn-1" type="button">Enviar mensaje</button>
+    </form>
+    <ul class="direct">
+      <li><span class="label">Correo</span><a href="#">centenofrander@gmail.com</a></li>
+      <li><span class="label">LinkedIn</span><a href="#">frander-centeno</a></li>
+      <li><span class="label">GitHub</span><a href="#">Frandercc1234</a></li>
+    </ul>
+  </section>
+</main>
+<footer class="footer"><div class="wrap">
+  <p class="links"><a href="#">Correo</a><a href="#">GitHub</a><a href="#">LinkedIn</a></p>
+  <p class="soft">© 2026 Frander Centeno. Hecho con Next.js, desplegado en Vercel.</p>
+</div></footer>
+<div class="overlay" aria-hidden="true"><div class="wrap grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+<script>if (location.search === '?grid') document.body.classList.add('show-grid');</script>
+</body>
+</html>
